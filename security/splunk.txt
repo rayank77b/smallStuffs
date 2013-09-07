@@ -1,0 +1,15 @@
+To start Splunk, run the command:
+        /opt/splunk/bin/splunk start
+
+
+To use the Splunk Web interface, point your browser to:
+    http://asd:8000
+https://asd:8000
+https://asd:8000 
+ 
+
+
+vim /etc/rsyslog.conf
+*.*                             @blub.blubz
+/etc/init.d/rsyslog restart
+

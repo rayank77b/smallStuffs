@@ -1,0 +1,6 @@
+dig @NS.domain   -t AXFR host.com    # zonen transfer anfodern
+
+nikto.pl  -host ip
+
+
+

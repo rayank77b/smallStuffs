@@ -1,0 +1,31 @@
+# join an array to scalar
+my $evilwordsregexp = join('|', @evilwords);
+
+foreach my $file (@testitems) {
+
+# nuke everything after the first space (#comment)
+$file =~ s/\s.*$//;
+next if (!$file); # skip null entries
+
+# open the file for reading
+if (open (FILE, $file)) { 
+close (FILE);
+
+# and go through the file line by line
+while (my $file_line = <FILE>) { 
+
+# found an evil word
+if ($file_line =~ /($evilwordsregexp)/i) { 
+
+
+
+
+
+
+
+
+
+
+
+
+

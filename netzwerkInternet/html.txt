@@ -1,0 +1,5 @@
+htmlspeicalchars() umgehen
+    falls <input type='submit' value=$b> ..
+    können wir 'onmouseover'=alert(123); übermitteln, 
+    da htmlspecialchars() ' nicht filtert. 
+    oder javascript:alert("bla");

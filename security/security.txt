@@ -1,0 +1,217 @@
+http://www.wechall.net/challenge/addslashes/index.php?username=%b3%27+union+select+Char(65,100,109,105,110)/*&password=1234&login=1234
+
+Web Application Firewall - WAF, Webfilter
+
+http://www.arachni-scanner.com/
+Arachni is a high-performance, modular, Open Source Web Application Security Scanner Framework.
+The framework can be extended indefinitely by the addition of components like path extractors, modules, plug-ins, or even user interfaces.
+Arachni is not only meant to serve as a security scanner but also as a platform for any sort of black box testing or data scraping; full-fledged applications can be converted into framework plug-ins so as to take advantage of the framework’s power and resources.
+Arachni has over 40 audit (active) and recon (passive) modules which identify and log entities of security and informational interest.
+Arachni offers plug-ins to help automate several tasks ranging from logging-in to a web application to performing high-level meta-analysis by cross-referencing scan results with a large number of environmental data.
+Report components allow you to format and/or export scan results in a desired format or fashion.
+If the existing reports (HTML, Plain Text, XML, etc.) don’t fulfill your needs it is very easy to create one that suits you.
+The system allows for multiple deployment options ranging from a simple single-user single-scan command line interface to multi-user multiple/parallel-scan distributed deployment utilizing server pools.
+Control of distributed deployments is achieved using XMLRPC in an effort to increase interoperability and cross-platform compliance.
+In simple terms, this means that you can go from performing simple command-line scans like: $ arachni http://my.site.com/
+to just as easily build scanner clusters in a couple of minutes via the WebUI.
+The command-line interface is the simplest, most tested and most stable.
+arachni -h
+You can simply run Arachni like so:
+$ arachni http://test.com
+In the following example all modules will be run against http://test.com, auditing links/forms/cookies and following subdomains – with verbose output enabled. The results of the audit will be saved in the the file test.com.afr.
+$ arachni -fv http://test.com --report=afr:outfile=test.com.afr
+The Arachni Framework Report (.afr) file can later be loaded by Arachni to create a report, like so:
+$ arachni --repload=test.com.afr --report=html:outfile=my_report.html
+or any other report type as shown by:
+$ arachni --lsrep
+You can make module loading easier by using wildcards (*) and exclusions (-).
+To load all xss modules using a wildcard:
+$ arachni http://example.net –mods=xss_*
+To load all audit modules using a wildcard:
+$ arachni http://example.net –mods=audit*
+To exclude only the csrf module:
+$ arachni http://example.net –mods=*,-csrf
+Or you can mix and match; to run everything but the xss modules:
+$ arachni http://example.net –mods=,-xss_*
+Web User Interface (WebUI): In order to better understand how the WebUI works it’s important that you know what happens in the background. To allow for distributed deployment Arachni uses XMLRPC over SSL to facilitate client-server communications. Before I start explaining let’s first agree on some terminology.
+Server instance: An ephemeral scanner instance/agent, it listens on a random port and awaits for instructions. Its job is to perform a single scan, send the results to the commanding client (the owner) and then die. It materializes as a system process.
+Dispatch server: A server that facilitates spawning and assigning instances to clients. Upon a dispatch request an instance is poped out of the pool and assigned to the client.
+The Web User Interface is basically a Sinatra app which acts as an Arachni XMLRPC client and connects to running XMLRPC Dispatch servers.
+It is a way to:
+    make working with Arachni easier
+    make report management easier
+    run and manage multiple scans at the same time (each scan will try its best for maximum bandwidth utilization so it’ll be like lions fighting in a cage – make sure you have sufficient resources)
+    work with and manage multiple Dispatchers
+Each time you start a scan from the WebUI, it connects to a Dispatcher and requests a new server instance.
+The WebUI then connects to the new instance and configures it according to user settings.
+From that point on, the user can monitor/pause/abort the scan or forget about it and let the WebUI manage everything; once the scan finishes the WebUI will save the report and shut down the instance.
+Anyone can essentially create and control a simple grid of Arachni scanners by adding multiple Dispatchers and distributing the work-load accordingly.
+start web gui: arachni_web,  run on port 9292
+The default number of concurrent requests is 20, this number can be adjusted using the ‘–http-req-limit’ parameter. This is the manual limiting.
+Auto-throttling comes into play when response times are either too high or too low.
+Too low response times mean that there’s room for a higher number of concurrent requests while high response times mean high server stress, in which case the concurrent requests limit is automatically lowered.
+XMLRPC authentication: SSL is used to provide entity authentication and data confidentiality (encryption) services, which means key management. By default, all XMLRPC communications are performed without peer verification. If you want to control who is allowed to connect to the Dispatcher or the WebUI you need to configure the relevant keys and certificates.
+
+w3af (Web Application audit and attack framework) is a framework for auditing and exploitation of web applications.
+# w3af_console 
+w3af>>> help
+| start                  | Start the scan.
+| plugins                | Enable and configure plugins.
+| exploit                | Exploit the vulnerability.
+| profiles               | List and use scan profiles.
+| cleanup                | Cleanup before starting a new scan.
+| http-settings          | Configure the HTTP settings of the framework. 
+| misc-settings          | Configure w3af misc settings.
+| target                 | Configure the target URL.
+| back                   | Go to the previous menu.
+| exit                   | Exit w3af.
+| assert                 | Check assertion. 
+| version                | Show w3af version information.
+| keys                   | Display key shortcuts.
+
+| Ctrl-A / Ctrl-E                          | Move cursor to the beginning/end of the line.
+| Ctrl-H                                   | Erase the character before the cursor. 
+| Ctrl-W                                   | Erase the word before the cursor.   
+| Ctrl-L                                   | Clear screen.        
+| Ctrl-D, Ctrl-C                           | Return to the previous menu or exit w3af.   
+
+w3af/plugins>>> help
+| back           | Go to the previous menu.                                        |
+| exit           | Exit w3af.                                                      |
+| assert         | Check assertion.                                                |
+|----------------------------------------------------------------------------------|
+| auth           | View, configure and enable auth plugins                         |
+| mangle         | View, configure and enable mangle plugins                       |
+| grep           | View, configure and enable grep plugins                         |
+| bruteforce     | View, configure and enable bruteforce plugins                   |
+| evasion        | View, configure and enable evasion plugins                      |
+| audit          | View, configure and enable audit plugins                        |
+| output         | View, configure and enable output plugins                       |
+| discovery      | View, configure and enable discovery plugins                    |
+
+1)Discovery- The discovery plugin helps in finding more Url’s, forms etc to be used for vulnerability scanning. This information is then passed over to the audit plugin. There are a number of different discovery plugins like webSpider, spiderMan, hmap etc. All these plugins have a different function. A user can enable one or more plugins at the same time.
+
+w3af/plugins>>> discovery desc userDir
+info about userDir
+
+w3af/plugins>>> discovery config userDir
+w3af/plugins/discovery/config:userDir>>>  view
+|---------------------------------------------------------------------------------|
+| Setting              | Value | Description                                      |
+|---------------------------------------------------------------------------------|
+| identifyOS           | True  | Try to identify the remote operating system      |
+|                      |       | based on the remote users                        |
+| identifyApplications | True  | Try to identify applications installed remotely  |
+|                      |       | using the available users                        |
+
+w3af>>> plugins
+w3af/plugins>>> discovery config spiderMan
+w3af/plugins/discovery/config:spiderMan>>> view
+|----------------------------------------------------------------------------------|
+| Setting       | Value     | Description                                          |
+|----------------------------------------------------------------------------------|
+| listenPort    | 44444     | Port that the spiderMan HTTP proxy server will use   |
+|               |           | to receive requests                                  |
+| listenAddress | 127.0.0.1 | IP address that the spiderMan proxy will use to      |
+|               |           | receive requests                                     |
+w3af/plugins/discovery/config:spiderMan>>> set listenPort 333
+w3af/plugins/discovery/config:spiderMan>>> set listenAddress 10.150.20.219
+w3af/plugins/discovery/config:spiderMan>>> view
+|----------------------------------------------------------------------------------|
+| Setting       | Value         | Description                                      |
+|----------------------------------------------------------------------------------|
+| listenPort    | 333           | Port that the spiderMan HTTP proxy server will   |
+|               |               | use to receive requests                          |
+| listenAddress | 10.150.20.219 | IP address that the spiderMan proxy will use to  |
+|               |               | receive requests                                 |
+
+Here are some other commands that could be used.
+1) discovery pluginType1, pluginType2 – Selects two plugins.
+2) discovery all- Enables all the plugins (not advisable as it may take a long time to finish).
+3) discovery !all – Removes all the enabled plugins.
+4) list discovery enabled – Lists all the plugins currently enabled.
+
+w3af/plugins/discovery/config:spiderMan>>> back    
+w3af/plugins>>> list discovery enabled
+No plugins have status enabled
+
+w3af/plugins>>> discovery config hmap
+w3af/plugins/discovery/config:hmap>>> view
+|----------------------------------------------------------------------------------|
+| Setting       | Value     | Description                                          |
+|----------------------------------------------------------------------------------|
+| genFpF        | False     | Generate a fingerprint file.                         |
+|----------------------------------------------------------------------------------|
+w3af/plugins/discovery/config:hmap>>> back
+w3af/plugins>>> discovery hmap
+w3af/plugins>>> list discovery enabled
+|---------------------------------------------------------------------------------|
+| Plugin    | Status  | Conf | Description                                        |
+| name      |         |      |                                                    |
+|---------------------------------------------------------------------------------|
+| hmap      | Enabled | Yes  | Fingerprint the server type, i.e apache, iis,      |
+|           |         |      | tomcat, etc.                                       |
+
+w3af>>> target
+w3af/config:target>>> view
+|----------------------------------------------------------------------------------|
+| Setting         | Value   | Description                                          |
+|----------------------------------------------------------------------------------|
+| targetOS        | unknown | Target operating system (unknown/unix/windows)       |
+| targetFramework | unknown | Target programming framework                         |
+|                 |         | (unknown/php/asp/asp.net/java/jsp/cfm/ruby/perl)     |
+| target          |         | A comma separated list of URLs                       |
+|----------------------------------------------------------------------------------|
+w3af/config:target>>> set target http://10.150.20.216 
+w3af/config:target>>> view
+|----------------------------------------------------------------------------------|
+| Setting    | Value            | Description                                      |
+|----------------------------------------------------------------------------------|
+| targetOS   | unknown          | Target operating system (unknown/unix/windows)   |
+| targetFramework | unknown          | Target programming framework                     |
+|            |                  | (unknown/php/asp/asp.net/java/jsp/cfm/ruby/perl) |
+| target     | http://10.150.20.216 | A comma separated list of URLs                   |
+
+start
+Auto-enabling plugin: discovery.serverHeader
+The server header for the remote web server is: "Apache/2.2.8 (Ubuntu) PHP/5.2.4-2ubuntu5.12 with Suhosin-Patch". This information was found in the request with id 16.
+"X-Powered-By" header for this HTTP server is: "PHP/5.2.4-2ubuntu5.12". This information was found in the request with id 17.
+Hmap web server fingerprint is starting, this may take a while.
+Found 1 URLs and 1 different points of injection.
+The list of URLs is:
+- http://10.150.20.216
+The list of fuzzable requests is:
+- http://10.150.20.216 | Method: GET
+Scan finished in 10 seconds.
+
+2)Audit-Audit plugins are used to detect vulnerabilities in the URL’s or forms provided by the discovery plugins. This is where the interaction between plugins in w3af comes to use. The audit plugin has options for testing different types of vulnerabilities like xss, sqli, csrf etc. It does this by injecting different strings in its request and then looking for a specific value (corresponding to the input string) in the response. False positives may occur during this process. If i want to know how the sqli plugin works, i could type in the commands as shown in the figure below.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

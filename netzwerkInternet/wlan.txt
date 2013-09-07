@@ -1,0 +1,17 @@
+ifconfig wlan2 up
+SIOCSIFFLAGS: Operation not possible due to RF-kill
+
+rfkill list all
+
+rfkill unblock 4
+
+ifconfig wlan2 up
+
+
+
+
+
+
+
+
+

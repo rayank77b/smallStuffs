@@ -1,0 +1,30 @@
+require 'open-uri'
+
+url="http://www.botva-online.ru/player.php?id=42946"
+
+pattern='img src="images/ico_11.png"'
+cnt=42954
+
+cnt.upto(cnt+0) do |x|
+  url="http://www.botva-online.ru/player.php?id=#{x}"
+  print "URL: #{url}\n"
+
+  arr=Array.new
+
+  f=open(url)
+  lines=f.readlines
+
+  nr=0
+  lines.each do |line|
+    if line=~/#{pattern}/
+      puts nr
+      puts line
+      puts lines[nr]
+      puts lines[nr+2]
+    end
+    nr=nr+1
+  end
+sleep 2
+end
+
+
