@@ -1,0 +1,1 @@
+gcc name.c -o bin/name
