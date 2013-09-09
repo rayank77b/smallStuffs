@@ -166,6 +166,9 @@ apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EEA14886
 apt-get update
 apt-get install oracle-java7-installer
 
+rsync -avz -e ssh remoteuser@remotehost:/remote/dir /this/dir/ 
+rsync -avz -e ssh /var/shares/videodata/ root@srv11:/backup/srv38/
+
 VER=$(git describe --tags HEAD)
 
 set -e
