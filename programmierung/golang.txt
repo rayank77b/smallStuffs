@@ -442,12 +442,21 @@ for {
     web.Hub().Send(<-storeMsg)
 }
 
+import "unsafe"
+Package unsafe contains operations that step around the type safety of Go programs. 
+Pointer represents a pointer to an arbitrary type. There are four special operations available for type Pointer that are not available for other types. 
+1) A pointer value of any type can be converted to a Pointer.
+2) A Pointer can be converted to a pointer value of any type.
+3) A uintptr can be converted to a Pointer.
+4) A Pointer can be converted to a uintptr.
 
+Pointer therefore allows a program to defeat the type system and read and write arbitrary memory. It should be used with extreme care. 
 
-
-
-
-
+import (
+    "log";
+)
+log.Stdoutf("bla bla bla\n");
+log.Exitf("connect faled! errno:[%s] error:[%s]\n", err["errno"], err["error"]);
 
 
 

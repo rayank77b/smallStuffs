@@ -95,6 +95,121 @@ url = ("https://www.dropbox.com/tray_login?"
        "i=%d&t=%d&v=%s&url=home&cl=en" %
         (host_int, now, h))
 
+multiprocessing is a package that supports spawning processes using an API similar to the threading module. The multiprocessing package offers both local and remote concurrency, effectively side-stepping the Global Interpreter Lock by using subprocesses instead of threads. Due to this, the multiprocessing module allows the programmer to fully leverage multiple processors on a given machine. It runs on both Unix and Windows.
+from multiprocessing import Pool
+p = Pool(5)
+def f(x):
+    return x*x
+p.map(f, [1,2,3])
+
+
+from multiprocessing import Process
+
+def f(name):
+    print 'hello', name
+
+if __name__ == '__main__':
+    p = Process(target=f, args=('bob',))
+    p.start()
+    p.join()
+
+if hasattr(os, 'getppid'):  # only available on Unix
+    print 'parent process:', os.getppid()
+
+The Queue class is a near clone of Queue.Queue.
+
+from multiprocessing import Process, Queue
+
+def f(q):
+    q.put([42, None, 'hello'])
+
+if __name__ == '__main__':
+    q = Queue()
+    p = Process(target=f, args=(q,))
+    p.start()
+    print q.get()    # prints "[42, None, 'hello']"
+    p.join()
+
+The Pipe() function returns a pair of connection objects connected by a pipe which by default is duplex (two-way). For example:
+
+from multiprocessing import Process, Pipe
+
+def f(conn):
+    conn.send([42, None, 'hello'])
+    conn.close()
+
+if __name__ == '__main__':
+    parent_conn, child_conn = Pipe()
+    p = Process(target=f, args=(child_conn,))
+    p.start()
+    print parent_conn.recv()   # prints "[42, None, 'hello']"
+    p.join()
+    
+http://docs.python.org/2/library/multiprocessing.html
+
+>>> os.path.isfile('baum.c')
+True
+>>> os.path.isfile('bin')
+False
+
+so to open a file, process its contents, and make sure to close it, you can simply do:
+
+with open("x.txt") as f:
+    data = f.read()
+    do something with data
+
+with open(STATE_FILENAME, 'w') as f:
+    f.write('\n'.join([instance.id for instance in instances]))
+
+client = paramiko.SSHClient()
+client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+client.connect(params['instance_name'], username='newsapps',
+        key_filename='/Users/sk/.ssh/frakkingtoasters.pem')
+stdin, stdout, stderr = client.exec_command('ab -r -n %(num_requests)s -c %(concurrent_requests)s -C "sessionid=NotARealSessionID" %(url)s' % params)
+ab_results = stdout.read()
+s = re.search('Time\ per\ request:\s+([0-9.]+)\ \[ms\]\ \(mean\)', ab_results)
+ms_per_request = float(s.group(1))
+client.close()
+
+
+from fabric.api import run
+from fabric.tasks import execute
+
+def do_something():
+    run("echo $RANDOM")
+
+if __name__ == "__main__":
+    execute(do_something, hosts=["username@host"])
+
+STATE_FILENAME = os.path.expanduser('~/.bees')
+
+with open(STATE_FILENAME, 'r') as f: 
+    username = f.readline().strip() 
+
+os.path.expanduser('~/.ssh/%s.pem' % key) 
+
+if not os.path.isfile(pem_path):
+    print 'No key file found at %s' % pem_path
+    return
+
+urllib2.urlopen(url) 
+
+python-virtualenv - Python virtual environment creator
+virtualenvwrapper - extension to virtualenv for managing multiple virtual Python environments
+
+for i, instance in enumerate(instances):
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
