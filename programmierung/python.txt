@@ -199,12 +199,20 @@ virtualenvwrapper - extension to virtualenv for managing multiple virtual Python
 
 for i, instance in enumerate(instances):
 
+# generator [ x for x in xlists], erzeugt eine liste mit x-werten aus xlists
+Type "help", "copyright", "credits" or "license" for more information.
+>>> l=[1,2,3,4,5]
+>>> [x*x for x in l]
+[1, 4, 9, 16, 25]
 
+f.write('\n'.join([instance.id for instance in instances]))
 
-
-
-
-
+NO_TRAILING_SLASH_REGEX = re.compile(r'^.*?\.\w+$') 
+^ anfang
+.*?  alles
+\.  punkt
+\w+ worter
+$ ende
 
 
 
