@@ -299,15 +299,49 @@ reduce(function, iterable[, initializer])
 
 if isinstance(v, types.StringTypes):
 
+for name, obj in locals().items():
+    if not name.startswith('_') and isinstance(obj, types.FunctionType):
+        COMMANDS[name] = obj
 
+>>> for name, obj in locals().items():
+...     if not name.startswith('_') and isinstance(obj, types.FunctionType):
+...             print name
 
+>>> import os
+>>> os.getcwd().split(os.sep)[-1]
+'smallStuffs'
+>>> os.getcwd()
+'/home/ray/git/smallStuffs'
 
+>>> name="test"
+>>> name.ljust(10)
+'test      '
 
+>>> b={'a':"blub",'b':"fish"}
+>>> d="hallo %(a)s und %(b)s .."
+>>> d%b
+'hallo blub und fish ..'
 
-
-
-
-
+>>> import sys 
+>>> import getpass 
+>>> import paramiko
+>>> client = paramiko.SSHClient()
+>>> client.load_system_host_keys() 
+>>> hostname="212.40.172.66"
+>>> port=22
+>>> username="ray"
+>>> password = getpass.getpass() 
+Password: 
+>>> client.connect(hostname, port, username, password) 
+>>> cmd="ps afux"
+>>> stdin, stdout, stderr = client.exec_command(cmd) 
+>>> stdout
+<paramiko.ChannelFile from <paramiko.Channel 1 (closed) -> <paramiko.Transport at 0x7a7ae910L (cipher aes128-ctr, 128 bits) (active; 0 open channel(s))>>>
+>>> for line in stdout: 
+...     print line,
+USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
+root         2  0.0  0.0      0     0 ?        S<   Jul23   0:00 [kthreadd]
+root         3  0.0  0.0      0     0 ?        S<   Jul23   0:00  \_ [migration/0]
 
 
 
