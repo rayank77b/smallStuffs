@@ -214,6 +214,102 @@ NO_TRAILING_SLASH_REGEX = re.compile(r'^.*?\.\w+$')
 \w+ worter
 $ ende
 
+from urlparse import urlparse
+parsed = urlparse(options.url)
+if not parsed.scheme:
+    parsed = urlparse("http://" + options.url)
+If not parsed.path:
+    print "error"
+
+blub={}
+blub['abc']="hallo"
+blub['doof']="fisch"
+print 'blub say: %(abc)s und %(doof)s ...'%(blub)
+
+headers="blub:aodsfdshf;asd:4934349943;id:10010100"
+d=h=dict(h.split(':') for h in headers.split(';'))
+>>> d
+{'asd': '4934349943', 'id': '10010100', 'blub': 'aodsfdshf'}
+>>> h
+{'asd': '4934349943', 'id': '10010100', 'blub': 'aodsfdshf'}
+
+request = urllib2.Request(url, headers=dict_headers) 
+request.add_header('Cookie', cookies) 
+urllib2.urlopen(request).read() 
+
+from pprint import pprint
+pprint(response) 
+
+import math
+tmin=23
+tmax=243
+map(math.log, [tmin,tmax])
+[3.1354942159291497, 5.493061443340548]
+
+>>> x = [1, 2, 3]
+>>> y = [4, 5, 6]
+>>> zipped = zip(x, y)
+>>> zipped
+[(1, 4), (2, 5), (3, 6)]
+
+"turn a string into a hex sequence"
+'.join(['%02X' % ord(c) for c in s])
+
+os.environ['HOME']
+
+l = logging.getLogger("secsh")
+l.setLevel(logging.DEBUG)
+
+try:
+    sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    sock.connect((hostname, port))
+except Exception, e:
+    print '*** Connect failed: ' + str(e)
+    traceback.print_exc()
+    sys.exit(1)
+
+# logging
+FORMAT = "%(asctime)-15s %(clientip)s %(user)-8s %(message)s"
+logging.basicConfig(format=FORMAT)
+d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
+logging.warning("Protocol problem: %s", "connection reset", extra=d)
+# would print something like:
+# 2006-02-08 22:20:02,165 192.168.0.1 fbloggs  Protocol problem: connection reset
+
+import struct
+>>> n=0x41
+>>> struct.pack('>I', n)
+'\x00\x00\x00A'
+>>> struct.pack('I', n)
+'A\x00\x00\x00'
+
+>>> [n[0] for n in locals().items()]
+['sys', 'cmds', 'set', 'staging', 'get', '__builtins__', 'setup', 'deploy', '__package__', 'getpass', 'tail', 'production', 'ENV', '__name__', 'n', 'os', '__doc__']
+
+cmds = dict([n for n in filter(lambda n: (n[0][0] != '_') and callable(n[1]), locals().items())])
+dict() generiert ein dictionaery aus 2 werten
+filter(f, d) filtert nach funktion f die wahr liefert, die d werte
+reduce(function, iterable[, initializer])
+
+>>> cmds.keys()
+['set', 'staging', 'deploy', 'setup', 'get', 'tail', 'production']
+>>> max_name_len = reduce(lambda a,b: max(a, len(b)), cmds.keys(), 0)
+>>> max_name_len
+10
+
+if isinstance(v, types.StringTypes):
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

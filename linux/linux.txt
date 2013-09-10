@@ -49,7 +49,8 @@ twprint --print-report --twrfile /opt/tripwire/lib/tripwire/report/prod-db-srv-2
 twadmin --print-polfile
 twadmin --print-cfgfile
 
-
+$ tempfile -s .csv
+/tmp/filesmEk3w.csv
 
 
 
