@@ -28,9 +28,20 @@ https://github.com/onyxfish
 https://github.com/ekulyk/PythonPusherClient 
 https://github.com/ekulyk/websocket-client 
 
+https://github.com/zmap/zmap/
+https://github.com/hcilab/campher
 
 
+rethinkdb
+https://github.com/rethinkdb/rethinkdb
+https://github.com/rethinkdb/rethinkdb/commit/c2062a77543a21d50ed5386c850059ee3c372156
 
+
+https://github.com/celery/kombu
+
+https://github.com/KeyserSosa/trialoftheclone1
+
+https://github.com/sdiehl
 
 
 
