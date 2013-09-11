@@ -343,6 +343,104 @@ USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND
 root         2  0.0  0.0      0     0 ?        S<   Jul23   0:00 [kthreadd]
 root         3  0.0  0.0      0     0 ?        S<   Jul23   0:00  \_ [migration/0]
 
+imp — Access the import internals
+This module provides an interface to the mechanisms used to implement the import statement.
+fp, pathname, description = imp.find_module(name)
+return imp.load_module(name, fp, pathname, description)
+
+# simple setup.py
+from distutils.core import setup
+import imp
+
+fab = imp.load_source('fab', 'fab')
+
+setup(
+    name='Fabric',
+    version=fab.__version__,
+    description='Fabric is a simple pythonic remote deployment tool.',
+    author=fab.__author__,
+    author_email=fab.__author_email__,
+    url=fab.__url__,
+    requires=['paramiko (>=1.6, <2.0)'],
+)
+
+>>> ENV={}
+>>> a="value of a"
+>>> b="value of b:%(a)s:"
+>>> c="value of c:%(b)s::%(a)s:"
+>>> ENV['a']=a
+>>> ENV['b']=b
+>>> a
+'value of a'
+>>> b%ENV
+'value of b:value of a:'
+>>> c
+'value of c:%(b)s::%(a)s:'
+>>> c%ENV
+'value of c:value of b:%(a)s:::value of a:'
+>>> (c%ENV)%ENV
+'value of c:value of b:value of a:::value of a:'
+
+def _shell():
+    "Start an interactive shell connection to the specified hosts."
+    def lines():
+        try:
+            while True:
+                yield raw_input("fab> ")
+        except EOFError:
+            # user pressed ctrl-d
+            print
+    for line in lines():
+        if line == 'exit':
+            break
+        elif line.startswith('sudo'):
+            print "we sudo it"
+        else:
+            print "runnnn cmd: ",line
+>>> _shell()
+fab> blub
+runnnn cmd:  blub
+fab> sudo
+we sudo it
+fab> exit
+
+
+def _trap_sigint(signal, frame):
+    "Trap ctrl-c and make sure we disconnect everything."
+    _disconnect()
+    exit(0) 
+
+signal.signal(signal.SIGINT, _trap_sigint) 
+
+default_value="blbu"
+print("bla '%s'" % (value1 or default_value))) 
+
+>>> import datetime 
+>>> datetime.datetime.now().strftime('%F_%H-%M-%S')
+'2012-01-11_19-48-02'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
