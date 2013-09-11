@@ -2,8 +2,8 @@
 
 
 FABRIC:
-https://github.com/fabric/fabric/commit/4fba283d7e818aa305258a26f81820a0912ad596
-https://github.com/fabric/fabric/commits/master?page=85
+https://github.com/fabric/fabric/commit/0fad7b35e523308408360b6f78f39680e2337446
+https://github.com/fabric/fabric/commits/master?page=84
 https://github.com/fabric/fabric
 
 https://github.com/bitprophetd
@@ -43,9 +43,11 @@ https://github.com/KeyserSosa/trialoftheclone1
 
 https://github.com/sdiehl
 
+https://github.com/sophacles?tab=repositories
+https://github.com/sophacles/bottle-cork
 
 
-
+https://github.com/fabric/fabric/commit/4fba283d7e818aa305258a26f81820a0912ad596
 
 
 
