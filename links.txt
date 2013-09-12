@@ -2,8 +2,8 @@
 
 
 FABRIC:
-https://github.com/fabric/fabric/commit/0fad7b35e523308408360b6f78f39680e2337446
-https://github.com/fabric/fabric/commits/master?page=84
+https://github.com/fabric/fabric/commit/d6834fd9495cb64afb6f0a29dab8c2c330a34dbc
+https://github.com/fabric/fabric/commits/master?page=83
 https://github.com/fabric/fabric
 
 https://github.com/bitprophetd
