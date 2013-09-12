@@ -1,6 +1,12 @@
 
 
 
+JQUERY:
+https://github.com/jquery/jquery/commits/master?page=153
+
+sqlmap:
+https://github.com/sqlmapproject/sqlmap/commits/master?page=168
+
 FABRIC:
 https://github.com/fabric/fabric/commit/d6834fd9495cb64afb6f0a29dab8c2c330a34dbc
 https://github.com/fabric/fabric/commits/master?page=83
