@@ -444,8 +444,39 @@ print hello() ## returns <b><i>hello world</i></b>
 >>> filter(lambda s: s != '', s.split(' '))
 ['as', 'sod', '230', '023', '93', '02', '0230', '4034', '39']
 
+print >>thefile, sometext
+thefile.write(sometext)
 
+"raw" string
+big = r"This is a lo"
 
+u or U to make it a Unicode string:
+hello = u'Hello\u0020World'
+
+Strings are immutable, which means that no matter what operation you do on a string, you will
+always produce a new string object
+
+mystr = "my string"
+mystr[0]  # 'm'
+mystr[-2] # 'n'
+
+mystr[1:4] # 'y s'
+mystr[3:]  # 'string'
+mystr[-3:] # 'ing'
+
+Slices can be extended, that is, include a third parameter that is known as the stride or step of
+the slice:
+mystr[:3:-1]  # 'gnirt'
+mystr[1::2]   # 'ysrn'
+
+list(mystr) # returns ['m','y',' ','s','t','r','i','n','g']
+mystr+'oid' # 'my stringoid'
+'xo'*3 # 'xoxoxo'
+one_large_string = '\n'.join(list_of_lines)
+s.isdigit( )
+s.toupper( )
+haystack.count('needle')
+list_of_lines = one_large_string.splitlines( )
 
 
 
