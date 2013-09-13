@@ -8,8 +8,8 @@ sqlmap:
 https://github.com/sqlmapproject/sqlmap/commits/master?page=168
 
 FABRIC:
-https://github.com/fabric/fabric/commit/d6834fd9495cb64afb6f0a29dab8c2c330a34dbc
-https://github.com/fabric/fabric/commits/master?page=83
+https://github.com/fabric/fabric/commit/22e7661952d2c0d2f824e3efeccf00c3a9acb4d2
+https://github.com/fabric/fabric/commits/master?page=82
 https://github.com/fabric/fabric
 
 https://github.com/bitprophetd

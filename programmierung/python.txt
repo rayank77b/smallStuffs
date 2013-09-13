@@ -420,7 +420,29 @@ print("bla '%s'" % (value1 or default_value)))
 '2012-01-11_19-48-02'
 
 
+Decorators: A decorator is the name used for a software design pattern. Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. 
+def makebold(fn):
+    def wrapped():
+        return "<b>" + fn() + "</b>"
+    return wrapped
 
+def makeitalic(fn):
+    def wrapped():
+        return "<i>" + fn() + "</i>"
+    return wrapped
+
+@makebold
+@makeitalic
+def hello():
+    return "hello world"
+
+print hello() ## returns <b><i>hello world</i></b>
+
+>>> s="as sod 230   023  93  02 0230  4034          39"
+>>> s.split(' ')
+['as', 'sod', '230', '', '', '023', '', '93', '', '02', '0230', '', '4034', '', '', '', '', '', '', '', '', '', '39']
+>>> filter(lambda s: s != '', s.split(' '))
+['as', 'sod', '230', '023', '93', '02', '0230', '4034', '39']
 
 
 
