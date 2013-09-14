@@ -80,10 +80,8 @@ host_int = data["host_int"]
 
 import hashlib
 import time
-
 host_id = 
 host_int = 
-
 now = int(time.time())
 
 fixed_secret = ’asdfdasfasdfin9’
@@ -101,7 +99,6 @@ p = Pool(5)
 def f(x):
     return x*x
 p.map(f, [1,2,3])
-
 
 from multiprocessing import Process
 
@@ -170,7 +167,6 @@ ab_results = stdout.read()
 s = re.search('Time\ per\ request:\s+([0-9.]+)\ \[ms\]\ \(mean\)', ab_results)
 ms_per_request = float(s.group(1))
 client.close()
-
 
 from fabric.api import run
 from fabric.tasks import execute
@@ -419,7 +415,6 @@ print("bla '%s'" % (value1 or default_value)))
 >>> datetime.datetime.now().strftime('%F_%H-%M-%S')
 '2012-01-11_19-48-02'
 
-
 Decorators: A decorator is the name used for a software design pattern. Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. 
 def makebold(fn):
     def wrapped():
@@ -478,11 +473,57 @@ s.toupper( )
 haystack.count('needle')
 list_of_lines = one_large_string.splitlines( )
 
+>>> passwd="osdoj"
+>>> passwd and "sudo -S" or "sudo"
+'sudo -S'
+>>> passwd=""
+>>> passwd and "sudo -S" or "sudo"
+'sudo'
 
+user = raw_input('Enter login name: ')
 
+>>> a=input("> ")
+> 23
+>>> a
+23
+>>> a=input("> ")
+> sdc
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<string>", line 1, in <module>
+NameError: name 'sdc' is not defined
 
+string.atoi()
 
+four different numerical types
+int(), long(), float(), complex()
 
+file = open(filename, 'r')
+allLines = file.readlines()
+file.close()
+for eachLine in allLines:
+    print eachLine,
+
+print 'My name is', self.__class__ # full class name
+
+_xxx do not import with 'from module import *'
+_xxx__ system-defined name
+_xxx request private name mangling in classes
+
+mutable:   lists, dictionaries
+immutable: numbers, strings, tuples
+
+random:  randint(),uniform(),random(),choice()
+
+[i for i in range(10) if i % 2 == 0]
+
+seq = ["one", "two", "three"]
+for i, element in enumerate(seq):
+    seq[i] = '%d: %s' % (i, seq[i])
+
+def _treatment(pos, element):
+    return '%d: %s' % (pos, element)
+[_treatment(i, el) for i, el in enumerate(seq)]
 
 
 

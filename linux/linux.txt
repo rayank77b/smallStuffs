@@ -196,6 +196,28 @@ quote() {
     sed 's/\\/\\\\/g' | sed 's/"/\\"/g' | sed 's/$/\\n/' | tr -d '\n'
 }
 
+Install Kernel on Debian
+you need:
+libncurses5-dev, kernel-package and maybe some other packages.
+cd /usr/src/linux-3.X
+make mrproper
+cp /boot/config-xxx .config
+make menuconfig
+make-kpkg -j4 --append-to-version=-amd64 --initrd kernel_image kernel_headers
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,9 @@
 
+ETCD: golang
+https://github.com/coreos/etcd
+https://github.com/coreos/etcd/commits/master?page=16
 
+https://github.com/Drin/perl_bot/commits/master
 
 JQUERY:
 https://github.com/jquery/jquery/commits/master?page=153
@@ -8,8 +12,8 @@ sqlmap:
 https://github.com/sqlmapproject/sqlmap/commits/master?page=168
 
 FABRIC:
-https://github.com/fabric/fabric/commit/22e7661952d2c0d2f824e3efeccf00c3a9acb4d2
-https://github.com/fabric/fabric/commits/master?page=82
+https://github.com/fabric/fabric/commit/284e665cd08997c4a126a04cfabfa9364861285a
+https://github.com/fabric/fabric/commits/master?page=81
 https://github.com/fabric/fabric
 
 https://github.com/bitprophetd
@@ -55,9 +59,9 @@ https://github.com/sophacles/bottle-cork
 
 https://github.com/fabric/fabric/commit/4fba283d7e818aa305258a26f81820a0912ad596
 
-
-
-
+https://github.com/xiangli-cmu/vegeta
+https://github.com/xiangli-cmu?tab=repositories
+https://github.com/coreos	
 
 
 
