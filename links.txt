@@ -2,6 +2,7 @@
 ETCD: golang
 https://github.com/coreos/etcd
 https://github.com/coreos/etcd/commits/master?page=16
+https://github.com/coreos/etcd/commit/56f28f80b297841d60c53c7d8ad13cbca4eb1b90
 
 https://github.com/Drin/perl_bot/commits/master
 
