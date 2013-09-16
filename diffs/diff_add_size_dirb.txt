@@ -1,0 +1,70 @@
+diff -urpN src/dirb.c /home/afrank/hacking/tools/dirb221/src/dirb.c
+--- src/dirb.c	2013-04-24 15:28:39.000000000 +0200
++++ /home/afrank/hacking/tools/dirb221/src/dirb.c	2013-06-25 12:41:47.004751046 +0200
+@@ -24,6 +24,7 @@ int main(int argc, char **argv) {
+   memset(&options, 0, sizeof(struct opciones));
+ 
+   options.exitonwarn=1;
++  options.ignore_size=-1;
+   options.ignore_nec=0;
+   options.default_nec=404;
+   options.lasting_bar=1;
+@@ -117,6 +118,9 @@ int main(int argc, char **argv) {
+       case 'N':
+         options.ignore_nec=atoi(optarg);
+         break;
++      case 'n':
++        options.ignore_size=atoi(optarg);
++        break;
+       case 'o':
+         options.saveoutput=1;
+         strncpy(options.savefile, optarg, STRING_SIZE-1);
+@@ -272,6 +276,7 @@ void ayuda(void) {
+   // printf(" -M <mutations> / -m <muts_file> : Mutate found URLs with this extensions.\n");
+   // printf(" -n <url>: Use the response for this URL as NEC.\n");
+   printf(" -N <nf_code>: Ignore responses with this HTTP code.\n");
++  printf(" -n <size_byte>: Ignore responses with size_byte response.\n");
+   printf(" -o <output_file> : Save output to disk.\n");
+   printf(" -p <proxy[:port]> : Use this proxy. (Default port is 1080)\n");
+   printf(" -P <proxy_username:proxy_password> : Proxy Authentication.\n");
+diff -urpN src/estructuras.h /home/afrank/hacking/tools/dirb221/src/estructuras.h
+--- src/estructuras.h	2011-09-05 17:19:55.000000000 +0200
++++ /home/afrank/hacking/tools/dirb221/src/estructuras.h	2013-06-25 12:39:00.120748542 +0200
+@@ -55,6 +55,7 @@ struct opciones {
+   int use_agent;
+   int ignore_nec;
+   int default_nec;
++  int ignore_size;
+   int debuging;
+   int exitonwarn;
+   int save_found;
+diff -urpN src/lanza_ataque.c /home/afrank/hacking/tools/dirb221/src/lanza_ataque.c
+--- src/lanza_ataque.c	2013-04-24 15:34:57.000000000 +0200
++++ /home/afrank/hacking/tools/dirb221/src/lanza_ataque.c	2013-06-25 12:37:01.116746757 +0200
+@@ -341,7 +341,10 @@ void lanza_ataque(char *inicio, struct w
+     // Mostramos la informacion si es interesante
+     ///////////////////////////////////////////////////////////////////////////
+ 
+-    if(existant && tested_estruct.codigo_http!=options.default_nec && tested_estruct.codigo_http!=options.ignore_nec) {
++    if(existant && 
++        tested_estruct.codigo_http!=options.default_nec && 
++        tested_estruct.codigo_http!=options.ignore_nec &&
++        tested_estruct.body_size!=options.ignore_size ) {
+ 
+       encontradas++;
+       if(!options.silent_mode) printf("%*c\r", columns, ' ');
+ 
+diff -urpN src/options.c /home/afrank/hacking/tools/dirb221/src/options.c
+--- src/options.c	2013-04-24 13:08:53.000000000 +0200
++++ /home/afrank/hacking/tools/dirb221/src/options.c	2013-06-25 12:38:46.488748338 +0200
+@@ -147,6 +147,10 @@ void get_options(void) {
+     IMPRIME("OPTION: Ignoring NOT_FOUND code -> %d\n", options.ignore_nec);
+     }
+ 
++  // -n
++  if(options.ignore_size>-1) {
++    IMPRIME("OPTION: Ignoring SIZE size -> %d\n", options.ignore_size);
++    }
+ 
+   // -p
+
