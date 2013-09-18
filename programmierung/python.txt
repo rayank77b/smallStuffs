@@ -525,6 +525,166 @@ def _treatment(pos, element):
     return '%d: %s' % (pos, element)
 [_treatment(i, el) for i, el in enumerate(seq)]
 
+for line in open("real.txt"):
+
+Many functions consume an "iterable" object
+• Reductions:
+sum(s), min(s), max(s)
+• Constructors
+list(s), tuple(s), set(s), dict(s)
+• in operator
+item in s
+
+>>> items = [1, 4, 5]
+>>> it = iter(items)
+>>> it.next()
+1
+>>> it.next()
+4
+>>> it.next()
+5
+>>> it.next()
+Traceback (most recent call last):
+File "<stdin>", line 1, in <module>
+StopIteration
+
+for x in obj:
+    # statements
+
+_iter = iter(obj)
+while 1:
+    try:
+        x = _iter.next()
+    except StopIteration:
+        break
+    # statements
+
+Any object that supports iter() and next() is said to be "iterable."
+
+class countdown(object):
+    def __init__(self,start):
+        self.count = start
+    def __iter__(self):
+        return self
+    def next(self):
+        if self.count <= 0:
+            raise StopIteration
+        r = self.count
+        self.count -= 1
+        return r
+
+>>> c =
+>>> for
+...
+...
+5 4 3 2
+>>>
+countdown(5)
+i in c:
+print i,
+1
+
+A generator is a function that produces a sequence of results instead of a single value
+Instead of returning a value, you generate a series of values (using the yield statement)
+
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+>>> for i in countdown(5):
+...
+print i,
+...
+5 4 3 2 1
+>>>
+
+Calling a generator function creates an generator object. However, it does not start running the function.
+yield produces a value, but suspends the function, Function resumes on next call to next()
+
+def countdown(n):
+    print "Counting down from", n
+    while n > 0:
+        yield n
+        n -= 1
+>>> x = countdown(10)
+>>> x
+<generator object at 0x58490>
+>>> x.next()
+Counting down from 10
+10
+>>>
+When the generator returns, iteration stops
+>>> x.next()
+Traceback (most recent call last):
+    File "<stdin>", line 1, in ?
+StopIteration
+
+A generator function is mainly a more convenient way of writing an iterator. You don't have to worry about the iterator protocol (.next, .__iter__, etc.)
+A generator is a one-time operation. You can iterate over the generated data once, but if you want to do it again, you have to call the generator function again. This is different than a list (which you can iterate over as many times as you want)
+
+A generated version of a list comprehension
+>>> a = [1,2,3,4]
+>>> b = (2*x for x in a)
+>>> b
+<generator object at 0x58760>
+>>> for i in b: print b,
+...
+2 4 6 8
+>>>
+This loops over a sequence of items and applies an operation to each item. However, results are produced one at a time using a generator
+
+>>> a = [1,2,3,4]
+>>> b = [2*x for x in a]
+>>> b
+[2, 4, 6, 8]
+>>> c = (2*x for x in a)
+<generator object at 0x58760>
+>>>
+
+General syntax
+(expression for i in s if cond1
+            for j in t if cond2
+            ...
+            if condfinal)
+What it means
+for i in s:
+    if cond1:
+        for j in t:
+            if cond2:
+                ...
+                if condfinal: yield expression
+
+The parens on a generator expression can dropped if used as a single function argument
+sum(x*x for x in s)  <- Generator expression
+
+Generator functions:
+def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+Generator expressions
+squares = (x*x for x in s)
+
+In both cases, we get an object that generates values (which are typically consumed in a for loop)
+
+# read the size from logs and sum
+wwwlog = open("access-log")
+total = 0
+for line in wwwlog:
+    bytestr = line.rsplit(None,1)[1]
+    if bytestr != '-':
+        total += int(bytestr)
+print "Total", total
+
+# generators
+wwwlog     = open("access-log")
+bytecolumn = (line.rsplit(None,1)[1] for line in wwwlog)
+bytes      = (int(x) for x in bytecolumn if x != '-')
+print "Total", sum(bytes)
+
+access-log -> wwwlog -> bytecolumn ->  bytes -> sum() -> total
+
+
 
 
 
