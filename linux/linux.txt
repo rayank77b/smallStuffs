@@ -206,6 +206,81 @@ make menuconfig
 make-kpkg -j4 --append-to-version=-amd64 --initrd kernel_image kernel_headers
 
 
+encrpyt:
+gpg -c --cipher-algo blowfish filename.txt
+decrypt:
+gpg -d filename.txt.gpg > output.txt
+
+
+lpr -Plp Datei # datei ausdrucken
+fuser -k /dev/lp0 # alle dienste die den /dev/lp0 benutzen toeten
+#/dev/usb/lp0
+scsi-scanner /dev/sg0
+set -o nochlobber
+git-rev-tree --bisect ^good1 ^good2 bad > git/refs/headers/tryN
+git checkout tryN
+^goodx > v2.6.12 bad > master
+movw%bx, (%rsi) <-> recvfrom()
+/usr/sbin/snort -b -m 027 -D -N -c /etc/snort/snort.conf -d -u snort -g snort -i eth1
+
+iptables -A INPUT -ptcp -s PVT_IP_HERE -d 0/0
+
+wget -p nur inhalt,
+wget -r -np nur unterverzeichniss, nicht von root an
+
+test -x $1 || exit 5
+find /proc -type s
+ls -Rr /proc/[0-9]* | fgrep ^s
+
+found free loop device:
+losetup -f
+encryption with losetup:
+insmod loop.o
+insmod des.o
+insmod cryptoloop.o
+dd if=/dev/urandom of=crypto.img bs=1M count=50
+losetup -e blowfish /dev/loop0 crypto.img
+mkfs -t ext2 /dev/loop0
+losetup -d /dev/loop0 # delete
+mount -o encryption=aes256 crypto.img crypto_home
+encryption with bind drive:
+losetup -e aes256 /dev/loop0 /dev/sda1
+losetup -d /dev/loop0
+mount -o encryption=aes256 /dev/sda1 crypto_home
+resizing the image:
+dd if=/dev/urandom bs=1M count=20 >> crypto.img
+losetup -e aes256 /dev/loop0 crypto.img
+ext2resize /dev/loop0
+encrypt/decrypt with openssl:
+openssl enc -aes-256-cbc -salt -in password.txt -out password.txt.enc
+openssl enc -d -aes-256-cbc -in password.txt.enc -out password.txt
+echo "put /bla/bl/das.log.gz /bls/bl2/dies.log.bz2" >> $TFTPSCRIPT
+tftp $TFTPSRV < $TFTPSCRIPT
+uuencode $FWLOG/old/$BLA.log.gz $BLA.log.gz | mail -s "FWEXPORT $EXPORTNAME.log.gz" $MAILRECPT
+
+#!/bin/sh
+#
+[ $# -lt 1 ] && echo $0 server && exit 1
+
+echo 'GET / HTTP/1.0\n' | nc $1 80 | egrep '^Server:'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

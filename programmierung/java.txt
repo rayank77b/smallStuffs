@@ -23,3 +23,98 @@ To check the version of Java you are now running
 
 java -version
 
+
+java.sql.*
+
+connecting to Driver Interface
+try {
+    class.forName("com.mysql.jdbc.Driver").newInstance();
+} catch ( Exception e) { ... }
+
+Connection cn = DriverManager.getConnection("jdbc:mysql://localhost/test?user=bla&password=bla");
+
+SQLException ex;
+ex.getMessage().ex_getSQLState()
+ex.getErrorCode()
+
+Statement st = cn.createStatement();
+ResultSet rs = st.executeQuery("SELECT ...");
+
+if( st.execute("SELECT ..."))
+rs = st.getResultSet();
+
+rs.close(); st.close();
+
+
+derby -> apache
+
+System.setProperty("derby.system.home", "dbname.db");
+Connection conn = DriverManager.getConnection("jdbc:derby:test_db;create=true");
+
+try {
+    Statement s = conn.createStatement();
+    s.execute("CREATE TABLE data (id INT, text VARCHAR(100), PRIMARY KEY (id))");
+    s.execute("INSERT INTO data VALUES (1, 'Hallo')");
+    s.execute("INSERT INTO data VALUES (2, 'Blub')");
+    ResultSet rs = s.exeucteQuery("SELECT text FROM data WHERE id=1");
+    while (rs.next()) {
+        String text = rs.getString("text");
+        System.out.println(text);
+    }
+} finally {
+    conn.close();
+}
+
+read from input:
+
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String name = br.readLine();
+int age = new Integer( br.readLine() ).intValue();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

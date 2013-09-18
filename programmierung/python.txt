@@ -685,10 +685,301 @@ print "Total", sum(bytes)
 access-log -> wwwlog -> bytecolumn ->  bytes -> sum() -> total
 
 
+this is a simple scanner in python.
+
+work: call a system ping (with popen() ) and look for ttl count.
+
+if count ~64 -> linux, count ~128 -> windows, count ~255 -> BSD/Router
+
+then it connect to well known ports and look for respond.
+
+limits: only certain ports and only TCP
+
+trace2.py
+
+###################################################################
 
 
+#!/usr/bin/python
+
+import sys, os, socket, re
 
 
+class Scan:
+  def __init__(self):
+    #print "create socket ..."
+    self.scanNew=None
+    self.allPorts={"ftp-data":20, "ftp":21,"smtp":25, "http":80, "pop3":110, "imap3":220,  "https":443,
+                    "ldap":389 }
+    self.linuxPorts={"ssh":22, "dns":53, "snmp":161, "snmp-trap":162}
+    self.windowPorts={"netbios-ns":137, "netbios-dgm":138, "netbios-ssn":139,"microsoft-ds":445 }
+
+  def ping(self, ip):
+    findttl = re.compile(r"ttl=(\d{1,3}) ")
+    pingpipe = os.popen("ping -W 1 -c 1 "+ip,"r")
+    for line in pingpipe.readlines():
+      if "ttl" in line:
+        result = re.findall(findttl,line)
+        return int(result[0])
+    return -1  
+
+  def connectTCP(self, ip, port, portname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.settimeout(1)
+    try:
+      s.connect((ip, port))
+      print "connect to %s : %d (%s) was succesfull"%(ip, port, portname)
+    except:
+      pass
+      #print "failing to connect %s : %d (%s)"%(ip, port, portname)
+    s.close()
+
+  def scann(self, ip):
+    ttl=self.ping(ip)
+    if( ttl==-1):
+      print "IP %s not reachable"%ip
+    elif( ttl==0 ):
+      print "huch, ttl is zero"
+    elif( ttl>0 and ttl<65 data-blogger-escaped-br="">      print " %s possible LINUX and is Alive"%ip
+      for port in self.allPorts.keys():
+        self.connectTCP(ip, self.allPorts[port], port)
+      for port in self.linuxPorts.keys():
+        self.connectTCP(ip, self.linuxPorts[port], port)
+    elif( ttl>64 and ttl<129 data-blogger-escaped-br="">      print " %s possible WINDOWS and is Alive"%ip
+      for port in self.allPorts.keys():
+        self.connectTCP(ip, self.allPorts[port], port)
+      for port in self.windowPorts.keys():
+        self.connectTCP(ip, self.windowPorts[port], port)
+    else:
+      print " %s possible BSD or Router and is Alive"%ip
+      for port in self.allPorts.keys():
+        self.connectTCP(ip, self.allPorts[port], port)
+      for port in self.linuxPorts.keys():
+        self.connectTCP(ip, self.linuxPorts[port], port)
+
+if( len(sys.argv) != 4):
+  print "%s ip(first triple) begin end"%sys.argv[0]
+  print "  example:"
+  print "  %s 123.45.67  10 20"%sys.argv[0]
+  sys.exit(2)
+
+iptriple=sys.argv[1]
+begin=int(sys.argv[2])
+end=int(sys.argv[3])
+
+scan=Scan()
+
+for ip4 in range(begin, end):
+  ip="%s.%d"%(iptriple,ip4)
+  scan.scann(ip)
+
+###################################################################
+
+
+you can set your own exception handler, this is done by
+sys.excepthook = your_func
+for that you must define a function, with following parameters:
+def your_func(exc_type, exc_obj, exc_tb):
+    print "whoaaa my exception"
+
+then you can call an exception
+5/0
+=>
+whoaaa my exception
+def your_func(exc_type, exc_obj, exc_tb):
+    import traceback
+    l = traceback.format_exception(exc_type, exc_obj, exc_tb)
+    print type(l)
+    print l
+
+=>
+['Traceback (most recent call last):\n', ' File "./t1.py", line 37, in \n 5/0\n', 'ZeroDivisionError: integer division or modulo by zero\n']
+traceback.format_exception(...) return us a list of information
+as a normal exception traceback
+
+functions numbers
+
+int(), long8), float(), round(), hex(), oct(), pow(), cmp()
+
+s1+s2 merge
+
+s1*n s1+s1+s1+s1+...
+
+functions strings:
+
+org(), chr(), str(), repr(), unicode(), len()
+
+s.count(), s.encode(), s.endswith(), s.find(), s.isalnum(), s.iksalpha(), s.isdigi(), s.islower(), s.isspace(), s.join(), s.lstrip(), s.replace(), s.rfind(), s.rstrip(), s.split(), s.startswith(), s.strip(), s.swapcase()
+
+List:
+
+array=[1,2,3,4]
+
+len(array)
+
+array[1]="blub"
+
+array[2]=["bla", [1,2,3], 'ups']
+
+append(), extend(), count(), index(), insert(), remove(), pop(), reverse(), sort()
+
+
+range()
+
+range(4)
+
+[0,1,2,3]
+
+range(5,10,2]
+
+[5,7,9]
+
+Tuples
+
+same as list but imutable
+
+t1=(1,2,3)
+
+
+indicies and slices
+
+s[4:]
+
+s[4:7]
+
+s[:-7]
+
+s[-4:]
+
+s[:]
+
+max(), min(), len()
+
+a,b,c = [ 1, 2, 3 ]
+
+del delete a varaible
+
+a= 1
+
+del a
+
+assoziative lists, hash
+
+h = { k:v, k2:v2, k3:v3 }
+
+t={"peter":23450, "anna":39454, "blub":439549}
+
+t["blub"]
+
+items(), keys(), values(), has_key(), update()
+
+t.has_key("anna")
+
+len(), del()
+
+None, type(), in-operator
+
+if 2 in lists:
+
+...
+
+if not "a" in string:
+
+...
+
+Functions:
+
+def p(n):
+
+"bla bla, describe function for help"
+
+for a in range(2,n):
+
+...
+
+p(3)
+
+def fct(a, b="bla"):
+
+...
+
+fct(3, "lala")
+
+fct(3)
+
+several arguments with *
+
+def h(g, *args):
+
+for m in args:
+
+...
+
+h("bl", "blub", "abc", "dbc")
+
+def h(**args):
+
+if len(args==0): return
+
+for n in args.keys():
+
+print args[n]+" : "+ n
+
+h(v1="blub", v2="aga")
+
+def complexparameters(firma, delim="-", *address, **inventars):
+
+def doNothing():
+
+pass
+
+functionale coding
+
+add = lambda x,y: x+y
+
+add(2,3)
+
+map(ord, "string")
+
+[115,116,114,...]
+
+[ord(a) for a in "string"]
+
+map(lambda x:x+1,(1,2,3))
+
+map for tuple (1,2,3) x+1
+
+def p(n):
+
+for a in range(2,n):
+
+if n%a == 0:
+
+return 0
+
+else:
+
+return 1
+
+filter(p, range(100))
+
+reduce(function, collection)
+
+a=5
+
+exec("var" +str(a)+"="+str(a))
+
+=> var5=5
+
+docstrings:
+
+def bla():
+
+""" blal bla"""
+
+...
+
+bla.__doc__
 
 
 

@@ -423,42 +423,6 @@ func main() {
     }
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 Channels
 Like maps, channels are allocated with make, and the resulting value acts as a reference to an underlying data structure. If an optional integer parameter is provided, it sets the buffer size for the channel. The default is zero, for an unbuffered or synchronous channel. 
 ci := make(chan int)            // unbuffered channel of integers
@@ -970,6 +934,336 @@ const (
 	b = 1 << iota  // b == 2
 	c = 1 << iota  // c == 4
 )
+
+Here is some introduction to new Google programing language.
+
+At first go has his design to build a fast compiling system programming language for fast application. There is no mess with Java or C#/C++. go has no inheritance, but interfaces.
+
+simple tutorial can be found on golang.org
+
+At first the question: why yet another language?
+
+google need a language which is fast in compiling and runing. Has the advantages of typing but not overloaded wiht oop stuff.
+
+simple example:
+
+
+// define the namespace
+package main
+
+// import the formated print package
+// import fmt "fmt";
+
+// import a couple of packages
+import (
+    "flag";      // flag package is a good replacament for main(int argc, char **args) and 
+                 // replace the argument calculation with getopt() and switch. then create
+                 // a help function automatic.
+    "fmt";
+)
+
+// create a boolean variable from package flag and set the values 
+var blub = flag.Bool("g", false, "blub lubn blub")
+
+// g => -g
+// false => set it at first to false
+// "blub..." => description in help switch
+
+func main() {
+  flag.Parse();  
+  // parse the arguments
+
+  // ask if the 
+  if  *blub {
+    fmt.Printf("blub was setted\n");
+  } else {
+    fmt.Printf("blub was not setted\n");
+  }
+}
+as you has see variables are defined with var
+
+var v1 int;
+var v2 string;
+var v3 float;
+
+for printing is there the package fmt: fmt.Printf(..)
+then exists other methods as in C.
+to compile:
+x64:
+6g file.go
+6l file.6 -o file
+for x86
+8g file.go
+8l file.8 -o file
+to be continued ...
+...
+
+we create first a file (package) Person
+
+Person.go:
+
+
+package Person
+
+type Person struct { 
+  vorname string;
+  name string;
+  alter int;
+}
+
+func NewPerson(v string, n string, a int) *Person {
+  return &Person{v, n, a}
+}
+
+func (pers *Person) String() string {
+  return "Name: "+pers.name+"  Vorname: "+pers.vorname;
+}
+
+then the main package with main()
+
+Main.go
+
+
+package main
+
+import (
+  prs "./Person";
+  "fmt";
+)
+
+
+func main() {
+
+  person := prs.NewPerson("blue", "blub", 42);
+
+
+  fmt.Printf("person is: \n");
+  fmt.Printf(person.String());
+  fmt.Printf("\n");
+}
+
+compile and link:
+
+6g Person.go
+
+6g Main.go
+
+6l -o Main Main.6
+
+execute: ./Main
+
+>person is:
+
+>Name: blub Vorname: blue
+
+At first we must import our file as "./Person"
+At second the function that are created for outside must begin with Capitalized Character.
+
+package Person
+type Person struct { 
+  vorname string;
+  name string;
+  alter int;
+}
+
+func newPerson(v string, n string, a int) *Person {
+  return &Person{v, n, a}
+}
+
+Person.newPerson(...) doesnot work.
+"For clients (importers) of the package, names must
+be upper case to be visible: global variables,
+functions, types, constants, plus methods and
+structure fields for global variables and types.
+const hello = "you smell" // package visible
+const Hello = "you smell nice" // globally visible
+const _Bye = "stinko!" // _ is not upper
+
+Go doesn't have references.
+all private functions begin with small character.
+all public functions begin with big character.
+To generate some Unit test:
+name: mylib_test.go ( xxx_test.go )
+the function must be called: TestXXX(t *testing.T) { ...
+and import: "testing"
+send Fatal error
+if err != nil {
+  t.Fatalf("Myerror %q: %s", path, err)
+}
+// or 
+t.Errorf("bla bla %q ", path)
+The T struct is:
+type T struct {
+ errors string;
+ failed bool;
+ ch chan *T;
+}
+There are some functions XXXf are with format string
+Fail(), Failed(): set the failed variable or ask them. (don't exit)
+FailNow() set the fail and exit.
+Log()/Logf(): set the errors string.
+Error()/Errorf(): Log with Fail
+Fatal()/Fatalf(): Log with FailNow
+To test a package, write a set of Go source files
+within the same package; give the files names of the
+form *_test.go.
+testing tool: gotest
+func TestXxxx(t *testing.T)
+create the file. later call gotest my_test.go
+
+"The defer statement executes a function (or method)
+when the enclosing function returns. The arguments
+are evaluated at the point of the defer; the function
+call happens upon return." GocourseDay1.pdf
+leet look folowing programm:
+package main
+import "fmt"
+func b() {
+  fmt.Printf("called b()\n");
+}
+func a() int {
+  fmt.Printf("start a()\n");
+  defer b();
+  fmt.Printf("ended a()\n");
+  return 0;
+}
+func main() {
+  fmt.Printf("start main\n");
+  fmt.Printf("call a()\n");
+  a();
+  fmt.Printf("after a()\n");
+  fmt.Printf("\n");
+}
+a() call with defer b(). But the outprint show:
+./6.out 
+start main
+call a()
+start a()
+ended a()
+called b()
+after a()
+
+we can see that b() will be called before a() return.
+=> defer is useful for closing fds, unlocking mutexes, etc.
+defer is simmilar to atexit() for main() in C.
+futher example:
+package main
+import "fmt"
+func trace(s string) string {
+ fmt.Print("entering:", s, "\n");
+  return s
+}
+func un(s string) {
+  fmt.Print("leaving:", s, "\n")
+}
+func a() {
+
+ defer un(trace("a"));
+  fmt.Print("in a\n")
+}
+func b() {
+
+ defer un(trace("b"));
+  fmt.Print("in b\n");
+  a()
+}
+func main() { b() }
+the output is:
+./6.out 
+entering:b
+in b
+entering:a
+in a
+leaving:a
+leaving:b
+as we can see: defer f1(f2()) f2() is called immediately but f1() is called at ending.
+
+package is a collection of source files begining with "package nameofpackage".
+import "fmt"
+// now useable fmt outputs
+fmt.Print(...)
+import my "fmt"  // with my own name. (for purpose if namespace coliders ;)
+my.Print(...)
+each package can have an init() for initalization data (single threaded).
+let see:
+a.go
+package a
+import "fmt"
+var A int
+func init() {
+    A = 4;
+  fmt.Print("A init\n");
+}
+b.go
+package b
+import "fmt"
+var B int
+func init() {
+  B=15;
+  fmt.Print("B init\n");
+}
+mainab.go
+package main
+import (
+  "fmt";
+  "./a";
+  "./b";
+)
+func main() {
+  fmt.Print("call main()\n");
+  var x= a.A;
+  var y= b.B;
+  var z = x + y;
+  fmt.Print(z);
+}
+output:
+./6.out 
+B init
+A init
+call main()
+at first there will be called init. later the main.
+"To build a program, the packages, and the files within them, must be compiled in the correct order.
+Package dependencies determine the order in which to build packages. "
+
+Package Purpose Examples
+fmt formatted I/OPrintf, Sprintf
+os OS interfaceOpen, Read, Write
+str convnumbers &lt;-&gt; strings<!----->Atoi, Atof, Itoa
+io generic I/O Copy, Pipe
+flag flags: --help etc.Bool, String
+log event logging Log, Logf, Stderr
+regexp regular expressions Compile, Match
+template HTML, etc.Parse, Execute
+bytes byte arraysCompare, Buffer
+
+further libs: bignum, crypto, encoding, exec, hash, http, image, json, net, math, rand, regexp, sort, syscall, xml, time, unicode,
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

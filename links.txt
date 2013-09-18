@@ -1,9 +1,19 @@
 
-ETCD: golang
-https://github.com/coreos/etcd
-https://github.com/coreos/etcd/commits/master?page=16
-https://github.com/coreos/etcd/commit/56f28f80b297841d60c53c7d8ad13cbca4eb1b90
+https://sites.google.com/site/rcpwire/
+https://sites.google.com/site/rcpciscat/
+http://sites.google.com/site/rcplinadmin
 
+GOLANG
+    ETCD:
+        https://github.com/coreos/etcd
+        https://github.com/coreos/etcd/commits/master?page=16
+        https://github.com/coreos/etcd/commit/69a8116272c8d61cee291f514c3cd709b99bd61f
+    CORE-ADMIN
+        https://github.com/philips/core-admin
+
+
+https://github.com/goraft/raft
+https://github.com/systemd
 https://github.com/Drin/perl_bot/commits/master
 
 JQUERY:
