@@ -192,16 +192,110 @@ Scan finished in 10 seconds.
 
 
 
+The problem nowadays to learn buffer overflow is:
+
+- linux kernel has protection (va_randomize, exec_shield,...)
+
+- distribution has protection (armor, selinux, ...)
+
+- gcc has protection (stack canary, ...
+
+That is good, because it protect us. But bad for learning.
+
+To learn "buffer overflows" you must deactivate the protection
+
+some tips:
+
+to deactivate gcc protection:
+
+-fno-stack-protector
+
+-fnomudflap
+
+-D_FORTIFY_SOURCE=0
+
+gcc overflow.c -o overflow -fno-stack-protector
+
+gcc -fno-stack-protector -z execstack -o bug bug.c
+
+to deactivate kernel protection:
+
+echo "0" > /proc/sys/kernel/randomize_va_space
+
+echo "0" > /proc/sys/kernel/exec-shield
+
+echo "0" > /proc/sys/kernel/exec-shield-randomize
+
+info about execstack
+
+If you look at the programm with objdump (objdump -x cmd):
+
+STACK off 0x0000000000000000 vaddr 0x0000000000000000 paddr 0x0000000000000000 align 2**3
+
+filesz 0x0000000000000000 memsz 0x0000000000000000 flags rw-
+
+The stack is not executable!
+
+you can do it executable with
+
+gcc -fno-stack-protector -z execstack -o bug bug.c
+
+If you want to learn heap or bss overflow you must do them executable too.
+
+DYNAMIC off 0x0000000000000e40 vaddr 0x0000000000600e40 paddr 0x0000000000600e40 align 2**3
+
+filesz 0x00000000000001a0 memsz 0x00000000000001a0 flags rw-
 
 
 
 
 
+THC-RUT
+
+is a tool for monitoring networks. It offers a wide range of network discovery utilities like arp lookup on an IP range, spoofed DHCP request, RARP, BOOTP, ICMP-ping, ICMP address mask request, OS fingerprinting, high-speed host discovery, ...
+
+thcrut arp 10.10.10.1-10.10.10.20
+
+scan a network with arp-discovery.
+
+ArpAlert
+
+is a discovery tool for unauthorized request on MAC address. Some more info manpage
+
+SendIP
+
+a packet generator (IPv4, IPv6, NTP, BGP, RIP, TCP, UDP, ICMP, ...). Some complex, but very usefull packet genrator (see manpage)
+
+Attention: the order of parameter is important to build correct packet ;)
+
+Tor
+
+is an anonymous proxy. Tor is a network of virtual tunnels that allows people and groups to improve their privacy and security on the Internet. It also enables software developers to create new communication tools with built-in privacy features. Tor provides the foundation for a range of applications that allow organizations and individuals to share information over public networks without compromising their privacy.
+
+Knock
+
+knockd is a port-knock server. It listens to all traffic on an ethernet (or PPP) interface, looking for special "knock" sequences of port-hits. A client makes these port-hits by sending a TCP (or UDP) packet to a port on the server. This port need not be open -- since knockd listens at the link-layer level, it sees all traffic even if it's destined for a closed port. When the server detects a specific sequence of port-hits, it runs a command defined in its configuration file. This can be used to open up holes in a firewall for quick access.
 
 
+for testing some security stuff aka buffer overflows, you must disable security such as address randomization and stack execuation deactivation.
 
+simple as root do:
 
+echo "0" > /proc/sys/kernel/randomize_va_space
 
+echo "0" > /proc/sys/kernel/exec-shield
+
+echo "0" > /proc/sys/kernel/exec-shield-randomize
+
+next you must compile the application without stack execution dissable and stack protection for example. example for a gcc compilation flags (that help me to learn hacking):
+
+gcc -m32 -w -fno-pie -z norelro -fno-stack-protector -ggdb -z execstack -o myprog myprog.c
+
+see my last article (the same stuff, but older)
+
+http://raycompstuff.blogspot.com/2010/09/hacks-tutorial-zero.html
+
+have fun
 
 
 

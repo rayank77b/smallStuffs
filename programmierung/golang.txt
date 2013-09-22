@@ -1238,6 +1238,1116 @@ bytes byte arraysCompare, Buffer
 
 further libs: bignum, crypto, encoding, exec, hash, http, image, json, net, math, rand, regexp, sort, syscall, xml, time, unicode,
 
+so there will be some golang tips.
+
+ 
+type My struct {
+    a, b int;
+    name string;
+}
+
+create a struct with three variables, a and b are integers. name is a string. The struct name is My.
+
+
+m := My{1,2,"ray"};
+fmt.Println(m);
+
+m:= XXX{inputs} create and initialize the struct to variable m.
+
+Println(m) print out: {1 2 ray}.
+
+to create you own methods for the stuct do: func (v *Mystruct) method(...) returntyps { ... }
+
+
+func (m *My) String() string {
+    ret := fmt.Sprintf("a: %d, b: %d, name: %s\n", m.a, m.b, m.name);
+    return ret;
+}
+
+here we create the String() method for printing our struct as a string. Access variables are done through m.var.
+
+to define a simple array of integers: a:=[3]int{1,2,3}
+
+if you don't know the length: a:=[]int{1,2,3,4,5,1,2,3}
+
+create an assoziative array or dictionary or hash: hash := map[string]int{"eins":1, "zwei":2, "drei":3}; where map[keytyp]valuetyp.
+
+
+    hash2 := map[string]string{"blub":"aodu", "a":"ousdf", "ouew":"gofdu"};
+
+    // iterate through the hash, range return the key and value of the hash.
+    for k, v := range hash2 {
+        fmt.Println("key: ",k,"   value: ",v);
+    }
+
+print out:
+
+key: blub value: aodu
+
+key: ouew value: gofdu
+
+key: a value: ousdf
+
+Read a directory:
+
+
+package main
+
+import (
+    "io";
+    "fmt";
+)
+
+func main() {
+    dir, err := io.ReadDir("/home/ray/daten");
+
+    fmt.Println("err: ", err);
+    fmt.Println(dir);
+
+    for _, v := range dir {
+        fmt.Println(">>", v);
+    }
+}
+
+let look the source on src/pkg/io/utils.go:
+
+
+// ReadDir reads the directory named by dirname and returns
+// a list of sorted directory entries.
+func ReadDir(dirname string) ([]*os.Dir, os.Error) {
+    f, err := os.Open(dirname, os.O_RDONLY, 0);  // open you directory
+    if err != nil {
+        return nil, err
+    }
+    list, err := f.Readdir(-1);    // f is a file handler
+    f.Close();
+    if err != nil {
+        return nil, err
+    }
+    dirs := make(dirList, len(list));
+    for i := range list {
+        dirs[i] = &list[i]
+    }
+    sort.Sort(dirs);
+    return dirs, nil;
+}
+
+func ReadDir(dirname string) ([]*os.Dir, os.Error) : ReadDir reads the directory named by dirname and returns a list of sorted directory entries.
+
+func Open(name string, flag int, perm int) (file *File, err Error): Open opens the named file with specified flag (O_RDONLY etc.) and perm, (0666 etc.) if applicable. If successful, methods on the returned File can be used for I/O. It returns the File and an Error, if any.
+
+Open return a File pointer. internal Open called a syscall to open
+
+func (file *File) Readdir(count int) (dirs []Dir, err Error): Readdir reads the contents of the directory associated with file and returns an array of up to count Dir structures, as would be returned by Stat, in directory order. Subsequent calls on the same file will yield further Dirs. A negative count means to read until EOF. Readdir returns the array and an Error, if any.
+
+our io.ReadDir() open the dir, read it through the file, create a list, sort and return the dir list.
+
+
+    for _, v := range dir {
+        if v.IsDirectory() {
+            fmt.Println(v.Name," is directory");
+        }
+    }
+
+print out all direcotries name.
+
+more info about dir is in: src/pkg/os/types.go or http://golang.org/pkg/os/#Dir
+
+Read a file
+
+
+    fileObj, err := os.Open( "echo.go", os.O_RDONLY, 0666 );
+    if err != nil {
+        log.Stderr( err );
+        return;
+    }
+
+  //open the file and test for errors. log.Stderr print the message with a timestamp as a log.
+
+  // create a buffered reader
+  r := bufio.NewReader( fileObj );
+
+  // read each line 
+  for {
+      line, err := r.ReadString('\n');
+
+a simple get for http:
+
+
+package main
+
+import (
+ "io";
+ "strings";
+  "log";
+  "http";
+  "fmt";
+)
+
+func main() {
+ r, _, err := http.Get("http://www.google.com/robots.txt");
+ var b []byte;
+ if err == nil {
+  b, err = io.ReadAll(r.Body);
+  r.Body.Close();
+ }
+
+ if err != nil {
+  log.Stderr(err)
+ } else {
+    fmt.Println(string(b));
+  }
+}
+
+ok, it was not very simple.
+
+r, _, err := http.Get("http://www.google.com/robots.txt");
+
+get the Response in r. Response has: a StatusCode, Body and Header.
+
+
+type Response struct {
+    Status     string; // e.g. "200 OK"
+    StatusCode int;    // e.g. 200
+    Header map[string]string;
+    Body io.ReadCloser;
+}
+
+Header is a simple string hash. Body is an interface to ReadCloser: all structures with Read and Close.
+
+func Get(url string) (r *Response, finalURL string, err os.Error) is doing followings:
+
+- do a redirection loop (maximal 10 times)
+
+- parse the url
+
+- send the request
+
+- if should redirect, get the new location in header
+
+- if should not redirect: return the result from send()
+
+b, err = io.ReadAll(r.Body);
+
+read the data from response body (which has a reader from connection) in a byte array.
+
+fmt.Println(string(b));
+
+printout the bytes as string
+
+create a simple webserver
+
+
+package main
+
+import (
+ "http";
+ "io";
+)
+
+// hello world, the web server
+func HelloServer(c *http.Conn, req *http.Request) {
+ io.WriteString(c, "hello, world!\n");
+}
+
+// call a html page
+func MyServerPage(c *http.Conn, req *http.Request) {
+ http.ServeFile(c, req, "myhtml.html");
+}
+
+func main() {
+ http.Handle("/hello", http.HandlerFunc(HelloServer));
+ http.Handle("/my.html", http.HandlerFunc(MyServerPage));
+ err := http.ListenAndServe(":8080", nil);
+ if err != nil {
+  panic("ListenAndServe: ", err.String())
+ }
+}
+
+http.Handle("/hello", http.HandlerFunc(HelloServer));
+
+set the hadler function HelloServer with "/hello".
+
+err := http.ListenAndServe(":8080", nil);
+
+start the TCP server on port 8080, that handle the registered handler.
+
+io.WriteString(c, "hello, world!\n"); write a simple string.
+
+http.ServeFile(c, req, "myhtml.html"); read the file and print it out.
+
+package main
+
+import "fmt"
+import "time"
+
+func main() {
+    
+    fmt.Println("time in seconds    : ", time.Seconds());
+    fmt.Println("time in nanoseconds: ", time.Nanoseconds());
+    
+    fmt.Println("sleep 1 second.");
+
+    time.Sleep(1*1000*1000*1000);
+
+    fmt.Println("time in seconds    : ", time.Seconds());
+    fmt.Println("time in nanoseconds: ", time.Nanoseconds());
+
+    fmt.Println("wait sleep 1 second.");
+    before := time.Nanoseconds();
+    time.Sleep(1*1000*1000*1000);
+    after := time.Nanoseconds();
+    fmt.Println("difference of nanoseconds: ", (after-before));
+    
+    t:=time.LocalTime();
+    fmt.Println("time.String(): ", t.String());
+}
+
+time.Seconds() get the time as unix time in seconds
+
+time.Nanoseconds() dito
+
+time.Sleep(x) sleep for x nanoseconds
+
+to sleep 1 second do time.Sleep(1e9)
+
+to get any type back from function
+
+let look:
+
+
+package main
+
+import "fmt"
+import "rand"
+import "time"
+
+func my() interface{} {
+
+    rand.Seed(time.Nanoseconds()/1000000);
+
+    switch rand.Intn(3) {
+        case 0: var i int; i=4; return i;
+        case 1: var f float; f=2.3; return f;
+        case 2: var s string; s="blub"; return s;
+    }
+    var b byte;
+    b='c';
+    return b;
+}
+
+func main() {
+    fmt.Println(my());
+    time.Sleep(1e9);
+    fmt.Println(my());
+    time.Sleep(1e9);
+    fmt.Println(my());
+    time.Sleep(1e9);
+    fmt.Println(my());
+    time.Sleep(1e9);
+    fmt.Println(my());
+}
+
+/*
+with func my() interface{} {...} we declare a function which return an interface. This is a void interface, which can implement all types. Thus we can back every typ back. The my() function simple init the rand and get randomly different types back.
+*/
+package main
+
+import (
+  "encoding/base64";
+  "bytes";
+  "fmt";
+)
+
+func main() {
+  // create the buffer
+  bb := &bytes.Buffer{};
+  bbURL := &bytes.Buffer{};
+
+  // create two base64 encoder (standard and for url)
+  encoder := base64.NewEncoder(base64.StdEncoding, bb);
+  encoderURL := base64.NewEncoder(base64.URLEncoding, bbURL);
+
+  data := "hallo this is a test, a=23&var2=blabla+-?!%$/\\";
+  fmt.Println("data       : ", data);
+
+  // to encode data, use Write([]bytes),
+  // therefore you must convert string to bytes 
+  // with string.Bytes(d string)
+  encoder.Write([]byte(data));
+  encoder.Close();
+
+  encoderURL.Write([]byte(data));
+  encoderURL.Close();
+
+  // voila
+  fmt.Println("encoded Std: ", bb.String());
+  fmt.Println("encoded URL: ", bbURL.String());
+}
+
+package main
+
+import (
+  "strings";
+  "fmt";
+)
+
+func main() {
+  data := "bla blu blub";
+  fmt.Println(data);
+  // return: bla blu blub
+  
+  // convert string in bytes 
+  b := strings.Bytes(data);
+  fmt.Println(b);  // print every byte as array
+  // return: [98 108 97 32 98 108 117 32 98 108 117 98]
+
+
+  // test if the string begin with the prefix
+  if strings.HasPrefix(data, "bl") {
+    fmt.Println("data: \"", data, "\" begin with the prefix \"bl\"");
+  }
+
+  // test if the string end with the suffix
+  if strings.HasSuffix(data, "blub") {
+    fmt.Println("data: \"", data, "\" end with \"blub\"");
+  }
+
+  // Index returns the index of the first instance of sep in s, 
+  // or -1 if sep is not present in s. 
+  fmt.Println("index: ", strings.Index(data, "blu"));
+  // return: index:  4
+
+  fmt.Println("index: ", strings.Index(data, "b"));
+  // return: index:  0
+  fmt.Println("last index: ", strings.LastIndex(data, "b"));
+  // return: last index:  11
+  // LastIndex return the last occurency of seeking string
+
+  // with Repeat you can repeat ;)
+  fmt.Println("r: ", strings.Repeat("x", 10));
+  // return: r:  xxxxxxxxxx
+
+  // split the string in array of string
+  as := strings.Split("root:alsdfjl:230:/blub/blub:lalalala", ":", 0);
+
+  fmt.Println(as);
+  // return: [root alsdfjl 230 /blub/blub lalalala]
+
+  fmt.Println(strings.Join(as, "|"));
+  // return: root|alsdfjl|230|/blub/blub|lalalala
+
+  fmt.Println(strings.ToLower("UASFalsdfuADSFWE$$"));
+  // return: uasfalsdfuadsfwe$$
+
+  fmt.Println(strings.ToUpper("owenadsfoadsfj"));
+  // return: OWENADSFOADSFJ
+
+  fmt.Println("<", strings.TrimSpace("  asdf sdowe   "), ">");
+  // return: < asdf sdowe >
+}
+
+//----------------------------------------
+package main
+import (
+  "io";
+  "fmt";
+  "os";
+  "strings";
+)
+func main() {
+  // read the file in bytes array
+  b, err := io.ReadFile("readfile.go");
+  if err!=nil {
+    fmt.Println("error on read file");
+    os.Exit(-1);
+  } 
+  
+  // convert from bytes to string
+  strbuffer := string(b);
+
+  // split into lines
+  lines := strings.Split(strbuffer, "\n", 0);
+
+  // iterate each
+  for i, line := range lines {
+    fmt.Printf("%d:  %s\n", i, line);
+  }
+}
+//----------------------------------------
+  url := "http://blub.org/b.html?v1=23&v2=bla&v=sdl+sdo";
+  surl := http.URLEscape(url);
+
+  fmt.Println(url);
+  fmt.Println(surl);
+
+  url2 := "http://это.порусс.ки/здесь.хтмл";
+  surl2 := http.URLEscape(url2);
+
+  fmt.Println(url2);
+  fmt.Println(surl2);
+/*
+output:
+
+http://blub.org/b.html?v1=23&v2=bla&v=sdl+sdo
+http://blub.org/b.html%3fv1%3d23%26v2%3dbla%26v%3dsdl%2bsdo
+
+http://это.порусс.ки/здесь.хтмл
+http://%d1%8d%d1%82%d0%be.%d0%bf%d0%be%d1%80%d1%83%d1%81%d1%81.%d0%ba%d0%b8/%d0%b7%d0%b4%d0%b5%d1%81%d1%8c.%d1%85%d1%82%d0%bc%d0%bb
+
+http.URLUnescape(url string) do it back.*/
+//------------------------------------------------------
+package main
+import (
+    "os"; "fmt"; "bufio";
+)
+func main() {
+
+    fmt.Print("input your name: ");
+
+    br := bufio.NewReader(os.Stdin);
+
+    name, _ := br.ReadString('\n');
+
+    fmt.Println();
+    fmt.Println("your name is: ", name);
+
+}
+/*
+func NewReader(rd io.Reader) *Reader NewReader returns a new Reader whose buffer has the default size.
+func (b *Reader) ReadString(delim byte) (line string, err os.Error) read until delim byte.
+here we read until enter. */
+//------------------------------------------------------
+path.Walk(p.String(), pathIter(c), nil);
+/*you can think pathIter(c) is a function. but:
+type pathIter chan
+pathIter is a typedefinition. Therefore is pathIter(c) not a function with parameter c, rahter a casting from c (is a Path channel) to pathIter.
+*/
+/* List: (a doubly linked list)
+The list is a double linked list of Elements. Element is an element in the linked list with Next() and Prev() pointer to other elements. Begining and ending of Elements are nil.*/
+package main
+
+import (
+  . "fmt";
+  "container/list";
+  "strings";
+  "bytes";
+)
+
+// print the elements of the list 
+func PrintList(l *list.List) {
+  Println("------------------------------");
+  for value := range l.Iter() {
+    Println("element: ", value);
+  }
+  Println("------------------------------");
+}
+
+func main() {
+  // create a new list
+  li := list.New();
+
+  // add elements at end
+  li.PushBack("list1");
+  li.PushBack("list2");
+
+  // add elements at begining
+  li.PushFront("list3");
+  
+  PrintList(li);
+
+  // get the first element from the list
+  element := li.Front();
+  str := element.Value;
+  Println("value: ", str);
+
+  // add a element before the first element
+  li.InsertBefore("list4", element);
+
+  // add after the element
+  li.InsertAfter("list5", element);
+
+  PrintList(li);
+
+  // get the next element
+  element = element.Next();
+  Println("value: ", element.Value);
+
+  // move the first element to back
+  element = li.Front();
+  li.MoveToBack(element);
+
+  PrintList(li);
+
+  // remove the first element
+  element = li.Front();
+  li.Remove(element);
+
+  PrintList(li);
+  
+  // find the element with "list2" and remove it
+  for element := li.Front(); element != nil; element = element.Next() {
+  // don't use li.Iter(), because the interface chanel 
+  // is geting the Value from the element back. not the element.
+    value := element.Value.(string);
+
+    if bytes.Equal(strings.Bytes(value),strings.Bytes("list2")) {
+      li.Remove(element);
+    }
+  }
+
+  PrintList(li);
+
+}
+/*  Ring:
+
+A Ring is an element of a circular list, or ring. Rings do not have a beginning or end; a pointer to any ring element serves as reference to the entire ring. Empty rings are represented as nil Ring pointers. The zero value for a Ring is a one-element ring with a nil Value. */
+package main
+import (
+  . "fmt";
+  "container/ring";
+  "bytes";
+)
+// print the elements of the ring 
+func PrintRing(r *ring.Ring) {
+  Println("------------------------------");
+  i, n := 0, r.Len()
+  for p := r; i < n; p = p.Next() {
+    Println("value: ", p.Value);
+    i++
+  }
+  Println("------------------------------");
+}
+func main() {
+  // create a new ring with 10 items
+  r := ring.New(10);
+
+  Println("len of ring: ", r.Len());
+  PrintRing(r);
+
+  // set some value
+  r.Value = "value 1";
+  // take the next
+  
+  r = r.Next();
+  r.Value = "value 2";
+
+  r = r.Next();
+  r.Value = "value 3";
+
+  r = r.Next();
+  r.Value = "value 4";
+
+  PrintRing(r);
+
+
+  // create a second ring with 3 item and set his value
+  r2 := ring.New(3);
+  r2.Value = "r2 value 1";
+  r2 = r2.Next();
+  r2.Value = "r2 value 2";
+  r2 = r2.Next();
+  r2.Value = "r2 value 3";
+  PrintRing(r2);
+
+  // merge ring2 into ring 1
+  r = r.Link(r2);
+  PrintRing(r);
+
+  // remove a value in ring
+  for p:=r.Next(); p!=r; p=p.Next() {
+    if p.Value != nil {
+      value := p.Value.(string);
+      if bytes.Equal([]byte(value),[]byte("r2 value 2")) {
+        p.Value=nil;
+      }
+    }
+  }
+
+  PrintRing(r);
+}
+/*
+Here we test the golang aes encryption decryption. We simple encrypt and decrypt a text message with AES-128. That is a key with 16 byte length.
+
+"NewCipher creates and returns a new Cipher. The key argument should be the AES key, either 16, 24, or 32 bytes to select AES-128, AES-192, or AES-256."
+*/
+package main
+
+import (
+    "crypto/aes";
+    . "fmt";
+    "os";
+)
+
+func main() {
+    // a 32 byte long message
+    msg := "This is long message text. len32";
+    // some key, 16 Byte long
+    key := []byte{0x2c, 0x88, 0x25, 0x1a, 0xaa, 0xae, 0xc2, 0xa2, 0xaf, 0xe7, 0x84, 0x8a, 0x10, 0xcf, 0xe3, 0x2a};
+
+    Println("len of message: ", len(msg));
+    Println("len of key: ", len(key));
+    // create the new cipher
+    c, err := aes.NewCipher(key);
+    if err != nil {
+       Println("Error: NewCipher(%d bytes) = %s", len(key), err);
+       os.Exit(-1);
+    }
+
+    // now we convert our string into 32 long byte array
+    msgbuf :=[]byte(msg);
+    Println("msgbuf >> ", msgbuf);
+    out := make([]byte, len(msg));
+    Println("out >> ", out);
+    
+    c.Encrypt(out[0:16], msgbuf[0:16]);   // encrypt the first half
+    c.Encrypt(out[16:32], msgbuf[16:32]); // encrypt the second half
+
+    Println("len of encrypted: ", len(out));
+    Println("out >> ", out);
+
+    // now we decrypt our encrypted text
+    plain := make([]byte, len(out));
+    c.Decrypt(plain[0:16], out[0:16]);   // decrypt the first half
+    c.Decrypt(plain[16:32], out[16:32]); // decrypt the second half
+
+    Println("msg: ", string(plain));
+}
+/*output:
+len of message:  32
+len of key:  16
+msgbuf >>  [84 104 105 115 32 105 115 32 108 111 110 103 32 109 101 115 115 97 103 101 32 116 101 120 116 46 32 108 101 110 51 50]
+out >>  [0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0]
+len of encrypted:  32
+out >>  [0 173 125 174 152 165 226 181 32 25 196 177 81 243 134 79 55 152 215 72 239 85 123 219 82 30 231 89 185 194 67 203]
+msg:  This is long message text. len32   */
+//------------------------------------------------
+/* a simple server and client in golang.
+server wait for a client and handle him, simple read and write, then close.
+client connect to server, write then read to/from server.*/
+//server:
+package main
+
+import (
+    . "fmt";
+    "net";
+    "os"; "log";
+    "strings";
+)
+
+func test(err os.Error, mesg string) {
+    if err!=nil {
+        log.Stderr("SERVER: ERROR: ", mesg);
+         os.Exit(-1);
+    } else
+        log.Stdout("SERVER: OK: ", mesg);
+}
+
+
+func main() {
+    buf := make([] byte, 1500);
+
+    Println("starting server...");
+
+    netlisten, err := net.Listen("tcp", "127.0.0.1:9988");
+    test(err, "Listen");
+    defer netlisten.Close();
+    
+    for{
+        Println("server wait for client ...");
+        con, err := netlisten.Accept();
+        test(err, "Accept for client");
+        Println("client has connect to server");
+
+        con.Read(buf);
+           
+        Println("readed: ", string(buf));
+
+        con.Write(strings.Bytes("response from server"));
+    }
+}
+// client:
+package main
+
+import (
+    . "fmt";
+    "net";
+    "os"; "log";
+)
+
+func test(err os.Error, mesg string) {
+    if err!=nil {
+        log.Stderr("CLIENT: ERROR: ", mesg);
+         os.Exit(-1);
+    } else
+        log.Stdout("CLIENT: OK: ", mesg);
+}
+
+func main() {
+    buf := make([] byte, 1500);
+
+    Println("starting client");
+    con, err := net.Dial("tcp", "", "127.0.0.1:9988");
+    test(err, "dialing");
+    defer con.Close();
+    Println("client has connected to server");
+    
+    con.Write(strings.Bytes("das ist ein test"));
+
+    con.Read(buf);
+           
+    Println("readed: ", string(buf));
+}
+
+//-------------------------------------------
+//server:
+package main
+
+import (
+    "fmt";
+    "net";
+    "log";
+    "os";
+    "container/list";
+    "strings";
+    "bytes";
+    "flag";
+)
+
+// flag for debuging info. or a simple log
+var debug = flag.Bool("d", false, "set the debug modus( print informations )")
+
+type ClientChat struct {
+    Name string;        // name of user
+    IN chan string;     // input channel for to send to user
+    OUT chan string;    // input channel from user to all
+    Con *net.Conn;      // connection of client
+    Quit chan bool;     // quit channel for all goroutines
+    ListChain *list.List;    // reference to list
+}
+
+// read from connection and return true if ok
+func (c *ClientChat) Read(buf []byte) bool{
+    nr, err := c.Con.Read(buf);
+    if err!=nil {
+        c.Close();
+        return false;
+    }
+    Log("Read():  ", nr, " bytes");
+    return true;
+}
+
+// close the connection and send quit to sender
+func (c *ClientChat) Close() {
+    c.Quit<-true data-blogger-escaped-br="">    c.Con.Close();
+    c.deleteFromList();
+}
+
+// compare two clients: name and network connection
+func (c *ClientChat) Equal(cl *ClientChat) bool {
+    if bytes.Equal(strings.Bytes(c.Name), strings.Bytes(cl.Name)) {
+        if c.Con == cl.Con {
+            return true;
+        }
+    }
+    return false;
+}
+
+// delete the client from list
+func (c *ClientChat) deleteFromList() {
+    for e := c.ListChain.Front(); e != nil; e = e.Next() {
+        client := e.Value.(ClientChat);
+        if c.Equal(&client) {
+            Log("deleteFromList(): ", c.Name);
+            c.ListChain.Remove(e);
+        }
+    }
+}
+
+// func Log(v ...): loging. give log information if debug is true
+func Log(v ...) {
+    if *debug == true {
+        ret := fmt.Sprint(v);
+        log.Stdoutf("SERVER: %s", ret);
+    }
+}
+
+// func test(): testing for error
+func test(err os.Error, mesg string) {
+    if err!=nil {
+        log.Stderr("SERVER: ERROR: ", mesg);
+         os.Exit(-1);
+    } else
+        Log("Ok: ", mesg);
+}
+
+// handlingINOUT(): handle inputs from client, and send it to all other client via channels.
+func handlingINOUT(IN <-chan data-blogger-escaped-br="" data-blogger-escaped-list.list="" data-blogger-escaped-lst="" data-blogger-escaped-string="">    for {
+        Log("handlingINOUT(): wait for input");
+        input := <-in data-blogger-escaped-br="" data-blogger-escaped-client="" data-blogger-escaped-from="" data-blogger-escaped-get="" data-blogger-escaped-input="">        // send to all client back
+        Log("handlingINOUT(): handling input: ", input);
+        for value := range lst.Iter() {
+            client := value.(ClientChat);
+            Log("handlingINOUT(): send to client: ", client.Name);
+            client.IN<- data-blogger-escaped-br="" data-blogger-escaped-input="">        }  
+    }
+}
+
+
+
+// clientreceiver wait for an input from network, after geting data it send to
+// handlingINOUT via a channel.
+func clientreceiver(client *ClientChat) {
+    buf := make([]byte, 2048);
+
+    Log("clientreceiver(): start for: ", client.Name);
+    for client.Read(buf) {
+        
+        if bytes.Equal(buf, strings.Bytes("/quit")) {
+            client.Close();
+            break;
+        }
+        Log("clientreceiver(): received from ",client.Name, " (", string(buf), ")");
+        send := client.Name+"> "+string(buf);
+        client.OUT<- data-blogger-escaped-br="" data-blogger-escaped-send="">        for i:=0; i<2048 data-blogger-escaped-br="" data-blogger-escaped-i="">            buf[i]=0x00;
+        }
+    }    
+
+    client.OUT <- data-blogger-escaped-br="" data-blogger-escaped-chat="" data-blogger-escaped-client.name="" data-blogger-escaped-has="" data-blogger-escaped-left="">    Log("clientreceiver(): stop for: ", client.Name);
+}
+
+// clientsender(): get the data from handlingINOUT via channel (or quit signal from
+// clientreceiver) and send it via network
+func clientsender(client *ClientChat) {
+    Log("clientsender(): start for: ", client.Name);
+    for {
+        Log("clientsender(): wait for input to send");
+        select {
+            case buf := <- data-blogger-escaped-br="" data-blogger-escaped-client.in:="">                Log("clientsender(): send to \"", client.Name, "\": ", string(buf));
+                client.Con.Write(strings.Bytes(buf));
+            case <-client data-blogger-escaped-.quit:="" data-blogger-escaped-br="">                Log("clientsender(): client want to quit");
+                client.Con.Close();
+                break;
+        }
+    }
+    Log("clientsender(): stop for: ", client.Name);
+}
+
+// clientHandling(): get the username and create the clientsturct
+// start the clientsender/receiver, add client to list.
+func clientHandling(con *net.Conn, ch chan string, lst *list.List) {
+    buf := make([]byte, 1024);
+    con.Read(buf);
+    name := string(buf);
+    newclient := &ClientChat{name, make(chan string), ch, con, make(chan bool), lst};
+
+    Log("clientHandling(): for ", name);
+    go clientsender(newclient);
+    go clientreceiver(newclient);
+    lst.PushBack(*newclient);
+    ch<- data-blogger-escaped-br="" data-blogger-escaped-chat="" data-blogger-escaped-has="" data-blogger-escaped-joinet="" data-blogger-escaped-name="" data-blogger-escaped-the="">}
+
+func main() {
+    flag.Parse();
+    Log("main(): start");
+
+    // create the list of clients
+    clientlist := list.New();
+    in := make(chan string);
+    Log("main(): start handlingINOUT()");
+    go handlingINOUT(in, clientlist);
+    
+    // create the connection
+    netlisten, err := net.Listen("tcp", "127.0.0.1:9988");
+    test(err, "main Listen");
+    defer netlisten.Close();
+
+    for {
+        // wait for clients
+        Log("main(): wait for client ...");
+        conn, err := netlisten.Accept();
+        test(err, "main: Accept for client");
+        go clientHandling(&conn, in, clientlist);
+    }
+}
+
+/*
+Server has three part which are running as goroutines and communicate via channels.
+
+1) handlingINOUT() simple wait for input of clientreceiver() and send to all clientsender() which are in the list.
+
+2) clientreceiver() wait for his data from client via networkconnection and send it to a inputchannel to handlingINOUT
+
+3) clientsender() wait for data from channel and send it to client
+
+every client connection get a his own clientreceiver/sender and a list entry. on disconnection the list entry will be deleted.
+*/
+//  --  --  --
+//client:
+package main
+
+import (
+    "fmt";
+    "net";
+    "log";
+    "os";
+    "bytes";
+    "bufio";
+    "strings";
+    "time";
+    "flag";
+)
+
+var running bool;  // global variable if client is running
+
+var debug = flag.Bool("d", false, "set the debug modus( print informations )")
+
+// func Log(v ...): loging. give log information if debug is true
+func Log(v ...) {
+    if *debug == true {
+        ret := fmt.Sprint(v);
+        log.Stdoutf("CLIENT: %s", ret);
+    }
+}
+
+// func test(): testing for error
+func test(err os.Error, mesg string) {
+    if err!=nil {
+        log.Stderr("CLIENT: ERROR: ", mesg);
+         os.Exit(-1);
+    } else
+        Log("Ok: ", mesg);
+}
+
+// read from connection and return true if ok
+func Read(con *net.Conn) string{
+    var buf [4048]byte;
+    _, err := con.Read(&buf);
+    if err!=nil {
+        con.Close();
+        running=false;
+        return "Error in reading!";
+    }
+    str := string(&buf);
+    fmt.Println();
+    return string(str);
+}
+
+// clientsender(): read from stdin and send it via network
+func clientsender(cn *net.Conn) {
+    reader := bufio.NewReader(os.Stdin);
+    for {
+        fmt.Print("you> ");
+        input, _ := reader.ReadBytes('\n');
+        if bytes.Equal(input, strings.Bytes("/quit\n")) {
+            cn.Write(strings.Bytes("/quit"));
+            running = false;
+            break;
+        }
+        Log("clientsender(): send: ", string(input[0:len(input)-1]));
+        cn.Write(input[0:len(input)-1]);
+    }
+}
+
+// clientreceiver(): wait for input from network and print it out
+func clientreceiver(cn *net.Conn) {
+    for running {
+        fmt.Println(Read(cn));
+        fmt.Print("you> ");
+    }
+}
+
+func main() {
+    flag.Parse();
+    running = true;
+    Log("main(): start ");
+    
+    // connect
+    destination := "127.0.0.1:9988";
+    Log("main(): connecto to ", destination);
+    cn, err := net.Dial("tcp", "", destination);
+    test(err, "dialing");
+    defer cn.Close();
+    Log("main(): connected ");
+
+    // get the user name
+    fmt.Print("Please give you name: ");
+    reader := bufio.NewReader(os.Stdin);
+    name, _ := reader.ReadBytes('\n');
+
+    //cn.Write(strings.Bytes("User: "));
+    cn.Write(name[0:len(name)-1]);
+
+    // start receiver and sender
+    Log("main(): start receiver");
+    go clientreceiver(&cn);
+    Log("main(): start sender");
+    go clientsender(&cn);
+    
+    // wait for quiting (/quit). run until running is true
+    for ;running; {
+        time.Sleep(1*1e9);
+    }
+    Log("main(): stoped");
+}
+/* client start two goroutines: for getting input from stdin and send it to network. and get from network and print it out. */
+
+//----------------------------------------
+// base64 encoding
+package main
+
+import (
+  "encoding/base64";
+  "io";
+  "os";
+)
+
+func main() {
+    e := base64.NewEncoder(base64.StdEncoding, os.Stdout)
+    io.Copy(e, os.Stdin)
+    e.Close()
+}
+//-------------------------------------------
+scanner := bufio.NewScanner(os.Stdin)
+for scanner.Scan() {
+    fmt.Println(scanner.Text()) // Println will add back the final '\n'
+}
+if err := scanner.Err(); err != nil {
+    fmt.Fprintln(os.Stderr, "reading standard input:", err)
+}
+//---------------------------------------
+// An artificial input source.
+const input = "Now is the winter of our discontent,\nMade glorious summer by this sun of York.\n"
+scanner := bufio.NewScanner(strings.NewReader(input))
+// Set the split function for the scanning operation.
+scanner.Split(bufio.ScanWords)
+// Count the words.
+count := 0
+for scanner.Scan() {
+    count++
+}
+if err := scanner.Err(); err != nil {
+    fmt.Fprintln(os.Stderr, "reading input:", err)
+}
+fmt.Printf("%d\n", count)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

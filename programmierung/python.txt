@@ -983,13 +983,169 @@ bla.__doc__
 
 
 
+bottlepy.org
+
+Bottle is a fast, simple and lightweight WSGI micro web-framework for Python. It is distributed as a single file module and has no dependencies other than the Python Standard Library.
+
+How to use: simple, download and copy the file bottle.py in your directory. (or you can install it, see the README file).
+
+myweb01.py
+
+from bottle import route, run
+
+@route('/test/:file')
+def hello(file):
+    if file=="test":
+        return &lt;h1&gt;Testing!&lt/h1&gt'
+    else:
+        return 'nothing here to see'
+
+run(host='localhost', port=8080)
+
+start with: python myweb01.py
+
+go to browser and go to http://localhost:8080/test/test
+
+you will get from console:
+
+Bottle server starting up (using WSGIRefServer())...
+Listening on http://localhost:8080/
+Use Ctrl-C to quit.
+
+localhost.localdomain - - [18/Jul/2011 15:27:47] "GET /test/test HTTP/1.1" 200 17
+
+and in the browser the message Testing!
+
+for more info go to Bottle documentation.
 
 
+Here is part 2 about python web framework bottle.
+
+let see code myweb02.py
+
+from bottle import route, run, get, post, request, redirect
+
+@route('/')
+@route('/index.html')
+def redirect_index():
+    redirect("/object/4")
+
+@route('/object/:id#[0-9]+#')
+def view_object(id):
+    return "Object ID: %d" % int(id)
+
+run(host='localhost', port=8080)
+
+with import we set the functions which we need:
+
+run - start the server
+
+run(host='localhost', port=8080) - self explained or?
+
+route - is a decorator, which say how the URI should be resolved.
+
+decorator - see galileo book (german) or english: short: Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. A Python decorator is a specific change to the Python syntax that allows us to more conveniently alter functions and methods (and possibly classes in a future version).
+
+there are other decorators too:
+
+get - simulate the GET request
+
+post - simulate the POST request
+
+put, delete - simulates the PUT, DELETE requests
+
+further imports from bottle are
+
+request - get the formular datas
+
+redirect - redirect the page
+
+In function redirect_index(), we redirect the / and index.html to /object/4.
+
+Thus we call the function view_object(id), which the id is a number given by dynamic routing /:id (thus we can change the input of URI) and only numbers #[0-9]+#. This is a regular expression [0-9]+ number 0 to 9 1 or many times. If we put /object/asd3, the we get a 404 Error.
+
+The functions itself return a string, which will be displayed.
+
+let see how get and post routing work: myweb03.py
+
+from bottle import run, get, post, request
+
+#@route('/login')
+@get('/login')
+def login_form():
+    return '''<form action="/login" method="POST">
+                <input name="name"     type="text" />
+                <input name="password" type="password" />
+                <input type="submit" value="Send"/>
+              </from>'''
+
+#@route('/login', method='POST')
+@post('/login')
+def login_submit():
+    name     = request.forms.get('name')
+    password = request.forms.get('password')
+    if name==password:
+        return "<p>Your login was correct</p>"
+    else:
+        return "<p>Login failed</p>"
 
 
+run(host='localhost', port=8080)
+
+@get('/login') - set the /login routing to function login_form() input for a get request.
+
+the login_form() generate a html formular and call the /login as a post request.
+
+@post('/login') - set the post request routing for login. The login_submit() get the setted fields from formular with request.forms.get('fieldname'). Next it test if the password similar to name and set the output.
+
+If you simple call /login, you get the formular, after send you go to /login via post and get the results.
 
 
+now we want to call static and templates.
 
+let see myweb04.py:
+
+from bottle import run, route, static_file
+
+@route('/:filename')
+def getstaticfile(filename):
+    return static_file(filename, root='./files')
+
+run(host='localhost', port=8080)
+
+to get the html-files you call static_file(filename, root)
+
+where the root is the path to the files.
+
+If you now call /index.html, the static_file() will be return the file index.html from the path.
+
+If there no such file, then we get 404 Error.
+
+Templates:
+
+from bottle import run, route, view
+
+@route('/hello')
+@route('/hello/:name')
+@view('template1.tmpl')
+def hello(name='World'):
+    return dict(name=name)
+
+run(host='localhost', port=8080)
+
+With @view() you set the template file name. The function return a dictionary for the template.
+
+The template itself has following content:
+
+%if name == 'World':
+    <h1>Hello {{name}}!</h1>
+    <p>This is a test.</p>
+%else:
+    <h1>Hello {{name.title()}}!</h1>
+    <p>How are you?</p>
+%end
+
+%if, else, end is similar to python syntax.
 
 
 

@@ -266,11 +266,193 @@ echo 'GET / HTTP/1.0\n' | nc $1 80 | egrep '^Server:'
 
 
 
+some info about udev
+
+see info:
+
+man udev      - Linux dynamic device management
+man udevd     - event managing daemon
+man udevadm   - udev management tool
+
+let see what habpen if we plug-in an usb-stick and monitoring it with udevadm monitor
+
+$ udevadm monitor
+monitor will print the received events for:
+UDEV - the event which udev sends out after rule processing
+KERNEL - the kernel uevent
+
+### here we plug in
+KERNEL[1310993660.681080] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9 (usb)
+KERNEL[1310993660.682788] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0 (usb)
+KERNEL[1310993660.683439] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7 (scsi)
+KERNEL[1310993660.683480] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/scsi_host/host7 (scsi_host)
+UDEV  [1310993660.717897] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9 (usb)
+UDEV  [1310993660.722838] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0 (usb)
+UDEV  [1310993660.726973] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7 (scsi)
+UDEV  [1310993660.729599] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/scsi_host/host7 (scsi_host)
+KERNEL[1310993661.679909] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0 (scsi)
+UDEV  [1310993661.681299] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0 (scsi)
+KERNEL[1310993661.681576] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0 (scsi)
+KERNEL[1310993661.683434] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_disk/7:0:0:0 (scsi_disk)
+KERNEL[1310993661.688669] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_device/7:0:0:0 (scsi_device)
+KERNEL[1310993661.689288] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_generic/sg3 (scsi_generic)
+KERNEL[1310993661.689399] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/bsg/7:0:0:0 (bsg)
+UDEV  [1310993661.690794] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0 (scsi)
+UDEV  [1310993661.695103] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_device/7:0:0:0 (scsi_device)
+UDEV  [1310993661.697359] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_disk/7:0:0:0 (scsi_disk)
+UDEV  [1310993661.700063] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_generic/sg3 (scsi_generic)
+UDEV  [1310993661.711454] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/bsg/7:0:0:0 (bsg)
+KERNEL[1310993663.768535] add      /devices/virtual/bdi/8:32 (bdi)
+UDEV  [1310993663.769416] add      /devices/virtual/bdi/8:32 (bdi)
+KERNEL[1310993663.772966] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc (block)
+KERNEL[1310993663.773037] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc/sdc1 (block)
+UDEV  [1310993664.231205] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc (block)
+UDEV  [1310993664.331853] add      /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc/sdc1 (block)
+
+
+### here we plug out
+KERNEL[1310993703.170021] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/bsg/7:0:0:0 (bsg)
+KERNEL[1310993703.170114] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_generic/sg3 (scsi_generic)
+KERNEL[1310993703.170146] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_device/7:0:0:0 (scsi_device)
+KERNEL[1310993703.170180] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_disk/7:0:0:0 (scsi_disk)
+UDEV  [1310993703.172553] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_device/7:0:0:0 (scsi_device)
+UDEV  [1310993703.173338] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_disk/7:0:0:0 (scsi_disk)
+UDEV  [1310993703.174748] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/scsi_generic/sg3 (scsi_generic)
+UDEV  [1310993703.174978] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/bsg/7:0:0:0 (bsg)
+KERNEL[1310993703.178554] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc/sdc1 (block)
+UDEV  [1310993703.201812] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc/sdc1 (block)
+KERNEL[1310993703.248140] remove   /devices/virtual/bdi/8:32 (bdi)
+KERNEL[1310993703.248304] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc (block)
+KERNEL[1310993703.248351] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0 (scsi)
+KERNEL[1310993703.248448] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0 (scsi)
+KERNEL[1310993703.248525] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/scsi_host/host7 (scsi_host)
+KERNEL[1310993703.248560] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7 (scsi)
+KERNEL[1310993703.251381] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0 (usb)
+UDEV  [1310993703.251445] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/scsi_host/host7 (scsi_host)
+KERNEL[1310993703.251501] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9 (usb)
+UDEV  [1310993703.251595] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0/block/sdc (block)
+UDEV  [1310993703.252799] remove   /devices/virtual/bdi/8:32 (bdi)
+UDEV  [1310993703.254218] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0/7:0:0:0 (scsi)
+UDEV  [1310993703.255623] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7/target7:0:0 (scsi)
+UDEV  [1310993703.256904] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0/host7 (scsi)
+UDEV  [1310993703.259197] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9/1-9:1.0 (usb)
+UDEV  [1310993703.283898] remove   /devices/pci0000:00/0000:00:13.5
+/usb1/1-9 (usb)
+
+some configurationsfile are in
+
+/lib/udev/rules.d
+
+/etc/udev/rules.d
+
+let see 10-vboxdrv.rules
+
+KERNEL=="vboxdrv", NAME="vboxdrv", OWNER="root", GROUP="root", MODE="0600"
+SUBSYSTEM=="usb_device", ACTION=="add", RUN+="/usr/share/virtualbox/
+VBoxCreateUSBNode.sh $major $minor $attr{bDeviceClass} vboxusers"
+SUBSYSTEM=="usb", ACTION=="add", ENV{DEVTYPE}=="usb_device", 
+RUN+="/usr/share/virtualbox/VBoxCreateUSBNode.sh $major $minor 
+$attr{bDeviceClass} vboxusers"
+SUBSYSTEM=="usb_device", ACTION=="remove", RUN+="/usr/share/virtualbox
+/VBoxCreateUSBNode.sh --remove $major $minor"
+SUBSYSTEM=="usb", ACTION=="remove", ENV{DEVTYPE}=="usb_device", 
+RUN+="/usr/share/virtualbox/VBoxCreateUSBNode.sh --remove $major $minor"
+
+we see the name vboxdrv and run the VBoxCreateUSBNode.sh command.
+
+let see VBoxCreateUSBNode.sh:
+
+#! /bin/sh
+# bla bla Oracle Copyright. see details the file itself.
+
+do_remove=0
+case "$1" in "--remove")
+  do_remove=1; shift;;
+esac
+bus=`expr "$2" '/' 128 + 1`
+device=`expr "$2" '%' 128 + 1`
+class="$3"
+group="$4"
+if test "$class" -eq 9; then
+  exit 0
+fi
+devdir="`printf "/dev/vboxusb/%.3d" $bus`"
+devpath="`printf "/dev/vboxusb/%.3d/%.3d" $bus $device`"
+if test "$do_remove" -eq 0; then
+  if test -z "$group"; then
+    group="vboxusers"
+  fi
+  mkdir /dev/vboxusb -m 0750 2>/dev/null
+  chown root:$group /dev/vboxusb 2>/dev/null
+  mkdir "$devdir" -m 0750 2>/dev/null
+  chown root:$group "$devdir" 2>/dev/null
+  mknod "$devpath" c $1 $2 -m 0660 2>/dev/null
+  chown root:$group "$devpath" 2>/dev/null
+else
+  rm -f "$devpath"
+fi
+
+it create files in /dev/vboxusb/
+
+crw-rw---- 1 root vboxusers 189, 385 2011-07-18 08:58 002
+crw-rw---- 1 root vboxusers 189, 386 2011-07-18 08:58 003
+
+at last there is a log file in
+
+/var/log/udev
 
 
 
-
-
+schnell ein Screenshot von einem Fenster erstellen.
+> import bild.png
+dann den Bereich mit Maus markieren, voila
 
 
 
