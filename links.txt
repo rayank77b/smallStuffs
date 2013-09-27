@@ -14,12 +14,16 @@ GOLANG
         https://github.com/goraft/raft/commit/79a0a57995da7ec72a8fda6d7d3b0792a4098bdd
     CORE-ADMIN:
         https://github.com/philips/core-admin
+https://github.com/thoj/go-mysqlpure
+https://github.com/ziutek/mymysql
+
 
 PYTHON:
     FABRIC:
         https://github.com/fabric/fabric
         https://github.com/fabric/fabric/commits/master?page=81
         https://github.com/fabric/fabric/commit/284e665cd08997c4a126a04cfabfa9364861285a
+
 
 https://github.com/systemd
 https://github.com/Drin/perl_bot/commits/master
@@ -29,8 +33,6 @@ https://github.com/jquery/jquery/commits/master?page=153
 
 sqlmap:
 https://github.com/sqlmapproject/sqlmap/commits/master?page=168
-
-
 
 
 
