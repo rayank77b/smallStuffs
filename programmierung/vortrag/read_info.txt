@@ -1,0 +1,6 @@
+http://jordanorelli.tumblr.com/post/32665860244/how-to-use-interfaces-in-go
+
+http://golang.org/doc/effective_go.html#interfaces_and_types
+
+
+
