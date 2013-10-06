@@ -16,7 +16,9 @@ GOLANG
         https://github.com/philips/core-admin
 https://github.com/thoj/go-mysqlpure
 https://github.com/ziutek/mymysql
-
+https://github.com/robfig/revel
+https://github.com/coopernurse/gorp
+https://github.com/astaxie/beedb
 
 PYTHON:
     FABRIC:

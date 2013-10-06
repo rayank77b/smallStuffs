@@ -20,11 +20,18 @@ func empfaenger(c chan int) {
     }
 }
 
+func empfaenger2(c chan int) {
+    for i := range c{
+        Println("i: ", i)
+    }
+}
+
 func main() {
 
     iCh:=make(chan int)
-    go empfaenger(iCh)
     go sender(iCh)
+    go empfaenger2(iCh)
+    
     
     time.Sleep(5000000)
 }
