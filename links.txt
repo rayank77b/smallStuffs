@@ -14,10 +14,13 @@ GOLANG
         https://github.com/goraft/raft/commit/79a0a57995da7ec72a8fda6d7d3b0792a4098bdd
     CORE-ADMIN:
         https://github.com/philips/core-admin
+    GORP:
+        https://github.com/coopernurse/gorp
+        https://github.com/coopernurse/gorp/commits/master?page=5
+        
 https://github.com/thoj/go-mysqlpure
 https://github.com/ziutek/mymysql
 https://github.com/robfig/revel
-https://github.com/coopernurse/gorp
 https://github.com/astaxie/beedb
 
 PYTHON:
