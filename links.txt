@@ -17,7 +17,9 @@ GOLANG
     GORP:
         https://github.com/coopernurse/gorp
         https://github.com/coopernurse/gorp/commits/master?page=5
-        
+        https://github.com/coopernurse/gorp/commit/1945ecfb82c5dc0c5f11e90d166a66f86ef04ca5
+    
+https://github.com/coopernurse/go-randomdata    
 https://github.com/thoj/go-mysqlpure
 https://github.com/ziutek/mymysql
 https://github.com/robfig/revel
