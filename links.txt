@@ -16,8 +16,8 @@ GOLANG
         https://github.com/philips/core-admin
     GORP:
         https://github.com/coopernurse/gorp
-        https://github.com/coopernurse/gorp/commits/master?page=5
-        https://github.com/coopernurse/gorp/commit/1945ecfb82c5dc0c5f11e90d166a66f86ef04ca5
+        https://github.com/coopernurse/gorp/commits/master?page=4
+        https://github.com/coopernurse/gorp/commit/623e9b110d4a9ab85fdbcada91cee34551dcc8e2
     
 https://github.com/coopernurse/go-randomdata    
 https://github.com/thoj/go-mysqlpure
