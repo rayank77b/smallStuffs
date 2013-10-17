@@ -4,7 +4,7 @@ import . "fmt"
 import "time"
 
 func sender(c chan int) {
-    for i:=0; i<10; i++ {
+    for i:=0; i<100000; i++ {
         c<- i
     }
     c<- -1
@@ -30,8 +30,9 @@ func main() {
 
     iCh:=make(chan int)
     go sender(iCh)
-    go empfaenger2(iCh)
+    //time.Sleep(1000000000)
+    go empfaenger(iCh)
     
     
-    time.Sleep(5000000)
+    time.Sleep(5000000000)
 }
