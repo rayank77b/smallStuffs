@@ -3,6 +3,23 @@ https://sites.google.com/site/rcpwire/
 https://sites.google.com/site/rcpciscat/
 http://sites.google.com/site/rcplinadmin
 
+PYTHON:
+    FABRIC:
+        https://github.com/fabric/fabric
+        https://github.com/fabric/fabric/commits/master?page=81
+        https://github.com/fabric/fabric/commit/284e665cd08997c4a126a04cfabfa9364861285a
+    CHROMITE:
+        https://github.com/coreos/chromite
+        https://github.com/coreos/chromite/commits/master?page=66
+    
+    AUTOTEST:
+        https://github.com/coreos/autotest
+        https://github.com/coreos/autotest/commits/master?page=205
+
+https://github.com/coreos/coreos-autotest
+https://github.com/coreos/coreos-buildbot
+https://github.com/coreos/dev-util
+
 GOLANG
     ETCD:
         https://github.com/coreos/etcd
