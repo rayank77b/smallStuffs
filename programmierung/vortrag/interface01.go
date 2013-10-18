@@ -51,7 +51,7 @@ func (r *Rechteck) Name() string {
 func (r *Rechteck) Umfang() float64 {
     return r.a*2 + r.b*2
 }
-func (r *Rechteck) Flaeche() float64 {
+func (r *Rechteck) Flaeches() float64 {
     return r.a*r.b
 }
 
