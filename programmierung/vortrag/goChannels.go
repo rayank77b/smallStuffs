@@ -30,7 +30,7 @@ func main() {
 
     iCh:=make(chan int)
     go sender(iCh)
-    //time.Sleep(1000000000)
+    time.Sleep(3000000000)
     go empfaenger(iCh)
     
     
