@@ -14,7 +14,8 @@ PYTHON:
     
     AUTOTEST:
         https://github.com/coreos/autotest
-        https://github.com/coreos/autotest/commits/master?page=205
+        https://github.com/coreos/autotest/commits/master?page=204
+        https://github.com/coreos/autotest/commit/a77f3c676c4c9e37a73fbb2c03a5262b74f02071
 
 https://github.com/coreos/coreos-autotest
 https://github.com/coreos/coreos-buildbot

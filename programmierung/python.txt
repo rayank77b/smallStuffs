@@ -1183,6 +1183,64 @@ class Hello:
         print "exit a block"
 
 
+if file.endswith('.bz2'):
+os.path.abspath(os.path.dirname(sys.argv[0]))
+execfile(fullpath)
+os.environ['AUTODIR']
+if not os.path.isdir(self.resultdir):
+    os.mkdir(self.resultdir)
+if x not in list1:
+if (src.startswith('http://')) or (src.startswith('ftp://')):
+os.getcwd()
+urllib.urlretrieve(src, dest)
+shutil.copyfile(src, dest)
+if os.path.isfile(dest):
+    os.remove(dest)
+signal.signal(signal.SIGPIPE, signal.SIG_DFL)
+signal.signal(signal.SIGPIPE, signal.SIG_IGN)
+os.dup2(newfd, self.fd)
+filehandle = os.fdopen(self.fd, 'w')
+os.fdopen(fd [, mode='r' [, bufsize]]) -> file_object
+    Return an open file object connected to a file descriptor.
+os.dup2(old_fd, new_fd)
+    Duplicate file descriptor.
+os.dup(fd) -> fd2
+    Return a duplicate of a file descriptor.
+os.pipe() -> (read_end, write_end)
+    Create a pipe.
+lines[i] = re.sub(r'^timeout.*/', 'timeout 60', lines[i])
+shutil.copyfile(src, dst)
+    Copy data from src to dst
+pickle - Create portable serialized representations of Python objects.
+>>> l1
+[1, 2, 3, 4]
+>>> pickle.dumps(l1)
+'(lp0\nI1\naI2\naI3\naI4\na.'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
