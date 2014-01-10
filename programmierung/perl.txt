@@ -802,9 +802,41 @@ HTML::LinkExtor, URI::URL
 head() links()
 
 
+perl Makefile.PL
+make
+make install
+
+perl -cw  p.pl  #  -c nur pruefen, nicht ausführen
+                #  -w zusätzliche Warnungen ausgeben
+
+use strict;  # direktive verwenden, alle variablen muessen mit my beginnen.
+
+# immer 
+#!/usr/bin/perl -w  # starten !
+
+for my $z (1..10) {
+    print "$z \n";
+}
+
+my $n;
+$n=<>;  # von stdin oder der dateiename (bei start
+# angegeben perl t.pl bla.txt) einlesen
+chomp $n; # zeilenende entfernen
+
+while (defined($z=<>)) { ....
+# oder
+while (my $z=<>) { ....
+
+$z = <STDIN>;  # nur von stdin einlesen
+
+@ARGV=("test.dat");
+while (my $z=<>) { # liest von test.dat ein.
+
+$^I=".bak"; # inplace editieren, kopie wird als .bak gespeichert
+# print "..."; wird in originaldatei umgeleitet.
 
 
-
+print sprintf("%-6d", $.).$zeile;
 
 
 
