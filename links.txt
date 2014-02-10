@@ -120,5 +120,8 @@ https://github.com/xiangli-cmu?tab=repositories
 https://github.com/coreos	
 
 
+Kolibri OS
+http://kolibrios.org/en/
+
 
 

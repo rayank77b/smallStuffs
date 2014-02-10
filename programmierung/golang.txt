@@ -2332,10 +2332,11 @@ if err := scanner.Err(); err != nil {
 fmt.Printf("%d\n", count)
 
 
+err := os.Mkdir(fs.RootFS, 0700); err != nil && !os.IsExist(err)
 
 
-
-
+"os/exec"
+exec.Command("umount", fs.RootFS).Run()
 
 
 
