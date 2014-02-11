@@ -2338,15 +2338,116 @@ err := os.Mkdir(fs.RootFS, 0700); err != nil && !os.IsExist(err)
 "os/exec"
 exec.Command("umount", fs.RootFS).Run()
 
+################################################################################
+sync
+Package sync provides basic synchronization primitives such as mutual exclusion locks. Other than the Once and WaitGroup types, most are intended for use by low-level library routines. Higher-level synchronization is better done via channels and communication. 
+
+package main
+
+import (
+    "sync"
+    "fmt"
+    "time"
+)
+
+func rout(i int, m *sync.Mutex, c *sync.Cond) {
+
+    fmt.Println("  rout(", i, ") start")
+    m.Lock()
+    c.Wait()
+    m.Unlock()
+    fmt.Println("  rout(", i, ") stop")
+}
+
+func main() {
+
+    var m sync.Mutex
+
+    cond := sync.NewCond(&m )
+
+    fmt.Println("start")
+    i:=0
+    for i<15 {
+        i=i+1
+        go rout(i, &m, cond)
+    }
+
+    time.Sleep(100 * time.Millisecond)
+    fmt.Println("send broadcast")
+    m.Lock()
+    cond.Broadcast()
+    m.Unlock()
+    fmt.Println("after broadcast")
+    fmt.Println("befre sleep")
+    time.Sleep(2000 * time.Millisecond)
+    fmt.Println("end")
+}
+################################################################################
+package main
+
+import (
+	"container/list"
+	"fmt"
+)
+
+func main() {
+	// Create a new list and put some numbers in it.
+	l := list.New()
+	e4 := l.PushBack(4)
+	e1 := l.PushFront(1)
+	l.InsertBefore(3, e4)
+	l.InsertAfter(2, e1)
+
+	// Iterate through list and and print its contents.
+	for e := l.Front(); e != nil; e = e.Next() {
+		fmt.Println(e.Value)
+	}
+
+}
+################################################################################
+package main
+
+import (
+    "io/ioutil"
+    "fmt"
+    "path"
+)
 
 
+func main() {
 
+    dir, err := ioutil.ReadDir("/tmp/a")
+	if err != nil {
+		fmt.Println("eror")
+		return 
+	}
+	
+	for _, v := range dir {
+		fmt.Println("name: ", v.Name())
+	}
+	
+	
+	v:= path.Join("/root", "containers")
+	fmt.Println(v)
 
+}
+################################################################################
+package main
 
+import (
+	"fmt"
+	"log"
+	"os/exec"
+)
 
-
-
-
+func main() {
+	out, err := exec.Command("/bin/date").Output()
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("The date is %s\n", out)
+}
+################################################################################
 
 
 
