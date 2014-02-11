@@ -46,7 +46,8 @@ GOLANG
         https://github.com/robfig/revel/commit/400a50459039a3b3c78d7882b834ff3a3724341a
    DOCKER
         https://github.com/dotcloud/docker
-        https://github.com/dotcloud/docker/commits/master?page=175
+        https://github.com/dotcloud/docker/commits/master?page=176
+        https://github.com/dotcloud/docker/commit/27c7ecb587c64ecf2057189f06b3d5ce365ed6e7
         
         
 https://github.com/coopernurse/go-randomdata    
