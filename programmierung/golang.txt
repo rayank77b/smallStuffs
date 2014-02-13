@@ -2464,31 +2464,405 @@ Package tabwriter implements a write filter (tabwriter.Writer) that translates t
 	}
 	w.Flush()
 
+################################################################################
+
+/*
+http://stackoverflow.com/questions/1821811/how-to-read-write-from-to-file
+*/
+
+func main() {
+    // open input file
+    fi, err := os.Open("/tmp/a/date.txt")
+    if err != nil { panic(err) }
+
+    // close fi on exit and check for its returned error
+    defer fi.Close()
+    /*defer func() {
+        if err := fi.Close(); err != nil {
+            panic(err)
+        }
+    }()*/
+    
+    // open output file
+    fo, err := os.Create("/tmp/a/output.txt")
+    if err != nil { panic(err) }
+    // close fo on exit and check for its returned error
+    defer func() {
+        if err := fo.Close(); err != nil {
+            panic(err)
+        }
+    }()
+    
+    // make a buffer to keep chunks that are read
+    buf := make([]byte, 1024)
+
+    for {
+        // read a chunk
+        n, err := fi.Read(buf)
+        if err != nil && err != io.EOF { panic(err) }
+        if n == 0 { break }
+
+        // write a chunk
+        if _, err := fo.Write(buf[:n]); err != nil {
+            panic(err)
+        }
+    }
+
+/*
+Here I used os.Open and os.Create which are convenient wrappers around os.OpenFile. We usually don't need to call OpenFile directly.
+
+Notice treating EOF. Read tries to fill buf on each call, and returns io.EOF as error if it reaches end of file in doing so. In this case buf will still hold data. Consequent calls to Read returns zero as the number of bytes read and same io.EOF as error. Any other error will lead to a panic.
+*/
 
 
+    // open input file
+    fi, err := os.Open("/tmp/a/date.txt")
+    if err != nil { panic(err) }
+    // close fi on exit and check for its returned error
+    defer func() {
+        if err := fi.Close(); err != nil {
+            panic(err)
+        }
+    }()
+    // make a read buffer
+    r := bufio.NewReader(fi)
+    
+    // open output file
+    fo, err := os.Create("/tmp/a/output.txt")
+    if err != nil { panic(err) }
+    // close fo on exit and check for its returned error
+    defer func() {
+        if err := fo.Close(); err != nil {
+            panic(err)
+        }
+    }()
+    // make a write buffer
+    w := bufio.NewWriter(fo)
+
+    // make a buffer to keep chunks that are read
+    buf := make([]byte, 1024)
+    for {
+        // read a chunk
+        n, err := r.Read(buf)
+        if err != nil && err != io.EOF { panic(err) }
+        if n == 0 { break }
+
+        // write a chunk
+        if _, err := w.Write(buf[:n]); err != nil {
+            panic(err)
+        }
+    }
+
+    if err = w.Flush(); err != nil { panic(err) }
+
+/*
+bufio is just acting as a buffer here, because we don't have much to do with data. In most other situations (specially with text files) bufio is very useful by giving us a nice API for reading and writing easily and flexibly, while it handles buffering behind the scenes.
+*/
 
 
+    // read whole the file
+    b, err := ioutil.ReadFile("/tmp/a/date.txt")
+    if err != nil { panic(err) }
+
+    // write whole the body
+    err = ioutil.WriteFile("/tmp/a/output.txt", b, 0644)
+    if err != nil { panic(err) }
+/* Easy as pie! But use it only if you're sure you're not dealing with big files.*/
+
+[]byte is a slice (similar to a substring) of all or part of a byte array. Think of the slice as a value structure with a hidden pointer field for the system to locate and access all or part of an array (the slice), plus fields for the length and capacity of the slice, which you can access using the len() and cap() functions.
 
 
+    inName := "file-rw.bin";
+    inPerm :=  0666;
+    inFile, inErr := os.Open(inName, os.O_RDONLY, inPerm);
+    if inErr == nil {
+    	inBufLen := 16;
+    	inBuf := make([]byte, inBufLen);
+    	n, inErr := inFile.Read(inBuf);
+    	for inErr == nil {
+    		fmt.Println(n, inBuf[0:n]);
+    		n, inErr = inFile.Read(inBuf);
+    	}
+    }
+    inErr = inFile.Close();
 
 
+// open files r and w
+    r, err := os.Open("input.txt")
+    if err != nil {
+        panic(err)
+    }
+    defer r.Close()
+
+    w, err := os.Create("output.txt")
+    if err != nil {
+        panic(err)
+    }
+    defer w.Close()
+
+    // do the actual work
+    n, err := io.Copy(w, r)
+    if err != nil {
+        panic(err)
+    }
+    log.Printf("Copied %v bytes\n", n)
 
 
+Read reads up to len(b) bytes from the File. It returns the number of bytes read and an Error, if any. EOF is signaled by a zero count with err set to EOF.
+################################################################################
+
+    file, err := os.Open("/tmp/a")
+    if err != nil {
+        panic(err)
+    }
+    defer file.Close()
+    
+    stats, _ := file.Stat()
+
+/*    
+    type FileInfo interface {
+        Name() string       // base name of the file
+        Size() int64        // length in bytes for regular files; system-dependent for others
+        Mode() FileMode     // file mode bits
+        ModTime() time.Time // modification time
+        IsDir() bool        // abbreviation for Mode().IsDir()
+        Sys() interface{}   // underlying data source (can return nil)
+}
+*/
+    
+    fmt.Println("Name: ", stats.Name())
+    fmt.Println("Size: ", stats.Size())
+    fmt.Println("Mode: ", stats.Mode())
+    fmt.Println("ModTime: ", stats.ModTime())
+    fmt.Println("IsDir: ", stats.IsDir())
+    fmt.Println("Sys: ", stats.Sys())
+
+################################################################################
+
+func nameReader(array [3]name) {
+    ...
+}
+
+nameReader(a[:])
+
+a := [3]int{1, 2, 3} // Array literal
+b := a               // Copy the contents of a into b
+a[0] = 0
+fmt.Println(a)       // Prints "[0 2 3]"
+fmt.Println(b)       // Prints "[1 2 3]"
+
+a := []int{1, 2, 3} // Slice literal
+b := a              // a and b now point to the same memory
+a[0] = 0
+fmt.Println(a)      // Prints "[0 2 3]"
+fmt.Println(b)      // Prints "[0 2 3]"
 
 
+Interface values are comparable. Two interface values are equal if they have identical dynamic types and equal dynamic values or if both have value nil.
+
+start := time.Now()
+elapsed := time.Since(start)
+log.Printf("\nTook %s", elapsed)
+time.Sleep(100 * time.Millisecond)
 
 
+How about using a select statement with a default clause which will execute if the channel can't receive?
+Loop:
+   for {
+      select {
+          //check exitMessage to see whether to break out or not
+          case <- exitMessage:
+               break Loop
+          //do something repeatedly very fast in the for loop
+          default:
+               // stuff
+       }
+   }  
+################################################################################
+package main
+
+import (
+    "fmt"
+    "io/ioutil"
+    "path"
+    "crypto/md5"
+)
+
+func PrintMD5Sum(dir string, name string) {
+    h := md5.New()
+    
+    b, err := ioutil.ReadFile(path.Join(dir, name))
+    if err != nil { panic(err) }
+    
+    h.Write(b)
+    
+    fmt.Printf("%x   %s/%s\n", h.Sum(nil), dir,name)
+}
+
+func GetDir(dirname string) {
+    v, err := ioutil.ReadDir(dirname)
+    
+    if err!=nil { panic(err) }
+    
+    for _,file := range v {
+        if file.IsDir() {
+            //fmt.Println("[+] dir:  ", file.Name())
+            GetDir(path.Join(dirname, file.Name()))
+        } else {
+            //fmt.Println("[+] file: ", file.Name())
+            PrintMD5Sum(dirname, file.Name())
+        }
+    }
+    
+}
+
+func main() {
+// open a directory, read all dirs(subdirs) and sum md5sum for all files/subfiles
+    GetDir("/tmp/a") 
+}
+
+################################################################################
+
+Package bytes implements functions for the manipulation of byte slices. 
+It is analogous to the facilities of the strings package. 
+
+var b bytes.Buffer // A Buffer needs no initialization.
+b.Write([]byte("Hello "))
+fmt.Fprintf(&b, "world!")
+b.WriteTo(os.Stdout)
 
 
+// A Buffer can turn a string or a []byte into an io.Reader.
+buf := bytes.NewBufferString("R29waGVycyBydWxlIQ==")
+dec := base64.NewDecoder(base64.StdEncoding, buf)
+io.Copy(os.Stdout, dec)
+
+	// Interpret Compare's result by comparing it to zero.
+	var a, b []byte
+	if bytes.Compare(a, b) < 0 {
+		// a less b
+	}
+	if bytes.Compare(a, b) <= 0 {
+		// a less or equal b
+	}
+	if bytes.Compare(a, b) > 0 {
+		// a greater b
+	}
+	if bytes.Compare(a, b) >= 0 {
+		// a greater or equal b
+	}
+
+	// Prefer Equal to Compare for equality comparisons.
+	if bytes.Equal(a, b) {
+		// a equal b
+	}
+	if !bytes.Equal(a, b) {
+		// a not equal b
+	}
+	
+	// Binary search to find a matching byte slice.
+	var needle []byte
+	var haystack [][]byte // Assume sorted
+	i := sort.Search(len(haystack), func(i int) bool {
+		// Return haystack[i] >= needle.
+		return bytes.Compare(haystack[i], needle) >= 0
+	})
+	if i < len(haystack) && bytes.Equal(haystack[i], needle) {
+		// Found it!
+	}
+	
+	var b = []byte("Goodbye,, world!")
+	b = bytes.TrimPrefix(b, []byte("Goodbye,"))
+	b = bytes.TrimPrefix(b, []byte("See ya,"))
+	fmt.Printf("Hello%s", b)
+	
+	var b = []byte("Hello, goodbye, etc!")
+	b = bytes.TrimSuffix(b, []byte("goodbye, etc!"))
+	b = bytes.TrimSuffix(b, []byte("gopher"))
+	b = append(b, bytes.TrimSuffix([]byte("world!"), []byte("x!"))...)
+	os.Stdout.Write(b)	
+
+################################################################################
+
+	u, err := url.Parse("http://bing.com/search?q=dotnet")
+	if err != nil {
+		log.Fatal(err)
+	}
+	u.Scheme = "https"
+	u.Host = "google.com"
+	q := u.Query()
+	q.Set("q", "golang")
+	u.RawQuery = q.Encode()
+	fmt.Println(u)
+
+    v := url.Values{}
+	v.Set("name", "Ava")
+	v.Add("friend", "Jess")
+	v.Add("friend", "Sarah")
+	v.Add("friend", "Zoe")
+	// v.Encode() == "name=Ava&friend=Jess&friend=Sarah&friend=Zoe"
+	fmt.Println(v.Get("name"))
+	fmt.Println(v.Get("friend"))
+	fmt.Println(v["friend"])
+
+s := strings.Split("127.0.0.1:5432", ":")
+s is an array/slice
+
+ip, port := strings.Split("127.0.0.1:5432", ":")
+
+################################################################################
 
 
+func CallToURL(host string, cmd string, args []string) *url.URL {
+    qValues := make(url.Values)
+    for _, v := range args {
+        qValues.Add("value", v)
+    }
+    return &url.URL{
+	    Scheme:     "http",
+	    Host:       host,
+        Path:       "/" + cmd,
+        RawQuery:   qValues.Encode(),
+    }
+}
 
+func main () {
 
+    s := strings.Split("127.0.0.1:5432", ":")
+    
+    u := CallToURL("blub.de", "asdf/index.html", s)
 
+    fmt.Println("url")
+    
+    fmt.Println(u)
+    
+    resp, err := http.Get(u.String())
+	if err != nil {
+		panic(err)
+	}
+	io.Copy(os.Stdout, resp.Body)
 
+################################################################################
+func b(args ...string) {
+    for _, v:=range args  {
+        fmt.Println(v)
+    }
+}
 
+func blub(a string, args ...string) {
+    fmt.Println("a: ", a)
+    b(args...)
+}
 
-
-
-
-
+func main() {
+    blub("hallo", "a", "b", "c", "test")
+    
+}
+################################################################################
+    fmt.Fprintf(os.Stdout, "Usage: docker COMMAND [arg...]\n\nCommands:\n")
+	for _, cmd := range [][]interface{}{
+		{"run", "Run a command in a container"},
+		{"list", "Display a list of containers"},
+	} {
+		fmt.Fprintf(os.Stdout, "    %-10.10s%s\n", cmd...)
+	}
