@@ -21,6 +21,12 @@ PYTHON:
         https://github.com/coreos/autotest/commits/master?page=204
         https://github.com/coreos/autotest/commit/a77f3c676c4c9e37a73fbb2c03a5262b74f02071
 
+    INVOKE:
+        https://github.com/pyinvoke/invoke
+        https://github.com/pyinvoke/invoke/commits/master?page=31
+        https://github.com/pyinvoke/invoke/commit/06ffd520b98f6b177e85e371d7112e54c64d3334
+
+
 https://github.com/coreos/coreos-autotest
 https://github.com/coreos/coreos-buildbot
 https://github.com/coreos/dev-util
