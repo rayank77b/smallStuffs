@@ -1,0 +1,3 @@
+here are some infos about scripting in libre office (tutorials/codesnipets).
+
+
