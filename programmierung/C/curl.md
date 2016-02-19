@@ -1,83 +1,93 @@
-coding libcurl in C
+# coding libcurl in C
 
-homepage: http://curl.haxx.se/
 
-download: http://curl.haxx.se/download.html
+* [`curl.haxx.se`](http://curl.haxx.se/)
+* [`download`](http://curl.haxx.se/download.html)
+* [`libcurl`](http://curl.haxx.se/libcurl/)
+* [`all about libcurl with C`](http://curl.haxx.se/libcurl/c/)
 
-latest version: latest:curl-7.19.5
-
-libcurl: http://curl.haxx.se/libcurl/
-
-all about libcurl with C: http://curl.haxx.se/libcurl/c/
 
 You must include:
 
+```c
 <curl/curl.h>
+```
 
 compile
-
+```bash
 gcc libcurl1.c -o libcurl1 -lcurl
+```
+
 
 important structures:
 
-
+```c
 CURL *curl;
 CURLcode curl_res;
 CURLINFO info;
+```
 
 Start a libcurl easy session
-
+```c
 curl = curl_easy_init();
+```
 
-see more info: http://curl.haxx.se/libcurl/c/curl_easy_init.html
+[`see more info`](http://curl.haxx.se/libcurl/c/curl_easy_init.html)
 
 set options for a curl easy handle
-
+```c
 curl_easy_setopt(CURL *handle, CURLoption option, parameter);
+```
 
 CURLOPT_WRITEDATA Data pointer to pass to the file write function
-
+```c
 curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
+```
 
 tmp: FILE handle
 
 set proxy
-
+```c
 curl_easy_setopt(curl, CURLOPT_PROXY, pxy);
+```
 
 Perform a file transfer
-
+```c
 curl_easy_perform(CURL * handle );
+```
 
 End a libcurl easy session
-
+```c
 curl_easy_cleanup(curl);
+```
 
 set an url
-
+```c
 curl_easy_setopt(curl, CURLOPT_URL, url);
+```
 
 set file handle, where the data get writed
-
+```c
 curl_easy_setopt(curl, CURLOPT_WRITEDATA, tmp);
+```
 
 download the page
-
+```c
 curl_res = curl_easy_perform(curl);
+```
 
 get http status code
-
+```c
 curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &http_code);
+```
 
 get size of downloaded page
-
+```c
 curl_easy_getinfo(curl, CURLINFO_SIZE_DOWNLOAD, &c_length);
+```
 
 sample: libcurl1.c
-
-##########################################
-
-
+```c
 #include <stdio.h>
 #include <string.h>
 #include <sys/types.h>
@@ -90,7 +100,7 @@ int main() {
   CURLcode curl_res;
   CURLINFO info;
   long http_code;
-  double c_length;  
+  double c_length;
   FILE *tmp;
 
   tmp=fopen("/tmp/google_index.html", "w");
@@ -131,9 +141,9 @@ int main() {
 
   return 0;
 }
+```
 
-##########################################
-
+```bash
 ./libcurl1
 
 init curl session
@@ -155,96 +165,5 @@ get size of download page
 length: 6969
 
 END: close all files and sessions
-
-
-
-learn regular expression in C
-
-info:
-
-http://www.opengroup.org/onlinepubs/007908799/xsh/regex.h.html
-
-#include <regex.h>
-
-structuren:
-
-
-regex_t preg;
-regmatch_t pmatch[100];
-
-example: regex1.c
-
-#################################################
-
-
-#include <stdio.h>
-#include <string.h>
-#include <sys/types.h>
-#include <fcntl.h>
-#include <stdlib.h>
-#include <regex.h>
-
-
-int main() {
-
-  int err;
-  char err_str[200];
-  char results[500];
-
-  int i,j,k=0;
-
-  regex_t preg;
-  regmatch_t pmatch[100];
-
-  char *buf="blub blub blub@googlemail.com adslfku asdf@gmail.com oasduf";
-
-  if( (err = regcomp(&preg, "\\b[A-Za-z0-9._%+-]+@(gmail|googlemail)+\\.[a-zA-Z]{2,4}\\b", REG_EXTENDED)) != 0)  {
-    printf("regcomp error\n");
-    return -1;
-  }
-
-  if( (err = regexec(&preg, buf, preg.re_nsub, pmatch, 0)) != 0)  {
-    regerror(err, &preg, err_str, 200);
-    printf("%s\n",err_str);
-    return -1;
-  } else {
-    for(i = 0; i < preg.re_nsub; i++) {
-      if(pmatch[i].rm_so == -1) continue;
-      for(j = pmatch[i].rm_so; j < pmatch[i].rm_eo; j++) 
-        results[k++] = buf[j];
-      results[k] = '|';
-      results[++k] = '\0';
-    }
-  }
-  printf(">> results: %s\n", results);
-  regfree(&preg);
-return 0;
-}
-
-#################################################
-
-"\\b[A-Za-z0-9._%+-]+@(gmail|googlemail)+\\.[a-zA-Z]{2,4}\\b": example pattern
-
-regcomp(): compile the seek string (pattern)
-
-regexec(): seek for a pattern in string
-
-struct regmatch_t
-
-
-typedef struct
-{
-  regoff_t rm_so;  /* Byte offset from string's start to substring's start.  */
-  regoff_t rm_eo;  /* Byte offset from string's start to substring's end.  */
-} regmatch_t; 
-
-further functions:
-
-regerror(): error handling
-
-regfree (): free buffers
-
-
-
-
+```
 

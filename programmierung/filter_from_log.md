@@ -45,19 +45,6 @@ public class JavaFilters {
 }
 ```
 
-Scala:
-```scala
-import scala.io.Source
-import java.util.regex._
-
-var p = Pattern.compile("usb")
-
-for ( line <- data-blogger-escaped-br="" data-blogger-escaped-getlines="" data-blogger-escaped-log="" data-blogger-escaped-source.fromfile="" data-blogger-escaped-syslog="" data-blogger-escaped-var="">  var m = p.matcher(line);
-  if( m.find ) 
-    print("found::" + line)
-} 
-```
-
 Perl:
 ```perl
 #!/usr/bin/perl
@@ -146,7 +133,7 @@ int main(int argc, char **argv)
 
       if( regexec(&preg, line, preg.re_nsub, pmatch, 0) == 0)  {
           printf("found:: %s", line);
-      }  
+      }
     }
   }
 
