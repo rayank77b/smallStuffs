@@ -23,8 +23,8 @@ PYTHON:
 
     INVOKE:
         https://github.com/pyinvoke/invoke
-        https://github.com/pyinvoke/invoke/commits/master?page=31
-        https://github.com/pyinvoke/invoke/commit/06ffd520b98f6b177e85e371d7112e54c64d3334
+        https://github.com/pyinvoke/invoke/commits/master?page=51
+        https://github.com/pyinvoke/invoke/commit/3b80cf84478150cc22fb36f5ef9375a318f78610
 
 
 https://github.com/coreos/coreos-autotest
@@ -134,6 +134,30 @@ https://github.com/coreos
 
 Kolibri OS
 http://kolibrios.org/en/
+
+
+http://matrixstorm.com/avr/tinyusbboard/
+
+
+
+
+
+
+
+https://github.com/Tojaj/librepo
+https://github.com/Tojaj/librepo/commits/master?page=18
+
+https://github.com/rpm-software-management/hawkey
+https://github.com/openSUSE/libsolv
+http://dnf.readthedocs.org/en/latest/release_notes.html#id43
+
+
+
+
+
+
+
+
 
 
 
