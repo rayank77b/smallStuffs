@@ -1,10 +1,12 @@
+# RCP - Rich Client Platform Samples and Tutorials
+
 here is some info about JFace TreeViewer.
 
 The Model is worked with MVC
 
-    Viewer: TreeViewer, LabelProvider
-    Model: Your own model, ContentProvider. The Objects should be Singleton
-    Control: create the Model, change the Model, refresh Viewer
+* Viewer: TreeViewer, LabelProvider
+* Model: Your own model, ContentProvider. The Objects should be Singleton
+* Control: create the Model, change the Model, refresh Viewer
 
 Create a RCP Application (for tutorials see: Vogella).
 
@@ -14,7 +16,7 @@ give an ID, name and create a class.
 
 At first create the Model. The Model is a tree with root and nodes.
 
-
+```shell
 root
 \
  node
@@ -23,6 +25,7 @@ root
 node
 \node
 \node
+```
 
 This example create a tree of hosts an commands for each host.
 
@@ -30,19 +33,20 @@ The root class. This object should be a singleton and have access to hostnames o
 
 The hostnames object should have access to commands objects.
 
-
+```
             RootNames
          /      |       \
     /           |           \
   host1       host2        host3
  /  |  \       |   \          |
 c1  c2  c3    c1   c2         command1
+```
 
 create package: xxx.model
 
 The model package will be have: RootNames, HostsNames and Commands class models.
 
-
+```java
 public class RootNames {
  private static RootNames root=null;
  public String name;
@@ -62,16 +66,17 @@ public class RootNames {
   return root;
  }
 
-        public String toString() {
+ public String toString() {
   return name;
  }
 }
+```
 
 RootNames is a singleton, has only a name and children of HostsNames. For simplicity we do the access public. Thus we don't need implement setter or getter.
 
 Then we implement following help methods in RootNames:
 
-
+```java
  public void addChild(HostsNames child) {
   children.add(child);
   child.parent = this;
@@ -89,14 +94,12 @@ Then we implement following help methods in RootNames:
  public boolean hasChildren() {
   return children.size()>0;
  }
-
-- add/removeChild() add/remove a child in a list and set/unset the parent of child.
-
-- getChildren() return an array of objects of children. Here a HostsNames array.
+```
+* add/removeChild() add/remove a child in a list and set/unset the parent of child.
+* getChildren() return an array of objects of children. Here a HostsNames array.
 
 HostsNames:
-
-
+```java
 public class HostsNames {
  public String name;
  public String host;
@@ -131,12 +134,11 @@ public class HostsNames {
   return name;
  }
 }
-
+```
 HostsNames: have a name, hostname, parent to root and children of Commandos. And helpers for Children.
 
 Commandos:
-
-
+```java
 public class Commandos {
  public String name;
  public String commando;
@@ -151,14 +153,14 @@ public class Commandos {
   return name;
  }
 }
-
+```
 Commandos have name, commando and reference to HostsNames via parent.
 
 Implement Provider:
 
 create package xxx.provider
 
-
+```java
 public class ViewLabelProvider extends LabelProvider {
  
  public String getText(Object obj) {
@@ -172,12 +174,12 @@ public class ViewLabelProvider extends LabelProvider {
   return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
  }
 }
-
+```
 The Label Provider is a View in MVC. it give the name and the image of the Tree back, based on model.
 
 Create a View Content Provider with implemented Interfaces: IStructuredContentProvider and ITreeContentProvider.
 
-
+```java
 public class ViewContentProvider implements IStructuredContentProvider, ITreeContentProvider {
 
  @Override
@@ -186,7 +188,7 @@ public class ViewContentProvider implements IStructuredContentProvider, ITreeCon
  }
 
  @Override
- public void dispose() {  
+ public void dispose() { 
  }
 
  @Override
@@ -208,14 +210,14 @@ public class ViewContentProvider implements IStructuredContentProvider, ITreeCon
   return false;
  }
 }
-
+```
 The Content Provider is the model part of MVC. It provide how the TreeViewer can access the model.
 
 following methods must be implemented: getElements(), getParent(), getChildren(), hasChildren().
 
 Implementation:
 
-
+```java
  @Override
  public Object[] getElements(Object parent) {
   return getChildren(parent);
@@ -250,6 +252,7 @@ Implementation:
    return ((HostsNames)element).hasChildren();
   return false;
  }
+```
 
 getElements and getChildren is here the same.
 
@@ -257,7 +260,7 @@ getChildren() return for RootNames or HostsNames his children list as an array. 
 
 Now set the ViewPart:
 
-
+```java
  private TreeViewer viewer;
  private RootNames root;
  
@@ -269,6 +272,7 @@ Now set the ViewPart:
   root=ModelCreator.createModel();
   viewer.setInput(root);
  }
+```
 
 Create the TreeViewer.
 
@@ -276,7 +280,7 @@ Set our Content and Label Provider. Call the Model Creator.
 
 ModelCreator:
 
-
+```java
 public class ModelCreator {
  
  public static RootNames createModel() {
@@ -295,22 +299,24 @@ public class ModelCreator {
   return root;
  }
 }
+```
 
 createModel() create a root with two hostnames and his commandos.
 
 Then we must set the view in perspective
 
-
+```java
 String editorArea = layout.getEditorArea();
   layout.setEditorAreaVisible(false);
   
   layout.addStandaloneView(ViewPart1.ID,  false, IPageLayout.LEFT, 0.95f, editorArea);
   
   layout.getViewLayout(ViewPart1.ID).setCloseable(false);
+```
 
 to add some context to the tree (here an example with a Command:
 
-
+```java
 public class CommandAdd extends AbstractHandler {
 
  @Override
@@ -330,6 +336,7 @@ public class CommandAdd extends AbstractHandler {
   return null;
  }
 }
+```
 
 simple get the singleton and add some childs. Then refresh the view.
 
@@ -341,7 +348,7 @@ At first we change our staticaly views and root objects.
 
 change in ViewPart1 (thus was it called my TreeViewer ViewPart)
 
-
+```java
 private TreeViewer viewer;
 private RootNames root;
 
@@ -352,10 +359,11 @@ private RootNames root;
  public TreeViewer getTreeViewer() {
   return viewer;
  }
+```
 
 now change the create the Command Add and Del and add them to menu. (see Vogella )
 
-
+```java
 public class CommandAdd extends AbstractHandler {
 
  @Override
@@ -376,7 +384,8 @@ public class CommandAdd extends AbstractHandler {
   return null;
  }
 }
-
+```
+```java
 public class CommandDel extends AbstractHandler {
 
  @Override
@@ -397,12 +406,13 @@ public class CommandDel extends AbstractHandler {
  }
 
 }
+```
 
 Now we create a second View where we simple put some text.
 
 The commands simple add and del some item of tree.
 
-
+```java
 public class OutputView extends ViewPart {
  public static final String ID = "zzz.zmytest.Tree.Views.OutputView";
  public Text text;
@@ -417,6 +427,7 @@ public class OutputView extends ViewPart {
  public void setFocus() {
  }
 }
+```
 
 we will simple alter the text.
 
@@ -426,7 +437,7 @@ selection Listener
 
 we implement ISelectionListener:
 
-
+```java
 public class OutputView extends ViewPart implements  ISelectionListener{
 
  @Override
@@ -441,10 +452,11 @@ public class OutputView extends ViewPart implements  ISelectionListener{
   text.setText(selection.toString());
  }
 }
+```
 
 add the view in the perspective:
 
-
+```java
 public class Perspective implements IPerspectiveFactory {
 
  public void createInitialLayout(IPageLayout layout) {
@@ -459,10 +471,11 @@ public class Perspective implements IPerspectiveFactory {
   layout.getViewLayout(ViewPart1.ID).setCloseable(false);
  }
 }
+```
 
 set the tree view to selection provider:
 
-
+```java
 public class ViewPart1 extends ViewPart {
  ...
 
@@ -473,10 +486,10 @@ public class ViewPart1 extends ViewPart {
   getSite().setSelectionProvider(viewer);
 
  }
-
+```
 improve the listener:
 
-
+```java
  @Override
  public void selectionChanged(IWorkbenchPart part, ISelection selection) {
   if (selection instanceof IStructuredSelection) {
@@ -493,6 +506,7 @@ improve the listener:
    }
   }
  }
+```
 
 the listener look for IStructuredSelection, get the object and test the object for our class instances.
 
@@ -510,7 +524,7 @@ forms tutorial 3
 
 Forms use Views:
 
-
+```java
 public class FormView extends ViewPart {
 public void createPartControl(Composite parent) {
   toolkit = new FormToolkit(parent.getDisplay());
@@ -546,6 +560,7 @@ Therefore forms use GridLayot, GridData, Buttons and other similar as SWT.
      System.out.println("Link activated!");
    }
  });
+```
 
 create a hyperlink as a HTML hyperlink.
 

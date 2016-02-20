@@ -1,9 +1,12 @@
-# python zeug
+# Python Samples/Tutorials
 
+```python
 def usage():
     print "bla"
     sys.exit(2)
+```
 
+```python
 opts, args = getopt.getopt(sys.argv[1:], "hp:")
 # h nur option
 # p: option mit wert
@@ -12,23 +15,27 @@ for opt, arg in opts:
         port = arg
     else:
         usage()
+```
 
+Pack/Unpack
+```python
 port = pack('!H', int(port))
-i integer 4 byte
-h half    2 byte
-b byte
-! network endian
+# i integer 4 byte
+# h half    2 byte
+# b byte
+# ! network endian
 
 values = (1, 'ab', 2.7)
 s = struct.Struct('I 2s f')
 packed_data = s.pack(*values)
 print 'Packed Value   :', binascii.hexlify(packed_data)
-Packed Value   : 0100000061620000cdcc2c40
+>>> Packed Value   : 0100000061620000cdcc2c40
 packed_data = binascii.unhexlify('0100000061620000cdcc2c40')
 s = struct.Struct('I 2s f')
 unpacked_data = s.unpack(packed_data)
 print 'Unpacked Values:', unpacked_data
-Unpacked Values: (1, 'ab', 2.700000047683716)
+>>> Unpacked Values: (1, 'ab', 2.700000047683716)
+
 
 endianness = [
     ('@', 'native, native'),
@@ -53,7 +60,10 @@ mac     = hmacSha.digest()
 self.cipher.encrypt(counterBytes)
 counterBytes = pack('!IIII', 0, 0, 0, counter)
 encrypted += chr(ord(plaintextData[i]) ^ ord(counterCrypt[i]))
+```
 
+JSON
+```python
 import json
 import requests
 
@@ -76,8 +86,9 @@ r = requests.post(url, data=data,
 
 data = json.loads(r.text)
 host_int = data["host_int"]
-
-
+```
+Hashlib
+```python
 import hashlib
 import time
 host_id = 
@@ -92,14 +103,19 @@ h = hashlib.sha1(’%s%s%d’% (fixed_secret,
 url = ("https://www.dropbox.com/tray_login?"
        "i=%d&t=%d&v=%s&url=home&cl=en" %
         (host_int, now, h))
+```
 
-multiprocessing is a package that supports spawning processes using an API similar to the threading module. The multiprocessing package offers both local and remote concurrency, effectively side-stepping the Global Interpreter Lock by using subprocesses instead of threads. Due to this, the multiprocessing module allows the programmer to fully leverage multiple processors on a given machine. It runs on both Unix and Windows.
+multiprocessing is a package that supports spawning processes using an API similar to the threading module. 
+The multiprocessing package offers both local and remote concurrency, effectively side-stepping the Global Interpreter Lock by using subprocesses instead of threads. 
+Due to this, the multiprocessing module allows the programmer to fully leverage multiple processors on a given machine. It runs on both Unix and Windows.
+```python
 from multiprocessing import Pool
 p = Pool(5)
 def f(x):
     return x*x
 p.map(f, [1,2,3])
-
+```
+```python
 from multiprocessing import Process
 
 def f(name):
@@ -109,12 +125,15 @@ if __name__ == '__main__':
     p = Process(target=f, args=('bob',))
     p.start()
     p.join()
+```
 
+```python
 if hasattr(os, 'getppid'):  # only available on Unix
     print 'parent process:', os.getppid()
+```
 
 The Queue class is a near clone of Queue.Queue.
-
+```python
 from multiprocessing import Process, Queue
 
 def f(q):
@@ -126,9 +145,10 @@ if __name__ == '__main__':
     p.start()
     print q.get()    # prints "[42, None, 'hello']"
     p.join()
+```
 
 The Pipe() function returns a pair of connection objects connected by a pipe which by default is duplex (two-way). For example:
-
+```python
 from multiprocessing import Process, Pipe
 
 def f(conn):
@@ -141,23 +161,29 @@ if __name__ == '__main__':
     p.start()
     print parent_conn.recv()   # prints "[42, None, 'hello']"
     p.join()
-    
-http://docs.python.org/2/library/multiprocessing.html
+```
 
+[`http://docs.python.org/2/library/multiprocessing.html`](http://docs.python.org/2/library/multiprocessing.html)
+
+```python
 >>> os.path.isfile('baum.c')
 True
 >>> os.path.isfile('bin')
 False
+```
 
 so to open a file, process its contents, and make sure to close it, you can simply do:
-
+```python
 with open("x.txt") as f:
     data = f.read()
     do something with data
 
 with open(STATE_FILENAME, 'w') as f:
     f.write('\n'.join([instance.id for instance in instances]))
+```
 
+ssh paramiko
+```python
 client = paramiko.SSHClient()
 client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
 client.connect(params['instance_name'], username='newsapps',
@@ -167,7 +193,9 @@ ab_results = stdout.read()
 s = re.search('Time\ per\ request:\s+([0-9.]+)\ \[ms\]\ \(mean\)', ab_results)
 ms_per_request = float(s.group(1))
 client.close()
-
+```
+Fabric
+```python
 from fabric.api import run
 from fabric.tasks import execute
 
@@ -176,7 +204,9 @@ def do_something():
 
 if __name__ == "__main__":
     execute(do_something, hosts=["username@host"])
+```
 
+```python
 STATE_FILENAME = os.path.expanduser('~/.bees')
 
 with open(STATE_FILENAME, 'r') as f: 
@@ -189,10 +219,12 @@ if not os.path.isfile(pem_path):
     return
 
 urllib2.urlopen(url) 
+```
 
-python-virtualenv - Python virtual environment creator
-virtualenvwrapper - extension to virtualenv for managing multiple virtual Python environments
+* python-virtualenv - Python virtual environment creator
+* virtualenvwrapper - extension to virtualenv for managing multiple virtual Python environments
 
+```python
 for i, instance in enumerate(instances):
 
 # generator [ x for x in xlists], erzeugt eine liste mit x-werten aus xlists
@@ -232,7 +264,9 @@ d=h=dict(h.split(':') for h in headers.split(';'))
 request = urllib2.Request(url, headers=dict_headers) 
 request.add_header('Cookie', cookies) 
 urllib2.urlopen(request).read() 
+```
 
+```python
 from pprint import pprint
 pprint(response) 
 
@@ -271,7 +305,8 @@ d = {'clientip': '192.168.0.1', 'user': 'fbloggs'}
 logging.warning("Protocol problem: %s", "connection reset", extra=d)
 # would print something like:
 # 2006-02-08 22:20:02,165 192.168.0.1 fbloggs  Protocol problem: connection reset
-
+```
+```python
 import struct
 >>> n=0x41
 >>> struct.pack('>I', n)
@@ -343,7 +378,9 @@ imp — Access the import internals
 This module provides an interface to the mechanisms used to implement the import statement.
 fp, pathname, description = imp.find_module(name)
 return imp.load_module(name, fp, pathname, description)
+```
 
+```python
 # simple setup.py
 from distutils.core import setup
 import imp
@@ -414,8 +451,15 @@ print("bla '%s'" % (value1 or default_value)))
 >>> import datetime 
 >>> datetime.datetime.now().strftime('%F_%H-%M-%S')
 '2012-01-11_19-48-02'
+```
 
-Decorators: A decorator is the name used for a software design pattern. Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. 
+
+Decorators 
+
+A decorator is the name used for a software design pattern. 
+Decorators dynamically alter the functionality of a function, method 
+or class without having to directly use subclasses or change the source code of the function being decorated. 
+```python
 def makebold(fn):
     def wrapped():
         return "<b>" + fn() + "</b>"
@@ -432,7 +476,9 @@ def hello():
     return "hello world"
 
 print hello() ## returns <b><i>hello world</i></b>
+```
 
+```python
 >>> s="as sod 230   023  93  02 0230  4034          39"
 >>> s.split(' ')
 ['as', 'sod', '230', '', '', '023', '', '93', '', '02', '0230', '', '4034', '', '', '', '', '', '', '', '', '', '39']
@@ -447,10 +493,11 @@ big = r"This is a lo"
 
 u or U to make it a Unicode string:
 hello = u'Hello\u0020World'
+```
 
 Strings are immutable, which means that no matter what operation you do on a string, you will
 always produce a new string object
-
+```python
 mystr = "my string"
 mystr[0]  # 'm'
 mystr[-2] # 'n'
@@ -458,9 +505,11 @@ mystr[-2] # 'n'
 mystr[1:4] # 'y s'
 mystr[3:]  # 'string'
 mystr[-3:] # 'ing'
+```
 
 Slices can be extended, that is, include a third parameter that is known as the stride or step of
 the slice:
+```python
 mystr[:3:-1]  # 'gnirt'
 mystr[1::2]   # 'ysrn'
 
@@ -558,9 +607,10 @@ while 1:
     except StopIteration:
         break
     # statements
+```
 
 Any object that supports iter() and next() is said to be "iterable."
-
+```python
 class countdown(object):
     def __init__(self,start):
         self.count = start
@@ -583,10 +633,11 @@ countdown(5)
 i in c:
 print i,
 1
+```
 
 A generator is a function that produces a sequence of results instead of a single value
 Instead of returning a value, you generate a series of values (using the yield statement)
-
+```python
 def countdown(n):
     while n > 0:
         yield n
@@ -597,10 +648,12 @@ print i,
 ...
 5 4 3 2 1
 >>>
+```
 
 Calling a generator function creates an generator object. However, it does not start running the function.
 yield produces a value, but suspends the function, Function resumes on next call to next()
 
+```python
 def countdown(n):
     print "Counting down from", n
     while n > 0:
@@ -618,11 +671,13 @@ When the generator returns, iteration stops
 Traceback (most recent call last):
     File "<stdin>", line 1, in ?
 StopIteration
+```
 
 A generator function is mainly a more convenient way of writing an iterator. You don't have to worry about the iterator protocol (.next, .__iter__, etc.)
 A generator is a one-time operation. You can iterate over the generated data once, but if you want to do it again, you have to call the generator function again. This is different than a list (which you can iterate over as many times as you want)
 
 A generated version of a list comprehension
+```python
 >>> a = [1,2,3,4]
 >>> b = (2*x for x in a)
 >>> b
@@ -653,20 +708,23 @@ for i in s:
             if cond2:
                 ...
                 if condfinal: yield expression
+```
 
 The parens on a generator expression can dropped if used as a single function argument
 sum(x*x for x in s)  <- Generator expression
 
 Generator functions:
+```python
 def countdown(n):
     while n > 0:
         yield n
         n -= 1
+```
 Generator expressions
 squares = (x*x for x in s)
 
 In both cases, we get an object that generates values (which are typically consumed in a for loop)
-
+```pyhton
 # read the size from logs and sum
 wwwlog = open("access-log")
 total = 0
@@ -681,7 +739,7 @@ wwwlog     = open("access-log")
 bytecolumn = (line.rsplit(None,1)[1] for line in wwwlog)
 bytes      = (int(x) for x in bytecolumn if x != '-')
 print "Total", sum(bytes)
-
+```
 access-log -> wwwlog -> bytecolumn ->  bytes -> sum() -> total
 
 
@@ -696,10 +754,7 @@ then it connect to well known ports and look for respond.
 limits: only certain ports and only TCP
 
 trace2.py
-
-###################################################################
-
-
+```python
 #!/usr/bin/python
 
 import sys, os, socket, re
@@ -772,20 +827,22 @@ scan=Scan()
 for ip4 in range(begin, end):
   ip="%s.%d"%(iptriple,ip4)
   scan.scann(ip)
-
-###################################################################
+```
 
 
 you can set your own exception handler, this is done by
 sys.excepthook = your_func
 for that you must define a function, with following parameters:
+```python
 def your_func(exc_type, exc_obj, exc_tb):
     print "whoaaa my exception"
+```
 
 then you can call an exception
 5/0
 =>
 whoaaa my exception
+```
 def your_func(exc_type, exc_obj, exc_tb):
     import traceback
     l = traceback.format_exception(exc_type, exc_obj, exc_tb)
@@ -796,23 +853,25 @@ def your_func(exc_type, exc_obj, exc_tb):
 ['Traceback (most recent call last):\n', ' File "./t1.py", line 37, in \n 5/0\n', 'ZeroDivisionError: integer division or modulo by zero\n']
 traceback.format_exception(...) return us a list of information
 as a normal exception traceback
+```
 
 functions numbers
-
+```python
 int(), long8), float(), round(), hex(), oct(), pow(), cmp()
 
 s1+s2 merge
 
 s1*n s1+s1+s1+s1+...
-
+```
 functions strings:
-
+```python
 org(), chr(), str(), repr(), unicode(), len()
 
 s.count(), s.encode(), s.endswith(), s.find(), s.isalnum(), s.iksalpha(), s.isdigi(), s.islower(), s.isspace(), s.join(), s.lstrip(), s.replace(), s.rfind(), s.rstrip(), s.split(), s.startswith(), s.strip(), s.swapcase()
+```
 
 List:
-
+```python
 array=[1,2,3,4]
 
 len(array)
@@ -823,7 +882,6 @@ array[2]=["bla", [1,2,3], 'ups']
 
 append(), extend(), count(), index(), insert(), remove(), pop(), reverse(), sort()
 
-
 range()
 
 range(4)
@@ -833,16 +891,17 @@ range(4)
 range(5,10,2]
 
 [5,7,9]
+```
 
 Tuples
 
 same as list but imutable
-
+```python
 t1=(1,2,3)
-
+```
 
 indicies and slices
-
+```python
 s[4:]
 
 s[4:7]
@@ -856,15 +915,16 @@ s[:]
 max(), min(), len()
 
 a,b,c = [ 1, 2, 3 ]
-
+```
 del delete a varaible
-
+```python
 a= 1
 
 del a
+```
 
 assoziative lists, hash
-
+```python
 h = { k:v, k2:v2, k3:v3 }
 
 t={"peter":23450, "anna":39454, "blub":439549}
@@ -885,10 +945,10 @@ if 2 in lists:
 
 if not "a" in string:
 
-...
+```
 
 Functions:
-
+```python
 def p(n):
 
 "bla bla, describe function for help"
@@ -906,9 +966,10 @@ def fct(a, b="bla"):
 fct(3, "lala")
 
 fct(3)
+```
 
 several arguments with *
-
+```python
 def h(g, *args):
 
 for m in args:
@@ -930,11 +991,10 @@ h(v1="blub", v2="aga")
 def complexparameters(firma, delim="-", *address, **inventars):
 
 def doNothing():
-
-pass
-
+  pass
+```
 functionale coding
-
+```python
 add = lambda x,y: x+y
 
 add(2,3)
@@ -950,16 +1010,11 @@ map(lambda x:x+1,(1,2,3))
 map for tuple (1,2,3) x+1
 
 def p(n):
-
-for a in range(2,n):
-
-if n%a == 0:
-
-return 0
-
-else:
-
-return 1
+    for a in range(2,n):
+        if n%a == 0:
+            return 0
+        else:
+            return 1
 
 filter(p, range(100))
 
@@ -970,9 +1025,10 @@ a=5
 exec("var" +str(a)+"="+str(a))
 
 => var5=5
+```
 
 docstrings:
-
+```python
 def bla():
 
 """ blal bla"""
@@ -980,7 +1036,7 @@ def bla():
 ...
 
 bla.__doc__
-
+```
 
 
 bottlepy.org
@@ -990,7 +1046,7 @@ Bottle is a fast, simple and lightweight WSGI micro web-framework for Python. It
 How to use: simple, download and copy the file bottle.py in your directory. (or you can install it, see the README file).
 
 myweb01.py
-
+```pyton
 from bottle import route, run
 
 @route('/test/:file')
@@ -1001,18 +1057,20 @@ def hello(file):
         return 'nothing here to see'
 
 run(host='localhost', port=8080)
+```
 
 start with: python myweb01.py
 
 go to browser and go to http://localhost:8080/test/test
 
 you will get from console:
-
+```shell
 Bottle server starting up (using WSGIRefServer())...
 Listening on http://localhost:8080/
 Use Ctrl-C to quit.
 
 localhost.localdomain - - [18/Jul/2011 15:27:47] "GET /test/test HTTP/1.1" 200 17
+```
 
 and in the browser the message Testing!
 
@@ -1022,7 +1080,7 @@ for more info go to Bottle documentation.
 Here is part 2 about python web framework bottle.
 
 let see code myweb02.py
-
+```python
 from bottle import route, run, get, post, request, redirect
 
 @route('/')
@@ -1035,30 +1093,23 @@ def view_object(id):
     return "Object ID: %d" % int(id)
 
 run(host='localhost', port=8080)
+```
 
 with import we set the functions which we need:
 
-run - start the server
-
-run(host='localhost', port=8080) - self explained or?
-
-route - is a decorator, which say how the URI should be resolved.
-
-decorator - see galileo book (german) or english: short: Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. A Python decorator is a specific change to the Python syntax that allows us to more conveniently alter functions and methods (and possibly classes in a future version).
+* run - start the server
+* run(host='localhost', port=8080) - self explained or?
+* route - is a decorator, which say how the URI should be resolved.
+* decorator - see galileo book (german) or english: short: Decorators dynamically alter the functionality of a function, method, or class without having to directly use subclasses or change the source code of the function being decorated. A Python decorator is a specific change to the Python syntax that allows us to more conveniently alter functions and methods (and possibly classes in a future version).
 
 there are other decorators too:
 
-get - simulate the GET request
-
-post - simulate the POST request
-
-put, delete - simulates the PUT, DELETE requests
-
-further imports from bottle are
-
-request - get the formular datas
-
-redirect - redirect the page
+* get - simulate the GET request
+* post - simulate the POST request
+* put, delete - simulates the PUT, DELETE requests
+* further imports from bottle are
+* request - get the formular datas
+* redirect - redirect the page
 
 In function redirect_index(), we redirect the / and index.html to /object/4.
 
@@ -1067,7 +1118,7 @@ Thus we call the function view_object(id), which the id is a number given by dyn
 The functions itself return a string, which will be displayed.
 
 let see how get and post routing work: myweb03.py
-
+```python
 from bottle import run, get, post, request
 
 #@route('/login')
@@ -1091,8 +1142,9 @@ def login_submit():
 
 
 run(host='localhost', port=8080)
+```
 
-@get('/login') - set the /login routing to function login_form() input for a get request.
+`@get('/login')` - set the /login routing to function login_form() input for a get request.
 
 the login_form() generate a html formular and call the /login as a post request.
 
@@ -1104,7 +1156,7 @@ If you simple call /login, you get the formular, after send you go to /login via
 now we want to call static and templates.
 
 let see myweb04.py:
-
+```python
 from bottle import run, route, static_file
 
 @route('/:filename')
@@ -1112,6 +1164,7 @@ def getstaticfile(filename):
     return static_file(filename, root='./files')
 
 run(host='localhost', port=8080)
+```
 
 to get the html-files you call static_file(filename, root)
 
@@ -1122,7 +1175,7 @@ If you now call /index.html, the static_file() will be return the file index.htm
 If there no such file, then we get 404 Error.
 
 Templates:
-
+```python
 from bottle import run, route, view
 
 @route('/hello')
@@ -1132,11 +1185,12 @@ def hello(name='World'):
     return dict(name=name)
 
 run(host='localhost', port=8080)
+```
 
-With @view() you set the template file name. The function return a dictionary for the template.
+With `@view()` you set the template file name. The function return a dictionary for the template.
 
 The template itself has following content:
-
+```html
 %if name == 'World':
     <h1>Hello {{name}}!</h1>
     <p>This is a test.</p>
@@ -1144,10 +1198,11 @@ The template itself has following content:
     <h1>Hello {{name.title()}}!</h1>
     <p>How are you?</p>
 %end
+```
 
 %if, else, end is similar to python syntax.
 
-
+```python
 f = (x for x in xrange(100)) # выражение - генератор
 c = [x for x in xrange(100)] # генератор списков
 
@@ -1163,10 +1218,10 @@ def prime(lst):
 Traceback (most recent call last):
   File "<stdin>", line 1, in <module>
 StopIteration
-
+```
 
 Python 3.3 : yield from.  because of "yield and for"
-
+```python
 def generator_range(first, last):
     for i in xrange(first, last):
         yield i
@@ -1181,21 +1236,23 @@ class Hello:
         print "enter a block"
     def __exit__(self, exp_type, exp_value, traceback):
         print "exit a block"
+```
 
-
+```python
 if file.endswith('.bz2'):
-os.path.abspath(os.path.dirname(sys.argv[0]))
-execfile(fullpath)
-os.environ['AUTODIR']
+    os.path.abspath(os.path.dirname(sys.argv[0]))
+    execfile(fullpath)
+    os.environ['AUTODIR']
 if not os.path.isdir(self.resultdir):
     os.mkdir(self.resultdir)
 if x not in list1:
-if (src.startswith('http://')) or (src.startswith('ftp://')):
-os.getcwd()
-urllib.urlretrieve(src, dest)
-shutil.copyfile(src, dest)
+    if (src.startswith('http://')) or (src.startswith('ftp://')):
+        os.getcwd()
+        urllib.urlretrieve(src, dest)
+        shutil.copyfile(src, dest)
 if os.path.isfile(dest):
     os.remove(dest)
+
 signal.signal(signal.SIGPIPE, signal.SIG_DFL)
 signal.signal(signal.SIGPIPE, signal.SIG_IGN)
 os.dup2(newfd, self.fd)
@@ -1209,48 +1266,17 @@ os.dup(fd) -> fd2
 os.pipe() -> (read_end, write_end)
     Create a pipe.
 lines[i] = re.sub(r'^timeout.*/', 'timeout 60', lines[i])
+```
+
+Copy data from src to dst
+```python
 shutil.copyfile(src, dst)
-    Copy data from src to dst
+```
+
 pickle - Create portable serialized representations of Python objects.
+```python
 >>> l1
 [1, 2, 3, 4]
 >>> pickle.dumps(l1)
 '(lp0\nI1\naI2\naI3\naI4\na.'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```

@@ -1,8 +1,11 @@
+# GDB Gnu Debugger Samples/Tutorials
+
 run `perl -e 'print "A"x1040'`  $(...)
 
 
 Simple C code
 
+```c
 int main() {
 
     int a=2;
@@ -14,7 +17,9 @@ int main() {
 
     return 0;
 }
+```
 
+```shell
 gcc -ggdb -S xx.c we get:
 
  .file "c2.c"
@@ -72,7 +77,7 @@ or disas it with gdb (x64 machine):
    0x00000000004004ce <+34>: pop    %rbp
    0x00000000004004cf <+35>: retq  
 // return 0;  exit main
-
+```
 
 
 Links:
@@ -86,27 +91,25 @@ http://sourceware.org/binutils/docs-2.20/as/
 Assembling: 
 
 GAS:
-
+```shell
 as –o program.o program.s
-
+```
 
 Linking (common to both kinds of assembler):
-
+```shell
 ld –o program program.o
-
+```
 
 Linking when an external C library is to be used:
-
+```shell
 ld –-dynamic-linker /lib/ld-linux.so.2 –lc –o program program.o
+```
 
 comments:  # comment  or /* comment */
 
-
 directives: (pseudo ops)  .blabla
 
-
 .intel_syntax noprefix   # intel syntax  einschalten
-
 
 .globl  _start   # main entry point
 
@@ -116,7 +119,6 @@ directives: (pseudo ops)  .blabla
 
 
 coding:
-
 
 $4  a value 4
 
@@ -155,7 +157,7 @@ int main()  {
 
 generate on x64:
 
-
+```c
 .file "c.c"
 
 .text
@@ -195,6 +197,8 @@ ret
 .ident "GCC: (Debian 4.7.2-5) 4.7.2"
 
 .section .note.GNU-stack,"",@progbits
+
+```
 
 pushq %rbp
 
