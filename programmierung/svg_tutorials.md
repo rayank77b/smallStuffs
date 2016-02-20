@@ -1,10 +1,12 @@
-https://code.google.com/p/svgfig/wiki/PlottingTutorial
+# SVGFIG
 
+[`Plotting Tutorial`](https://code.google.com/p/svgfig/wiki/PlottingTutorial)
+
+```python
 from svgfig import *
 
 hacks=[]
 hacks["inkscape-text-vertical-shift"] = True
-
 
 c = Curve( "t, t**2", -2, 2 )
 p = Plot( -2, 2, -2, 6, c )
@@ -13,8 +15,9 @@ s.save()           # tmp.svg
 
 Plot( -2, 2, -2, 6, c ).SVG().save()
 Plot( -2, 2, -2, 6, Curve( "t, t**2", -2, 2 ) ).SVG().save()
+```
 
-
+```python
 c1 = Curve( "t, t**2", -2, 2 )
 c2 = Curve( "t, t**3", -2, 2, stroke = "blue" )
 Plot(-2, 2, -2, 6, c1, c2).SVG().save()
@@ -45,11 +48,10 @@ Plot(-2, 2, -2, 6, c, yticks=-7).SVG().save()
 
 
 c = Curve("t, t**2", -2, 2)
->>> Plot (-2, 2, -2, 6, c, yticks = {2:"two", 3:"three", 4:"four", 5:"five"} ).SVG().save()
+Plot (-2, 2, -2, 6, c, yticks = {2:"two", 3:"three", 4:"four", 5:"five"} ).SVG().save()
+```
 
-
-
-
+```python
 from svgfig import *
 from math import *
 import random
@@ -71,10 +73,9 @@ xerr = XErrorBars(points)
 yerr = YErrorBars(points)
 dots = Dots(points, make_symbol("name", stroke="black", fill="red", stroke_width="0.25pt"))
 Fig(Fig(angle_axis, radial_axis, xerr, yerr, dots, trans="x*cos(y), x*sin(y)")).SVG(window(-6, 6, -6, 6)).inkview()
+```
 
-
-
-
+```python
 import svgfig
 
 # read in the "SVGFig" text I typed and converted into paths
@@ -129,37 +130,4 @@ svg[0].prepend(defs)
 svg[0].attr["clip-path"] = "url(#theClip)"
 
 svgfig.canvas(svg, viewBox="0 0 200 100").save("svgfig_logo.svg")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```

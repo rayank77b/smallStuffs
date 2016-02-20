@@ -1,15 +1,16 @@
-Tutorials: http://www.simplyscala.com/
+# Scala Samples
 
-Book: http://programming-scala.labs.oreilly.com/
-
-further info from http://www.scala-lang.org/
-
-http://www.scala-lang.org/node/1305
-
+* [`Tutorials`](http://www.simplyscala.com/)
+* [`Book`](http://programming-scala.labs.oreilly.com/)
+* [`further info`](http://www.scala-lang.org/)
+* [`node 1305`](http://www.scala-lang.org/node/1305)
 
 install scala, and type scala in console ;)
+```shell
+apt-get install scala
+```
 
-
+```scala
 scala> 4/3.0
 res5: Double = 1.3333333333333333
 
@@ -33,7 +34,6 @@ res7: Int = 3
 scala> a=5
 a: Int = 5
 
-
 scala> val b=3
 b: Int = 3
 
@@ -50,10 +50,11 @@ For printing is here
 
 Ascala> println(b)
 3
+```
 
 operators and control sturctures (if, else, ...) are the same as in java.
 
-
+```scala
 scala> val isBook = 6>=3
 isBook: Boolean = true
 
@@ -69,7 +70,6 @@ sale: Int = 160
 scala> sale
 res13: Int = 160
 
-
 scala> val try1=if (1==2) 8 else 9
 try1: Int = 9
 
@@ -79,36 +79,17 @@ scala> while(total < 17) total+=3
 scala> total
 res15: Int = 18
 
-scala> for(i <- data-blogger-escaped-1="" data-blogger-escaped-4="" data-blogger-escaped-br="" data-blogger-escaped-five="" data-blogger-escaped-hi="" data-blogger-escaped-println="" data-blogger-escaped-to="">hi five
+scala> for(i hi five
 hi five
 hi five
 hi five
-
-scala> for(i <- data-blogger-escaped-1="" data-blogger-escaped-3="" data-blogger-escaped-5="" data-blogger-escaped-br="" data-blogger-escaped-i="" data-blogger-escaped-j="" data-blogger-escaped-println="" data-blogger-escaped-to="" data-blogger-escaped-until="">(1,1)
-(1,2)
-(1,3)
-(2,1)
-(2,2)
-(2,3)
-(3,1)
-(3,2)
-(3,3)
-(4,1)
-(4,2)
-(4,3)
-
-scala> for(c<- data-blogger-escaped-br="" data-blogger-escaped-c="" data-blogger-escaped-hello="" data-blogger-escaped-println="">h
-e
-l
-l
-o
+```
 
 hex, octal, bin is the same as in java
 
-
+```scala
 scala> val abyte: Byte = 27
 abyte: Byte = 27
-
 
 scala> var chr='A'
 chr: Char = A
@@ -116,10 +97,11 @@ scala> chr=5
 chr: Char =
 scala> chr=66
 chr: Char = B
+```
 
 define functions:
 
-
+```scala
 scala> def max(x: Int, y: Int): Int = {
 | if (x > y) x
 | else y
@@ -134,24 +116,22 @@ scala> max(3.6, 4)
 found : Double(3.6)
 required: Int
 max(3.6, 4)
+```
 
 define a class
 
-
-
+```scala
 scala> class Point {
 | var x=0
 | var y=0
 | }
 defined class Point
 
-
 scala> val p=new Point
 p: Point = Point@18b62e0
 
 scala> p.x=3
 scala> p.y=4
-
 
 scala> class Point( ix:Int,iy:Int){
 | var x=ix
@@ -170,7 +150,6 @@ scala> val p3=p1.vectorAdd(p2)
 p3: Point = Point@1095c6c
 scala> println(p3.x,p3.y)
 (10,6)
-
 
 scala> class Point( ix:Int,iy:Int){
 | var x=ix
@@ -196,10 +175,11 @@ scala> val p4=p1+p2-p3
 p4: Point = Point(12,4)
 scala> println(p4.x,p4.y)
 (12,4)
+```
 
 there is no switch -> use match
 
-
+```scala
 scala> def decode(n:Int){
 | n match {
 | case 1 => println("One")
@@ -209,13 +189,13 @@ scala> def decode(n:Int){
 | }
 | }
 decode: (Int)Unit
+```
 
 List:
 
-
+```scala
 scala> var lst = List(1, 7, 2, 8, 5, 6, 3, 9, 14, 12, 4, 10)
 res29: List[Int] = List(1, 7, 2, 8, 5, 6, 3, 9, 14, 12, 4, 10)
-
 
 scala> def odd(inLst:List[Int]):List[Int]={
 | if(inLst==Nil) Nil
@@ -237,9 +217,9 @@ inLst.head first element
 
 inLst.tail all other elements after first element
 
-
 scala> odd(lst)
 res32: List[Int] = List(1, 7, 5, 3, 9)	
+```
 
 This tutorial based on:
 
@@ -247,14 +227,16 @@ http://www.scala-lang.org/docu/files/ScalaTutorial.pdf
 
 http://www.thomasknierim.com/77/scala/scala-tutorial-2/
 
+
 write a file s1.scala
 
-
+```scala
 object HelloWorld {
   def main(args: Array[String]) {
     println("Hello, world!")
   }
 }
+```
 
 object -> declare a static singleton object
 
@@ -262,14 +244,15 @@ args: Array[String] -> a variable args as Array of Strings
 
 compile and execute
 
-
+```shell
 $ scalac s1.scala 
 $ ls
 s1.class  s1$.class  s1.scala
+```
 
 you get created standard java class files, but you must use java interpreter with setted parameters.
 
-
+```shell
 $ java s1
 Exception in thread "main" java.lang.NoClassDefFoundError: scala/ScalaObject
  at java.lang.ClassLoader.defineClass1(Native Method)
@@ -291,12 +274,13 @@ exec ${JAVACMD:=java} ${JAVA_OPTS:=-Xmx256M -Xms16M} \
 
 $ scala s1
 hallo
+```
 
 As you can see, the scala executable is a simple shell script, which start the java virtual machine with specific parameters and the scala library.
 
 Create Date.scala
 
-
+```scala
 import java.util.{Date, Locale}
 import java.text.DateFormat
 import java.text.DateFormat._
@@ -307,35 +291,28 @@ object FrenchDate {
     println(df format now)
   }
 }
+```
 
-
-
-
-
-
-
+```scala
 import java.util.{Date, Locale}
-	
 
 import Date and Locale from java.util
 
 import java.text.DateFormat._
-	
+```	
 
 DateFormat._ is similar to DateFormat.* in java
 
 val
-	
 
 declare an inmutable variable
-
+```scala
 val now = new Date
-	
+```
 
 simmilar to "Date now = new Date();" in java
 
 println(df format now)
-	
 
 "df format now" is similar to "df.format(now)"
 
@@ -343,7 +320,7 @@ In scala is everything an object. There is no primitive datatypes (that is simil
 
 Because scala based on functional programming functions are objects too.
 
-
+```scala
 object Timer {
 
   def oncePerSecond(callback: () => Unit) {
@@ -358,25 +335,20 @@ object Timer {
     oncePerSecond(timeFlies)
   }
 }
+```
 
 with functions as object you can very simple code a callback.
 
-
-
-
-
 timeFlies()
-	
 
 our callback function.
 
 callback: () => Unit
-	
+
 
 parameter for a function. ()=>Unit is the type of all functions which take no arguments and return nothing.
 
 Thread sleep 1000
-	
 
 is similar to Thread.sleep(1000)
 
@@ -388,33 +360,36 @@ oncePerSecond(() => println("time flies like an arrow..."))
 
 Clases:
 
-
+```scala
 class Complex(real: Double, imaginary: Double) {
    def re() = real
    def im() = imaginary
 }
+```
 
 define class Complex with two arguments,
 
 def re() and im() are getters. return type of these two methods is not given explicitly
 
-
+```scala
 object ComplexNumbers {
   def main(args: Array[String]) {
     val c = new Complex(1.2, 3.4)
     println("imaginary part: " + c.im())
   }
 }
+```
 
 if you have no arguments in function, write: def re = real
 
-
+```scala
 class Complex(real: Double, imaginary: Double) {
   def re = real
   def im = imaginary
   override def toString() =
     "" + re + (if (im < 0) "" else "+") + im + "i"
 }
+```
 
 class Complex(real: Double, imaginary: Double) -> primary constructor, which is part of the class declaration
 
@@ -422,7 +397,7 @@ override -> for overriding functions
 
 (if (im < 0) "" else "+") have you see it ;)
 
-
+```scala
 class Rational(numerator: Int, denominator: Int) {
  
   require(denominator != 0)
@@ -451,6 +426,7 @@ class Rational(numerator: Int, denominator: Int) {
  
   override def toString = n + "/" + d
 }
+```
 
 require(denominator != 0) -> look that variable is not null, throw exception
 
@@ -462,17 +438,16 @@ you can see +-*/ are objects functions, which can be simple overrided
 this tutorial based on:
 
 http://www.thomasknierim.com/104/scala/scala-tutorial-1/
-
 http://www.thomasknierim.com/104/scala/scala-tutorial-2/
-
 http://www.thomasknierim.com/104/scala/scala-tutorial-3/
 
-
+```scala
 object Hello {
   def main(args: Array[String]) {
     for(val arg: String <- data-blogger-escaped-args="" data-blogger-escaped-br="">      System.out.println("Hello, " + arg + "!");
   }
 }
+```
 
 for(val arg: String <- data-blogger-escaped--="" data-blogger-escaped-args=""> an array into each arg as String
 
@@ -481,11 +456,8 @@ similar: args.foreach(arg => println("Hello" + arg + "!"))
 
 args.foreach(println)
 
-
 var decrease = (x: Int) => x - 1
 decrease(11)
-
-
 
 (x: Int) => x - 1 -> anonymous function declaration
 
@@ -515,8 +487,6 @@ scala> List("Tango", "Mango", "Bobo", "Gogo")
 res2: List[Boolean] = List(true, true, false, true)
 
 
-
-
 List("alpha", "beta", "crash") -> create a list
 
 map() -> map each list element to some condition/function
@@ -527,8 +497,7 @@ _ -> ist the element (similar to perl $_ )
 (_*2) is equivalent to (i => i * 2)
 
 
-
-
+```scala
 object FileMatcher {
  
   private val filesHere=(new java.io.File(".")).listFiles
@@ -552,7 +521,7 @@ object Main {
     matchingFiles = FileMatcher.filesRegex(query)
   }
 }
-
+```
 
 
 let look:
@@ -617,16 +586,6 @@ args.foreach(arg => println(arg))
 args.foreach((arg: String) => println(arg))
 args.foreach(println)
 
-for (arg <- data-blogger-escaped-args="" data-blogger-escaped-br="">  println(arg)
-
-
-scala> for (i <- data-blogger-escaped-0="" data-blogger-escaped-5="" data-blogger-escaped-br="" data-blogger-escaped-to="">     | println(i)
-0
-1
-2
-3
-4
-5
 
 
 val greetStrings: Array[String] = new Array[String](3)
@@ -641,13 +600,9 @@ greetStrings(2) = "world!\n"
 important indexes are in brakes () not square brackets[]
 
 
-for (i <- data-blogger-escaped-0="" data-blogger-escaped-2="" data-blogger-escaped-br="" data-blogger-escaped-to="">  print(greetStrings(i))
-
-
 
 read file in scala:
 
-for (file <- data-blogger-escaped-file="" data-blogger-escaped-listfiles="" data-blogger-escaped-log="" data-blogger-escaped-new="" data-blogger-escaped-pre="" data-blogger-escaped-var="">
 
 list a directory 
 
@@ -662,7 +617,7 @@ simple print out of a file
 import scala.io.Source  
   
 for {  
-  (line) <- data-blogger-escaped-bla.txt="" data-blogger-escaped-br="" data-blogger-escaped-getlines="" data-blogger-escaped-source.fromfile="">} print(line)  
+  (line) } print(line)  
 
 
 
@@ -692,12 +647,6 @@ or you can use Java API
 
 
 val os = new BufferedOutputStream(new FileOutputStream("gen/" + file.getName))
-
-
-
-
-
-
 
 
 

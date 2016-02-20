@@ -1,35 +1,37 @@
-ein Replace-programm für Datei erstellen.
+# Ruby Samples/Tutorials
 
-ein Wort durch ein anderen ersetzen
+* ein Replace-programm für Datei erstellen.
+* ein Wort durch ein anderen ersetzen
 
-Lösung:
+Solution:
+```ruby
+#!/usr/bin/ruby
 
- 1 #!/usr/bin/ruby
- 2
- 3 puts "start"
- 4
- 5 if ARGV.length > 2
- 6   datei=ARGV[0]
- 7   muster=ARGV[1]
- 8   ersetzen=ARGV[2]
- 9 else
-10   print "\n\tfile02.rb  file muster replacetext\n\n"
-11   Process.exit
-12 end
-13
-14 puts "mustering file #{datei}"
-15
-16 f=File.open(datei, "r+")
-17     lines = f.readlines           # read into array of lines
-18     lines.each do |it|            # modify lines
-19         it.gsub!(/#{muster}/, ersetzen)
-20     end
-21     f.pos = 0                     # back to start
-22     f.print lines                 # write out modified lines
-23
-24     f.truncate(f.pos)  
-25 f.close
+puts "start"
 
+if ARGV.length > 2
+  datei=ARGV[0]
+  muster=ARGV[1]
+  ersetzen=ARGV[2]
+else
+  print "\n\tfile02.rb  file muster replacetext\n\n"
+  Process.exit
+end
+
+puts "mustering file #{datei}"
+
+f=File.open(datei, "r+")
+    lines = f.readlines           # read into array of lines
+    lines.each do |it|            # modify lines
+        it.gsub!(/#{muster}/, ersetzen)
+    end
+    f.pos = 0                     # back to start
+    f.print lines                 # write out modified lines
+    f.truncate(f.pos)  
+f.close
+```
+
+```ruby
 items = [1,2,3,4]
 items.each do |i|
   puts i
@@ -48,7 +50,8 @@ sentence.split.reverse.map{|word| word.capitalize }.join(' ')
 
 sentence = 'a short sentence'
 sentence.split.length
-
+```
+```ruby
 class MyClass
   def initialize
     @n = 0
@@ -58,35 +61,39 @@ end
 def inc(n)
   n + 1
 end
+```
 
 webseite runterladen und links ausgeben
- 1 #!/usr/bin/ruby
- 2
- 3 require 'net/http'
- 4
- 5 if ARGV.length >0
- 6   url=ARGV[0]
- 7 else
- 8   p " url file"
- 9   Process.exit
-10 end
-11
-12 req = Net::HTTP.get_response(URI.parse(url))
-13 line=req.body
-14
-15 lines=line.split(" ")
-16
-17 lines.each do |l|
-18   if l.include?("href=http") or l.include?("href=\"http")
-19     v1=l.split("\"")
-20     if v1.length>1
-21       puts v1[1]
-22     else
-23       puts v1[0]
-24     end
-25   end
-26  
-27 end
+```ruby
+#!/usr/bin/ruby
+
+require 'net/http'
+
+if ARGV.length >0
+  url=ARGV[0]
+else
+  p " url file"
+  Process.exit
+end
+
+req = Net::HTTP.get_response(URI.parse(url))
+
+line=req.body
+
+lines=line.split(" ")
+
+lines.each do |l|
+  if l.include?("href=http") or l.include?("href=\"http")
+    v1=l.split("\"")
+    if v1.length>1
+      puts v1[1]
+    else
+      puts v1[0]
+    end
+  end
+ 
+end
+```
 
 ENV.each do |e|
     p e
@@ -102,6 +109,7 @@ example:
 ["TERM", "xterm"]
 
 
+```ruby
 #!/usr/bin/ruby
 # put out file wiht numbers out
 #
@@ -117,16 +125,19 @@ begin
 rescue
   puts "no file???   or errors"
 end
+```
 
 install:
-
+```shell
 ~# gem install getopt
 Successfully installed getopt-1.3.7
 1 gem installed
 Installing ri documentation for getopt-1.3.7...
 Installing RDoc documentation for getopt-1.3.7...
 need: require 'getoptlong'
+```
 
+```ruby
 #!/usr/bin/ruby
 
 require 'getoptlong'
@@ -156,7 +167,8 @@ opts.each do |opt, arg|
      puts "upsala"
  end
 end
-
+```
+```ruby
 with #{ }
 puts "Text is #{["Test 1", "Test 2"][1]}"
 =>Text is Test 2
@@ -203,12 +215,12 @@ b bit
 e,f,g floating
 %x$y x which argument, y what (i,d,s,..)
 %1$*2$s argument 1 with length of argument 2 (string)
-
+```
 
 from "Ruby Cookbook" OReilly
 
 for detailed information, look this book
-
+```ruby
 [1,2,3].each { |i| puts i }
 [1,2,3].each do |i|
   if i%2 == 0
@@ -237,25 +249,25 @@ times_ten.call(5)        # => 50
 circumference = times_n(2*Math::PI)
 [1, 2, 3].collect(&circumference)
 # => [6.28318530717959, 12.5663706143592, 18.8495559215388]
+```
 
 Clousure:
 
 Every Ruby block is also a closure.
-
-
+```ruby
 ceiling = 50
 [1, 10, 49, 50.1, 200].select { |x| x <  ceiling }
 # => [1, 10, 49]
+```
 
 the var celing is context depended.
 
 Lambda and Proc
 
-
+```ruby
 block = { |x| puts x }                  # error
 block = lambda { |x| puts x }           # ok
 block.call "bla bla!"
-
 
 def my_lambda(&aBlock)   # a block in function parameters
   aBlock
@@ -275,10 +287,11 @@ add_lambda.call(4,5,6)  # ArgumentError: wrong number of arguments (3 for 2)
 
 add_procnew = Proc.new { |x,y| x + y }
 add_procnew.call(4,5,6)     # => 9
+```
 
 Yielding
 
-
+```ruby
 def myfunc
   puts "1"
   yield
@@ -338,41 +351,4 @@ cnt.upto(cnt+0) do |x|
   end
 sleep 2
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
