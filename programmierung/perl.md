@@ -1,24 +1,36 @@
-# join an array to scalar
+# Perl Sampels/Tutorials
+
+join an array to scalar
+```perl
 my $evilwordsregexp = join('|', @evilwords);
 
 foreach my $file (@testitems) {
+```
 
-# nuke everything after the first space (#comment)
+nuke everything after the first space (#comment)
+```perl
 $file =~ s/\s.*$//;
 next if (!$file); # skip null entries
+```
 
-# open the file for reading
+open the file for reading
+```perl
 if (open (FILE, $file)) { 
 close (FILE);
+```
 
-# and go through the file line by line
+and go through the file line by line
+```perl
 while (my $file_line = <FILE>) { 
+```
 
-# found an evil word
+found an evil word
+```perl
 if ($file_line =~ /($evilwordsregexp)/i) { 
-
+```
 
 get page with perl
+```perl
 sub getpage($$) {
     my $link = shift;
     my $base = shift;
@@ -43,21 +55,27 @@ sub getpage($$) {
         return @site_content;
     }
 }
+```
 
+```perl
 ($sec, $min, $hour, $day, $mon, $year, $wday, $yday, $isdst)=localtime(time());
 print scalar(localtime()); # > Fri Dec 21 11:11:30 2006
+```
 
-# gibt keine leezreilen und zeilen mit "---" oder mehr aus
+gibt keine leezreilen und zeilen mit "---" oder mehr aus
+```perl
 print unless ( /^\s+$/ or /-{3,}/ );
+```
 
-# sucht nach kapazietaet
+sucht nach kapazietaet
+```perl
 $pfad="/proc/acpi/battery/BAT0/state";
 if(/remaining capacity: *?(\d*?) mAh/) {
 print $1;
+```
 
-
-# eine mail senden
-
+eine mail senden
+```perl
 use Email::Send;
 send SMTP=> <<'__MESSAGE__', $host;
 To: anfrit00@fht-esslingen.de
@@ -65,8 +83,9 @@ From: foo@example.com
 
 bla bla
 __MESSAGE__
+```
 
-
+```perl
 perl -e 'print "$_\n" foreach(@INC);'
 /etc/perl
 /usr/local/lib/perl/5.8.8
@@ -76,8 +95,10 @@ perl -e 'print "$_\n" foreach(@INC);'
 /usr/lib/perl/5.8
 /usr/share/perl/5.8
 /usr/local/lib/site_perl
+```
 
-# formatprobe
+formatprobe
+```perl
 open (CON_LIST, '>-') or die " open error\n";
 $i=1; $key="klasst"; $result=0.23; $erg=23;
 
@@ -89,17 +110,20 @@ format CON_LIST =
 @> @<<<<<<<<<<<<<<< @>>>> = @<<<<<<
 $i, $key, $result, $erg
 .
+```
 
-
-# zu datenbank verbinden (mysql)
+zu datenbank verbinden (mysql)
+```perl
 use DBI();
 
 $dbhost="localhost";
 $dbname="mysql";
 $dbuser="root";
 $dbpass="";
+```
 
-# verbinden
+verbinden
+```perl
 my $dbh = DBI->connect("DBI:mysql:database=$dbname;host=$dbhost",
 $dbuser, $dbpass, {'RaiseError' => 1});
 my $sth = $dbh->prepare("SELECT host, user, Password FROM user"); # anfrage
@@ -111,9 +135,10 @@ print "HOST: ".$user->{'host'}."\nUSER: ".$user->{'user'}."\nPASS: ".$user->{'Pa
 
 }
 $dbh->disconnect(); # verbindung zu db schliessen
+```
 
-
-# einfaches parameter options
+einfaches parameter options
+```perl
 use Getopt::Std;
 getopts("vr:", \%options);
 print "v-> ".$options{'v'}."\n";
@@ -121,23 +146,27 @@ print "r-> ".$options{r}."\n";
 #./test.pl -v -r bla
 #v-> 1
 #r-> bla
+```
 
-
-# dateien globen
+dateien globen
+```perl
 $path=".";
 while (<$path/*.pl>) {
 print $_."\n";
 }
 # gibt alle dateinamen *.pl aus
+```
 
-
-# socket
+socket
+```perl
 my $sock = new IO::Socket::UNIX (Peer => $ARGV[0], Type => SOCK_STREAM); # socket
 print $sock $query; # senden
 my $response = <$sock>; # empfangen
 close $sock;
+```
 
-# einfacher server
+einfacher server
+```perl
 use IO::Socket;
 $socket=new IO::Socket::INET (LocalHost=>$ARGV[0],
 LocalPort=>6677,
@@ -152,8 +181,10 @@ $cli->flush(); # flushen
 close($cli); # und tschuess
 }
 close($socket);
+```
 
-# server
+server
+```perl
 user IO::Socket;
 $ss=new IO::Socket::INET(LocalPort=>2345, Listen=>$SOMAXCONN, Proto=>'tcp', Reuse=>1);
 # loop on incomming connections
@@ -163,26 +194,32 @@ print $sc "bla"; # senden
 $sc->close();
 }
 close($ss);
+```
 
-# client
+client
+```perl
 $sc=new IO::Socket::INET(PeerAddr=>$hostname, PeerPort=>2345, Type=>SOCK_STREAM, Proto=>'tcp');
 # .. aehnlich server
 
 # donot use IO::Socket::INET this package is defined in IO::Socket
+```
 
-# pack unpack
+pack unpack
+```perl
 my $query = pack("L L N N S S", 0x2343defe, 0x12345678,
 2343343, 1111323, $ARGV[2], $ARGV[4]);
 my ($magic, $id, $type, $genre, $detail, $dist, $link, $tos, $fw,
 $nat, $real, $score, $mflags, $uptime) =
 unpack ("L L C Z20 Z40 c Z30 Z30 C C C s S N", $response);
+```
 
-
-# alle modulen *.pm ausgeben
+alle modulen *.pm ausgeben
+```perl
 perl -e 'print "$_\n" foreach(@INC);' | while read f; do find $f -name \*.pm ; done
+```
 
-
-# inplace editieren, scritpname:pr2.orig
+inplace editieren, scritpname:pr2.orig
+```perl
 @ARGV=("pr2.orig");
 $^I=".bak"; # backup name
 $n=0;
@@ -190,9 +227,10 @@ while(<>) {
 print "$n: $_";
 $n++;
 }
+```
 
-
-# pipe
+pipe
+```perl
 open IN, "cat mail.pl |" or die "cat??";
 print while();
 close IN;
@@ -208,17 +246,19 @@ $encoder="/usr/bin/uuencode";
 open SEND, "| $encoder stdout" or die "encoder";
 print SEND "dies ist eine probe";
 close SEND;
+```
 
-
-# cgi
+cgi
+```perl
 use CGI qw/:standard/;
 print header,
 start_html('-title'=>"Statistik"),
 p("Die letzten Tagen"),
 h1("Blabla bla");
+```
 
-
-# datei locken
+datei locken
+```
 use IO::File;
 use Fcntl qw(:flock);
 
@@ -232,9 +272,10 @@ $eing=<>;
 
 flock $fh, LOCK_UN;
 $fh->close;
+```
 
-
-# ftp benutzen
+ftp benutzen
+```perl
 use Net::FTP;
 
 $host="dx40";
@@ -251,10 +292,11 @@ $ftp->cwd("/home/ray/daten") or die "cwd error\n";
 $ftp->get($_) foreach(@alle);
 
 $ftp->quit();
+```
 
 
-
-# holt n-mails von gmx.net ab
+holt n-mails von gmx.net ab
+```perl
 use Net::POP3;
 $host='pop.gmx.net';
 $user='userbla@gmx.net';
@@ -279,15 +321,17 @@ $mail->delete($nr);
 }
 close(OUT);
 $mail->quit();
+```
 
-
-# wandelt ip in int um
+wandelt ip in int um
+```perl
 use Net::IP;
 my $src = new Net::IP ("127.0.0.1") or die (Net::IP::Error());
 print $src->intip()."\n";
+```
 
-
-# read a gif file
+read a gif file
+```perl
 $A="latest.gif";
 open A or die "$A: $!";
 read A, $b, 1024;
@@ -295,35 +339,40 @@ read A, $b, 1024;
 open OUT, ">gifinfo.txt";
 print OUT for(@c);
 close OUT;
+```
 
-
-# zeit
+zeit
+```perl
 @monat=qw(jan feb mar apr mai jul jun aug sep okt nov dec);
 my ($s,$m,$h,$d,$mo,$y,@r)=localtime();
 print "$h:$m:$s\n";
 print "$d ".$monat[$mo]." ", 1900+$y,"\n";
-
-
-
+```
+```perl
 $|=1; # ausgabe nicht puffern
+```
 
 
-
-# persistente variablen(hash)
+persistente variablen(hash)
+```perl
 use GDBM_File; # persistenter hash
 use Fcntl; # O_CREAT, O_RDWR usw
-# persistenten hash oeffnen
+```
+persistenten hash oeffnen
+```perl
 tie(%MEM, GDBM_File, $pfile, O_CREAT|O_RDWR, 0644) or
 die "cannot open $pfile";
-# binden den hash MEM an die Datei pfile, ueber GDBM Interface
-# der hash MEM erscheint als normaler hash im speicher, liegt aber auf der platte
+```
+binden den hash MEM an die Datei pfile, ueber GDBM Interface
+der hash MEM erscheint als normaler hash im speicher, liegt aber auf der platte
+```perl
 $MEM($url)="bla"; # schreiben
 $d=$MEM('pla'); # lesen
 untie(%MEM); # pers. hash schliessen
+```
 
-
-
-# web
+web
+```perl
 use LWP::UserAgent;
 $ua=LWP::UserAgent->new(); # user agent erzeugen
 $request=HTTP::Request->new('GET', $url); # url festlegen
@@ -345,25 +394,25 @@ use HTML::FormatText;
 $html=parse_htmlfile($htmlfile);
 $formatter=new HTML::FormatText(leftmargin=>0, rightmargin=>70);
 print OUT $formater->format($html);
+```
 
-
-
-
-# checksume berechnen
+checksume berechnen
+```perl
 $chksum=unpack("%16C*", $dat);
+```
 
-
-
-# Ping
+Ping
+```perl
 user Net::Ping;
 $po=Net::Ping->new();
 if($po->ping($hostname)) {
-print "$hostname da";
+    print "$hostname da";
 }
 $po->close();
+```
 
-
-# FTP
+FTP
+```perl
 use Net::FTP;
 login($servername, $passwort);
 #ascii, binary
@@ -381,9 +430,10 @@ $ftp->get("that.file")
 or die "get failed ", $ftp->message;
 $ftp->quit;
 # SEE perldoc Net::FTP
+```
 
-
-# mail
+mail
+```perl
 use Mail::Send;
 $mail=Mail::Send->new();
 $mail->to($addr);
@@ -395,9 +445,10 @@ bla bla
 ....
 END;
 $mailhandle->close(); # send mail
+```
 
-
-# MIME
+MIME
+```perl
 use MIME::Lite;
 $msg=MIME::Lite->new(From=>$fromaddr, To=>$toaddr, Subject=>'bla',
 Type=>'multipart/mixed');
@@ -411,38 +462,44 @@ $msg->send();
 use MIME::Parser;
 $mime=new MIME::Parser;
 $mime->read(\*INPUT); # geoffnete Datei
+```
 
-
-# SMTP
+SMTP
+```perl
 use Net::SMTP;
 $ms=new Net::SMTP($hostname, Debug=>1,);
 $ms->mail($from_addr);
 $ms->to($addr);
 $ms->data($data); # in data steht auch der subject
+```
 
-# POP3
+POP3
+```perl
 use Net::POP3;
 $ms=new Net::POP3($hostname);
 $msg_cnt=$ms->login($usrename, $passwd);
 $headers=$ms->list(); # reference
 foreach $message(keys(%$headers)) {
-$header=$ms->top($message);
+    $header=$ms->top($message);
 }
 $message=$ms->last();
 $contents=$ms->get($message);
 $ms->quit();
+```
 
-
-# DBM
+DBM
+```perl
 dbmopen(%dbhash, "filename", 0666);
 $dbhash{'name'}="bla bla";
 print $dbhash{'any'};
 dbmclose(%dbhash);
 
 while(($key, $val)=each(%dbhash)) {
-print ...
+    print ...
 }
+```
 
+```perl
 use Fcntl;
 use SDBM_File;
 use Config;
@@ -450,9 +507,11 @@ $flags=O_CREAT|O_RDWR;
 tie(%dbhash, 'SDBM_File', 'sdmtest', $flags, 0666) or die "cannot open database $!";
 $dbhas{localtime()}="bla..";
 untie(%dbhash);
-# tie bindet eine variable zu etwas, hier zu einer datenbank klasse
-# tie(var, classname, file, flags, mode)
-# var: %hash, @array, $scalar, HANDLE
+```
+
+tie bindet eine variable zu etwas, hier zu einer datenbank klasse
+tie(var, classname, file, flags, mode)
+var: %hash, @array, $scalar, HANDLE
 
 tying scalar, array, filehandle, hash when call 'tie', perl execute proper constructor
 array ->TIEARRAY
@@ -465,6 +524,7 @@ FETCH this
 STORE this, val
 DESTROY this
 
+```perl
 package Myscalar;
 
 sub TIESCALAR {
@@ -478,13 +538,14 @@ return ($$reference_to_self);
 }
 ...
 1;
+```
 
-# an object is a reference
-
+an object is a reference
+```perl
 tie($myscalar, 'Myscalar');
 $myscalar=55;
 untie($myscalar);
-
+```
 
 TIEARRAY classname, list
 FETCH this, index
@@ -682,7 +743,7 @@ $template=new HTML::Template(filename=>'addressbuch_kontakt.html');
 $template->param(personen=>\@_pers)
 
 
-#db 
+db 
 $dbh->selectrow_hashref('SELECT ..');
       selectrow_array( .... );
 
@@ -690,7 +751,7 @@ if(exists $bla)
 if( not exiss $bla)
 
 
-#splice: removes and replaces elements in an array
+splice: removes and replaces elements in an array
 splice(ARRAY, OFFSET, LENGTH, LIST);
 
 
@@ -733,7 +794,7 @@ sub mp {
 }
 
 use File::Basename;
-#look for File/Basename.pm
+look for File/Basename.pm
 
 
 jeder Modul muss mit 1; beenden
@@ -746,6 +807,7 @@ calling methods (OOP)
 $obj->meth($param);
 meth $obj $param;
 
+```perl
 sub meth {
   my $self=shift;  # refernz auf obj
   ...
@@ -765,8 +827,9 @@ sub new {
 sub DESTROY {
  ...
 }
+```
 
-###
+```perl
 sub u {
   my $self=shift;
   if(@_) {
@@ -779,7 +842,7 @@ print $o->u,"\n";
 
 #!!not 
 print "$o->u\n";
-###
+```
 
 
 use Cwd;
@@ -801,17 +864,19 @@ HTML::LinkExtor, URI::URL
 
 head() links()
 
-
+```shell
 perl Makefile.PL
 make
 make install
+```
 
 perl -cw  p.pl  #  -c nur pruefen, nicht ausführen
                 #  -w zusätzliche Warnungen ausgeben
 
 use strict;  # direktive verwenden, alle variablen muessen mit my beginnen.
 
-# immer 
+immer 
+```perl
 #!/usr/bin/perl -w  # starten !
 
 for my $z (1..10) {
@@ -837,16 +902,6 @@ $^I=".bak"; # inplace editieren, kopie wird als .bak gespeichert
 
 
 print sprintf("%-6d", $.).$zeile;
-
-
-
-
-
-
-
-
-
-
-
+```
 
 

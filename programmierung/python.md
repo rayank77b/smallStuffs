@@ -234,14 +234,18 @@ Type "help", "copyright", "credits" or "license" for more information.
 [1, 4, 9, 16, 25]
 
 f.write('\n'.join([instance.id for instance in instances]))
+```
 
+```python
 NO_TRAILING_SLASH_REGEX = re.compile(r'^.*?\.\w+$') 
-^ anfang
-.*?  alles
-\.  punkt
-\w+ worter
-$ ende
+# ^ anfang
+# .*?  alles
+# \.  punkt
+# \w+ worter
+# $ ende
+```
 
+```python
 from urlparse import urlparse
 parsed = urlparse(options.url)
 if not parsed.scheme:
