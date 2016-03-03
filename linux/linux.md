@@ -8,63 +8,93 @@ Alle löschen:
 
 Alle löschen, die älter, als einen Tag sind: 
 ```bash
-# exiqgrep -zi -o 86400 | xargs exim -Mrm 
+exiqgrep -zi -o 86400 | xargs exim -Mrm 
 ```
 
-dd if=kali.iso of=/dev/sdb bs=512k
-
 ```bash
-# clone vmware vmdk to vbox vdi
+dd if=kali.iso of=/dev/sdb bs=512k
+```
+
+clone vmware vmdk to vbox vdi
+```bash
 VBoxManage clonehd --format vdi /path/to/original.vmdk /path/to/converted.vdi
 ```
 
+```bash
 find . -name .svn -exec rm -rf {} \;
-find -cmin +30 -exec rm -f {} \;
+find . -cmin +30 -exec rm -f {} \;
 find . -user chayer -exec chown sfinn.tedradis {} \;
-# alle aelter als 90 tage löschen
+```
+
+alle aelter als 90 tage löschen
+```bash
 find . -ctime +90  -exec rm -rf {} \;
+```
 
-# start a google-chrome with proxy tor?
+start a google-chrome with proxy tor?
+```bash
 /usr/bin/google-chrome --user-data-dir=/tmp/abc --proxy-server=localhost:8118
+```
 
+```
 mount -t cifs -o user=name,password=mypass,rw "//server/path" /mnt/point
 
 sed -e 's/ AUTO_INCREMENT=[0-9]\+//'
+```
 
-tripwire - a file integrity checker for UNIX systems
-twadmin - Tripwire administrative and utility tool
-twintro - introduction to Tripwire software
+* tripwire - a file integrity checker for UNIX systems
+* twadmin - Tripwire administrative and utility tool
+* twintro - introduction to Tripwire software
 
-############################################################################################
-tripwire:  
-    http://www.thegeekstuff.com/2008/12/tripwire-tutorial-linux-host-based-intrusion-detection-system/
-    http://netwizards.co.uk/installing-tripwire-on-ubuntu/
-    http://www.linuxjournal.com/article/8758
-    http://www.morpoint.com/setting-up-tripwire-in-ubuntu-11-10-intrusion-detection-system/
-    http://www.ibm.com/developerworks/aix/library/au-usingtripwire/
+
+# tripwire
+* http://www.thegeekstuff.com/2008/12/tripwire-tutorial-linux-host-based-intrusion-detection-system/
+* http://netwizards.co.uk/installing-tripwire-on-ubuntu/
+* http://www.linuxjournal.com/article/8758
+* http://www.morpoint.com/setting-up-tripwire-in-ubuntu-11-10-intrusion-detection-system/
+* http://www.ibm.com/developerworks/aix/library/au-usingtripwire/
+
+```bash
 tripwire --init             # For the first time use, you should initialize the tripwire database as shown below.
 /etc/tripwire/twpol.tx      # Modify Tripwire Policy File
-# Update Tripwire Policy File
+```
+
+Update Tripwire Policy File
+```bash
 twadmin -m P /etc/tripwire/twpol.txt
-# Check for any changes to the files and update tripwire database.
+```
+
+Check for any changes to the files and update tripwire database.
+```bash
 tripwire --check --interactive
 tripwire -m i
-# view the twr report file
+```
+
+view the twr report file
+```bash
 twprint --print-report --twrfile /opt/tripwire/lib/tripwire/report/prod-db-srv-20081204-114336.twr  > /tmp/readable-output.txt
-# Monitor Linux System Integrity Regularly
+```
+
+Monitor Linux System Integrity Regularly
+```bash
 00 4 * * * /opt/tripwire/sbin/tripwire  --check
-# Tripwire Configuration and Policy File Locations
+```
+
+Tripwire Configuration and Policy File Locations
+```bash
 twadmin --print-polfile
 twadmin --print-cfgfile
+```
 
+```bash
 $ tempfile -s .csv
 /tmp/filesmEk3w.csv
+```
 
 
-
-unhide — forensic tool to find hidden processes
-rkhunter - RootKit Hunter
-chrootkit - Determine whether the system is infected with a rootkit
+* unhide — forensic tool to find hidden processes
+* rkhunter - RootKit Hunter
+* chrootkit - Determine whether the system is infected with a rootkit
 
 
 
@@ -72,9 +102,12 @@ remote wipe - Fernlöschung
 
 tethering modus - wlan<->GSM/UMTS Gerät als Modem bzw AP.
 
+datei ausdrucken
+```bash
+lpr -Plp Datei
+```
 
-lpr -Plp Datei # datei ausdrucken
-
+```bash
 fuser -k /dev/lp0 # alle dienste die den /dev/lp0 benutzen toeten
 #/dev/usb/lp0
 
@@ -461,28 +494,4 @@ at last there is a log file in
 schnell ein Screenshot von einem Fenster erstellen.
 > import bild.png
 dann den Bereich mit Maus markieren, voila
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
