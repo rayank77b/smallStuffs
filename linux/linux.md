@@ -1,14 +1,22 @@
+# Information aoub Linux und simple Commands
+
 Exim - Frozen mails löschen
 Alle löschen: 
+```shell
 # exiqgrep -zi | xargs exim -Mrm 
+```
 
 Alle löschen, die älter, als einen Tag sind: 
+```bash
 # exiqgrep -zi -o 86400 | xargs exim -Mrm 
+```
 
 dd if=kali.iso of=/dev/sdb bs=512k
 
+```bash
 # clone vmware vmdk to vbox vdi
 VBoxManage clonehd --format vdi /path/to/original.vmdk /path/to/converted.vdi
+```
 
 find . -name .svn -exec rm -rf {} \;
 find -cmin +30 -exec rm -f {} \;

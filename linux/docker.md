@@ -1,11 +1,13 @@
-docker.io
-https://index.docker.io
-https://github.com/dotcloud/docker
+# Docker Information and Samples
+
+* docker.io
+* https://index.docker.io
+* https://github.com/dotcloud/docker
 
 
 docker
 
-
+```
 attach    Attach to a running container
 build     Build a container from a Dockerfile
 commit    Create a new image from a container's changes
@@ -34,8 +36,9 @@ stop      Stop a running container
 tag       Tag an image into a repository
 version   Show the Docker version information
 wait      Block until a container stops, then print its exit code
+```
 
-
+```shell
 $ docker version
 Docker Emulator version 0.1.3
  
@@ -45,7 +48,6 @@ Server version: 0.5.3
 Go version: go1.1
 
 $ docker search debian
-
 
 $ docker search ubuntu
 Found 22 results matching your query ("ubuntu")
@@ -75,8 +77,7 @@ ooyala/test-ubuntu3
 ooyala/test-ubuntu4
 ooyala/test-ubuntu5
 surma/go                  Simple augmentation of the standard Ubuntu...
- 
- 
+
  
 $ docker pull
 Usage: Docker pull NAME
@@ -85,7 +86,6 @@ Pull an image or a repository from the registry
  
 -registry="": Registry to download from. Necessary if image is pulled by ID
 -t="": Download tagged image in repository
-
 
 
 $ docker pull learn/tutorial
@@ -215,44 +215,5 @@ learn/ping            latest              effb66b31edb        10 minutes ago    
 
 
 $ docker push learn/ping
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+```
 
