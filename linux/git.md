@@ -65,6 +65,13 @@ git push origin <branch>  # upload branch
 back to master
 ```
 git checkout master
+
+git checkout a1e8fb5
+git checkout a1e8fb5 hello.py
+git checkout HEAD hello.py
+
+git revert <commit>
+
 ```
 
 get new stuff
@@ -88,6 +95,7 @@ infos
 git status
 git log
 git log -p
+git log --stat --summary
 ```
 
 global config
