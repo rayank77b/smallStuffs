@@ -1,36 +1,36 @@
-# alles ueber apt-get und dpkg + deb
+# Information about apt-get and dpkg + deb
 
---------------------------------------------------------------------------------
 /etc/apt/sources.list
+```
 # deb cdrom:[Debian GNU/Linux 7.0 _Kali_ - Official Snapshot amd64 LIVE/INSTALL Binary 20130723-12:53]/ kali contrib main non-free
 #deb cdrom:[Debian GNU/Linux 7.0 _Kali_ - Official Snapshot amd64 LIVE/INSTALL Binary 20130723-12:53]/ kali contrib main non-free
 deb http://http.kali.org/kali kali main non-free contrib
 deb-src http://http.kali.org/kali kali main non-free contrib
 ## Security updates
 deb http://security.kali.org/kali-security kali/updates main contrib non-free
---------------------------------------------------------------------------------     
-/etc/apt/apt.conf.d# cat 99kali-menu 
-DPkg::Post-Invoke { "/usr/share/kali-menu/update-kali-menu wait_dpkg"; }
---------------------------------------------------------------------------------
+```
 
+```shell
 apt-get update
 apt-get upgrade
 apt-get dist-upgrade
---------------------------------------------------------------------------------
+```
 
 hier liegen heruntergeladen deb files
+```
 /var/cache/apt/archives
+```
 
---------------------------------------------------------------------------------
-http://docs.kali.org/development/rebuilding-a-package-from-source
+* http://docs.kali.org/development/rebuilding-a-package-from-source
+```shell
 apt-get source libfreefare
 nano examples/mifare-classic-format.c
 dpkg-checkbuilddeps
 dpkg-buildpackage
 dpkg -i ../libfreefare*.deb
+```
 
-
-
+```
 ## Debian Wheezy
 #deb http://http.us.debian.org/debian/ wheezy main contrib non-free
 #deb http://security.debian.org/ wheezy/updates main contrib non-free
@@ -52,3 +52,4 @@ dpkg -i ../libfreefare*.deb
 ## Debian Experimental
 #deb http://http.us.debian.org/debian/ experimental main contrib non-free
 #deb http://security.debian.org/ experimental/updates main contrib non-free 
+```
