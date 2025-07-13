@@ -119,6 +119,11 @@ git checkout -- <filename>
 git fetch origin
 git reset --hard origin/master
 ```
+Add a remote git repo
+
+REPO=snakeGame.git
+git remote add -f ${REPO} git@github.com:rayank77b/${REPO}
+git merge ${REPO}/main --allow-unrelated-histories
 
 
 
