@@ -1,2 +1,5 @@
 /programmierung/src/C/bin/
 .~*#
+*.o
+programmierung/Cpp/a.out
+.vscode
