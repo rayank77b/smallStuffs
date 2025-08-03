@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Persistent Ping Time Graph</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <canvas id="pingChart" width="800" height="400"></canvas>
+    <script>
+        const ctx = document.getElementById('pingChart').getContext('2d');
+
+        // Load stored data or initialize empty arrays
+        let labels = JSON.parse(localStorage.getItem('pingLabels')) || [];
+        let dataPoints = JSON.parse(localStorage.getItem('pingData')) || [];
+
+        const pingData = {
+            labels: labels,
+            datasets: [{
+                label: 'Ping Time (ms)',
+                data: dataPoints,
+                borderWidth: 2,
+                fill: false,
+                tension: 0.2
+            }]
+        };
+
+        const pingChart = new Chart(ctx, {
+            type: 'line',
+            data: pingData,
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+
+        function pingServer() {
+            const url = 'https://dns.google/resolve?name=example.com&type=A';
+            const startTime = performance.now();
+
+            fetch(url, {mode: 'no-cors', cache: 'no-store'})
+                .then(() => {
+                    const ping = performance.now() - startTime;
+                    updateChart(ping.toFixed(2));
+                })
+                .catch(() => {
+                    updateChart(null);
+                });
+        }
+
+        function updateChart(ping) {
+            const now = new Date().toLocaleTimeString();
+
+            labels.push(now);
+            dataPoints.push(ping);
+
+            // Keep max of 100 points
+            if (labels.length > 100) {
+                labels.shift();
+                dataPoints.shift();
+            }
+
+            localStorage.setItem('pingLabels', JSON.stringify(labels));
+            localStorage.setItem('pingData', JSON.stringify(dataPoints));
+
+            pingChart.update();
+        }
+
+        setInterval(pingServer, 2000);
+        pingServer();
+    </script>
+</body>
+</html>
