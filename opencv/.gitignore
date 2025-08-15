@@ -2,3 +2,4 @@
 *.png
 a.out
 webcam
+opencl/ocl_webcam
